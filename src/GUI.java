@@ -102,7 +102,6 @@ public class GUI extends BorderPane {
 
     public void line(Vector2D[] p, int i, int j, int offset) {
         gc.strokeLine((double) p[i+offset].x, (double) p[i+offset].y, (double) p[j+offset].x, (double) p[j+offset].y);
-        //System.out.println(p[i].x + "\t" + p[i].y + "\t" + p[j].x + "\t" +p[j].y); just for debugging
     }
 
     public void drawPoints(Vector2D[] v) {
@@ -122,11 +121,11 @@ public class GUI extends BorderPane {
     }
 
     public void resetSliders(){
-        rotationXW.setValue(0);
-        rotationYW.setValue(0);
-        rotationZW.setValue(0);
         rotationX.setValue(0);
         rotationY.setValue(0);
         rotationZ.setValue(0);
+        rotationXW.setValue(0);
+        rotationYW.setValue(0);
+        rotationZW.setValue(0);
     }
 }

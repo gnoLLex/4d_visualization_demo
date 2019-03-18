@@ -97,7 +97,6 @@ public class MatrixHandler {
 
         t = multMatVec4D(to3D, t);
 
-
         return new Vector3D(t.x, t.y, t.z);
     }
 
@@ -158,11 +157,11 @@ public class MatrixHandler {
 
     private float[][] rotZW(float i) {
         float m[][] = new float[4][4];
-        m[0][0] = (float)Math.cos(i);
+        m[0][0] = 1.0f;
         m[1][1] = 1.0f;
-        m[2][2] = 1.0f;
-        m[0][3] = (float)Math.sin(i);
-        m[3][0] = -(float)Math.sin(i);
+        m[2][2] = (float)Math.cos(i);
+        m[2][3] = (float)Math.sin(i);
+        m[3][2] = -(float)Math.sin(i);
         m[3][3] = (float)Math.cos(i);
         return m;
     }

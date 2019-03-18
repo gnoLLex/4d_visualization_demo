@@ -14,13 +14,25 @@ public class Main extends Application {
     private static float rSpeed = 0.8f;
     private Vector4D[] points =
     {
-        new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
-        new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
-        new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
-        new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
+            new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
+            new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
+            new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
+            new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
     };
-    private Vector3D proj3D[] = new Vector3D[points.length];
-    private Vector2D[] proj2D = new Vector2D[points.length];
+    private Vector3D[] proj3D =
+    {
+            new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
+            new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
+            new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
+            new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D()
+    };
+    private Vector2D[] proj2D =
+    {
+            new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
+            new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
+            new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
+            new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D()
+    };
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -50,14 +62,6 @@ public class Main extends Application {
         gui.drawPoints(proj2D);
     }
 
-    public void reset(){
-        gui.resetSliders();
-        for(int i = 0; i < points.length; i++){
-            points[i].initialValues();
-        }
-        foo(points, "X", 0.0f);
-    }
-
     private void addHandlers() {
         gui.rotationX.valueProperty().addListener((ov, old_val, new_val) -> {
             float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
@@ -85,5 +89,31 @@ public class Main extends Application {
         });
 
         gui.resetBtn.addEventHandler( MouseEvent.MOUSE_CLICKED, e -> this.reset() );
+    }
+
+    public void reset(){
+        gui.resetSliders();
+        Vector4D[] points =
+                {
+                        new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
+                        new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
+                        new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
+                        new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
+                };
+        Vector3D[] proj3D =
+                {
+                        new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
+                        new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
+                        new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
+                        new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D()
+                };
+        Vector2D[] proj2D =
+                {
+                        new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
+                        new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
+                        new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
+                        new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D()
+                };
+        foo(points, "X", 0.0f);
     }
 }
