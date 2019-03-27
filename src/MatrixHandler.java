@@ -3,28 +3,30 @@ import vector.Vector3D;
 import vector.Vector4D;
 
 public class MatrixHandler {
-    private GUI gui;
 
     private float[][] to2D = new float[4][4];
     private float[][] to3D = new float[4][4];
-    //float zScale;
 
-    public MatrixHandler(GUI gui) {
-        this.gui = gui;
+    MatrixHandler(float aR)
+    {
+        calcProjTo2D(aR);
+    }
 
+    public void calcProjTo2D(float aR)
+    {
         float zNear = 0.1f;
         float zFar = 1000.0f;
         float zFov = 90.0f;
-        float zAspectRatio = gui.getAspectRatio();
+        float zAspectRatio = aR;
         float zFovRad = (float) (1.0f / Math.tan(zFov * 0.5f / 180.0f * (float) Math.PI));
 
         to2D[0][0] = zAspectRatio * zFovRad;
         to2D[1][1] = zFovRad;
         to2D[2][2] = (zFar + zNear) / (zFar - zNear);
-        //zScale = ( -zFar * 2 * zNear ) / ( zFar - zNear);
     }
 
-    public Vector3D multMatVec3D(float[][] m, Vector3D v){
+    public Vector3D multMatVec3D(float[][] m, Vector3D v)
+    {
         float newX = v.x * m[0][0] + v.y * m[1][0] + v.z * m[2][0];
         float newY = v.x * m[0][1] + v.y * m[1][1] + v.z * m[2][1];
         float newZ = v.x * m[0][2] + v.y * m[1][2] + v.z * m[2][2];
@@ -32,7 +34,8 @@ public class MatrixHandler {
         return new Vector3D(newX, newY, newZ);
     }
 
-    public Vector2D projectTo2D(Vector3D v){
+    public Vector2D projectTo2D(Vector3D v, double w, double h)
+    {
         Vector3D t = new Vector3D(v.x, v.y, v.z);
         t.z += 5.0f;
         float tempZ = t.z;
@@ -46,13 +49,14 @@ public class MatrixHandler {
         t.z /= tempZ;
 
         t.x += 1.0f; t.y += 1.0f;
-        t.x *= 0.5f * gui.getW();
-        t.y *= 0.5f * gui.getH();
+        t.x *= 0.5f * w;
+        t.y *= 0.5f * h;
 
         return new Vector2D(t.x, t.y);
     }
 
-    public Vector4D rot(Vector4D v, float elapsedTime, String axis){
+    public Vector4D rot(Vector4D v, float elapsedTime, String axis)
+    {
         float rM[][] = new float[4][4];
         switch (axis){
             case "X":
