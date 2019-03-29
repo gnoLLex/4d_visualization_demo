@@ -2,7 +2,7 @@ import vector.Vector2D;
 import vector.Vector3D;
 import vector.Vector4D;
 
-public class MatrixHandler {
+class MatrixHandler {
 
     private float[][] to2D = new float[4][4];
     private float[][] to3D = new float[4][4];
@@ -12,12 +12,11 @@ public class MatrixHandler {
         calcProjTo2D(aR);
     }
 
-    public void calcProjTo2D(float aR)
+    void calcProjTo2D(float zAspectRatio)
     {
         float zNear = 0.1f;
         float zFar = 1000.0f;
         float zFov = 90.0f;
-        float zAspectRatio = aR;
         float zFovRad = (float) (1.0f / Math.tan(zFov * 0.5f / 180.0f * (float) Math.PI));
 
         to2D[0][0] = zAspectRatio * zFovRad;
@@ -25,7 +24,13 @@ public class MatrixHandler {
         to2D[2][2] = (zFar + zNear) / (zFar - zNear);
     }
 
-    public Vector3D multMatVec3D(float[][] m, Vector3D v)
+    /**
+     * multiplies a matrix with a vector
+     * @param m Matrix
+     * @param v Vector
+     * @return new Vector(product)
+     */
+    private Vector3D multMatVec3D(float[][] m, Vector3D v)
     {
         float newX = v.x * m[0][0] + v.y * m[1][0] + v.z * m[2][0];
         float newY = v.x * m[0][1] + v.y * m[1][1] + v.z * m[2][1];
@@ -34,14 +39,13 @@ public class MatrixHandler {
         return new Vector3D(newX, newY, newZ);
     }
 
-    public Vector2D projectTo2D(Vector3D v, double w, double h)
+    Vector2D projectTo2D(Vector3D v, double w, double h)
     {
         Vector3D t = new Vector3D(v.x, v.y, v.z);
         t.z += 5.0f;
         float tempZ = t.z;
 
         t = multMatVec3D(to2D, t);
-
         //t.z += zScale;
 
         t.x /= tempZ;
@@ -55,9 +59,9 @@ public class MatrixHandler {
         return new Vector2D(t.x, t.y);
     }
 
-    public Vector4D rot(Vector4D v, float elapsedTime, String axis)
+    Vector4D rot(Vector4D v, float elapsedTime, String axis)
     {
-        float rM[][] = new float[4][4];
+        float[][] rM = new float[4][4];
         switch (axis){
             case "X":
                 rM = this.rotX(elapsedTime);
@@ -82,7 +86,8 @@ public class MatrixHandler {
         return this.multMatVec4D(rM, v);
     }
 
-    public Vector4D multMatVec4D(float[][]m, Vector4D v){
+    private Vector4D multMatVec4D(float[][]m, Vector4D v)
+    {
         float newX = v.x * m[0][0] + v.y * m[1][0] + v.z * m[2][0] + v.w * m[3][0];
         float newY = v.x * m[0][1] + v.y * m[1][1] + v.z * m[2][1] + v.w * m[3][1];
         float newZ = v.x * m[0][2] + v.y * m[1][2] + v.z * m[2][2] + v.w * m[3][2];
@@ -91,7 +96,8 @@ public class MatrixHandler {
         return new Vector4D(newX, newY, newZ, newW);
     }
 
-    public Vector3D projectTo3D(Vector4D v) {
+    Vector3D projectTo3D(Vector4D v)
+    {
         Vector4D t = new Vector4D(v.x, v.y, v.z, v.w);
         float ok = 1 / (2.0f - v.w);
 
@@ -104,8 +110,9 @@ public class MatrixHandler {
         return new Vector3D(t.x, t.y, t.z);
     }
 
-    private float[][] rotX(float i) {
-        float m[][] = new float[4][4];
+    private float[][] rotX(float i)
+    {
+        float[][] m = new float[4][4];
         m[0][0] = 1.0f;
         m[1][1] = (float)Math.cos(i);
         m[1][2] = (float)Math.sin(i);
@@ -115,8 +122,9 @@ public class MatrixHandler {
         return m;
     }
 
-    private float[][] rotY(float i) {
-        float m[][] = new float[4][4];
+    private float[][] rotY(float i)
+    {
+        float[][] m = new float[4][4];
         m[0][0] = (float)Math.cos(i);
         m[1][1] = 1.0f;
         m[0][2] = (float)Math.sin(i);
@@ -126,8 +134,9 @@ public class MatrixHandler {
         return m;
     }
 
-    private float[][] rotZ(float i) {
-        float m[][] = new float[4][4];
+    private float[][] rotZ(float i)
+    {
+        float[][] m = new float[4][4];
         m[0][0] = (float)Math.cos(i);
         m[0][1] = (float)Math.sin(i);
         m[1][0] = -(float)Math.sin(i);
@@ -137,8 +146,9 @@ public class MatrixHandler {
         return m;
     }
 
-    private float[][] rotXW(float i) {
-        float m[][] = new float[4][4];
+    private float[][] rotXW(float i)
+    {
+        float[][] m = new float[4][4];
         m[0][0] = (float)Math.cos(i);
         m[1][1] = 1.0f;
         m[2][2] = 1.0f;
@@ -148,8 +158,9 @@ public class MatrixHandler {
         return m;
     }
 
-    private float[][] rotYW(float i) {
-        float m[][] = new float[4][4];
+    private float[][] rotYW(float i)
+    {
+        float[][] m = new float[4][4];
         m[0][0] = 1.0f;
         m[1][1] = (float)Math.cos(i);
         m[2][2] = 1.0f;
@@ -159,8 +170,9 @@ public class MatrixHandler {
         return m;
     }
 
-    private float[][] rotZW(float i) {
-        float m[][] = new float[4][4];
+    private float[][] rotZW(float i)
+    {
+        float[][] m = new float[4][4];
         m[0][0] = 1.0f;
         m[1][1] = 1.0f;
         m[2][2] = (float)Math.cos(i);
