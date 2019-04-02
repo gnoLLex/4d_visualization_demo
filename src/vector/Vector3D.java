@@ -3,8 +3,7 @@ package vector;
 /**
  * Vector3D extends Vector2D with a z-value
  */
-public class Vector3D extends Vector2D
-{
+public class Vector3D extends Vector2D {
     /**
      * z coordinate stored as a float
      */
@@ -16,8 +15,7 @@ public class Vector3D extends Vector2D
      * @param y coordinate
      * @param z coordinate
      */
-    public Vector3D(float x, float y, float z)
-    {
+    public Vector3D(float x, float y, float z) {
         super(x, y);
         this.z = z;
     }
@@ -25,8 +23,7 @@ public class Vector3D extends Vector2D
     /**
      * initialize 3D vector with a x, y and z coordinate as 0
      */
-    public Vector3D()
-    {
+    public Vector3D() {
         super();
         this.z = 0;
     }

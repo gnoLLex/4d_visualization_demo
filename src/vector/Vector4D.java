@@ -3,8 +3,7 @@ package vector;
 /**
  * Vector4D extends Vector3D with a w-value
  */
-public class Vector4D extends Vector3D
-{
+public class Vector4D extends Vector3D {
     /**
      * w coordinate stored as a float
      */
@@ -17,8 +16,7 @@ public class Vector4D extends Vector3D
      * @param z coordinate
      * @param w coordinate
      */
-    public Vector4D(float x, float y, float z, float w)
-    {
+    public Vector4D(float x, float y, float z, float w) {
         super(x, y, z);
         this.w = w;
     }
@@ -26,8 +24,7 @@ public class Vector4D extends Vector3D
     /**
      * initialize 3D vector with a x, y, z and w coordinate as 0
      */
-    public Vector4D()
-    {
+    public Vector4D() {
         super();
         this.w = 0;
     }

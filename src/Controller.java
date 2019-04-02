@@ -1,3 +1,4 @@
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -53,15 +54,16 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
-        mh = new MatrixHandler((float)(canvas.getHeight() / canvas.getWidth()));
+
+        mh = new MatrixHandler();
+        mh.calcProjTo2D((float)(canvas.getHeight() / canvas.getWidth()));
 
         reset();
         addHandlers();
     }
 
     @FXML
-    public void reset()
-    {
+    public void reset() {
         resetSliders();
         points = new Vector4D[]{
                 new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
@@ -69,18 +71,16 @@ public class Controller implements Initializable {
                 new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
                 new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
         };
-        for(int i = 0; i < points.length; i++)
-        {
+        for(int i = 0; i < points.length; i++) {
             proj3D[i] = new Vector3D();
             proj2D[i] = new Vector2D();
         }
         foo(points, "X", 0.0f);
     }
 
-    private void foo(Vector4D[] v, String axis, float theta)
-    {
+    private void foo(Vector4D[] v, String axis, float theta) {
         clear();
-        for (int i = 0; i < v.length; i++){
+        for (int i = 0; i < v.length; i++) {
             v[i] = mh.rot(v[i], theta, axis);
             proj3D[i] = mh.projectTo3D(v[i]);
             proj2D[i] = mh.projectTo2D(proj3D[i], canvas.getWidth(), canvas.getHeight());
@@ -88,8 +88,7 @@ public class Controller implements Initializable {
         drawPoints(proj2D);
     }
 
-    private void clear()
-    {
+    private void clear() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
@@ -97,8 +96,7 @@ public class Controller implements Initializable {
         gc.strokeLine((double) p[i+offset].x, (double) p[i+offset].y, (double) p[j+offset].x, (double) p[j+offset].y);
     }
 
-    private void drawPoints(Vector2D[] v)
-    {
+    private void drawPoints(Vector2D[] v) {
         for(int i = 0; i < 4; i++) {
             line(v, i, ( i + 1 ) % 4, 0);
             line(v, i + 4, ( ( i + 1 ) % 4 ) + 4, 0);
