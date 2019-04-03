@@ -1,4 +1,3 @@
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -6,53 +5,53 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
-import vector.*;
+import vector.Vector2D;
+import vector.Vector3D;
+import vector.Vector4D;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    @FXML public Pane canvasPane;
-    @FXML public Canvas canvas;
+    @FXML
+    private Pane canvasPane;
+    @FXML
+    private Canvas canvas;
 
-    @FXML public Slider sdrX;
-    @FXML public Slider sdrY;
-    @FXML public Slider sdrZ;
-    @FXML public Slider sdrXW;
-    @FXML public Slider sdrYW;
-    @FXML public Slider sdrZW;
+    @FXML
+    private Slider sdrX;
+    @FXML
+    private Slider sdrY;
+    @FXML
+    private Slider sdrZ;
+    @FXML
+    private Slider sdrXW;
+    @FXML
+    private Slider sdrYW;
+    @FXML
+    private Slider sdrZW;
 
-    @FXML public Button btnReset;
+    @FXML
+    private Button btnReset;
+
+    private Slider[] sliders;
+    private String[] planes;
 
     private GraphicsContext gc;
     private MatrixHandler mh;
 
     private static float rSpeed = 0.8f;
-    private Vector4D[] points =
-            {
-                    new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
-                    new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
-                    new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
-                    new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
-            };
-    private Vector3D[] proj3D =
-            {
-                    new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
-                    new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
-                    new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D(),
-                    new Vector3D(), new Vector3D(), new Vector3D(), new Vector3D()
-            };
-    private Vector2D[] proj2D =
-            {
-                    new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
-                    new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
-                    new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D(),
-                    new Vector2D(), new Vector2D(), new Vector2D(), new Vector2D()
-            };
+
+    private Vector4D[] points = new Vector4D[16];
+    private Vector3D[] proj3D = new Vector3D[16];
+    private Vector2D[] proj2D = new Vector2D[16];
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        sliders = new Slider[]{sdrX, sdrY, sdrZ, sdrXW, sdrYW, sdrZW};
+        planes = new String[]{"X", "Y", "Z", "XW", "YW", "ZW"};
+
         gc = canvas.getGraphicsContext2D();
 
         mh = new MatrixHandler();
@@ -112,40 +111,20 @@ public class Controller implements Initializable {
         }
     }
 
-    private void resetSliders(){
-        sdrX.setValue(0);
-        sdrY.setValue(0);
-        sdrZ.setValue(0);
-        sdrXW.setValue(0);
-        sdrYW.setValue(0);
-        sdrZW.setValue(0);
+    private void resetSliders() {
+        for(Slider slider: sliders) {
+            slider.setValue(0);
+        }
     }
 
     private void addHandlers() {
-        sdrX.valueProperty().addListener((ov, old_val, new_val) -> {
-            float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
-            foo(points, "X", theta);
-        });
-        sdrY.valueProperty().addListener((ov, old_val, new_val) -> {
-            float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
-            foo(points, "Y", theta);
-        });
-        sdrZ.valueProperty().addListener((ov, old_val, new_val) -> {
-            float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
-            foo(points, "Z", theta);
-        });
-        sdrXW.valueProperty().addListener((ov, old_val, new_val) -> {
-            float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
-            foo(points, "XW", theta);
-        });
-        sdrYW.valueProperty().addListener((ov, old_val, new_val) -> {
-            float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
-            foo(points, "YW", theta);
-        });
-        sdrZW.valueProperty().addListener((ov, old_val, new_val) -> {
-            float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
-            foo(points, "ZW", theta);
-        });
+        for(int i = 0; i < sliders.length; i++) {
+            int finalI = i;
+            sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
+                float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
+                foo(points, planes[finalI], theta);
+            });
+        }
 
         canvas.widthProperty().bind(canvasPane.widthProperty());
         canvas.heightProperty().bind(canvasPane.heightProperty());
