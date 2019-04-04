@@ -5,9 +5,9 @@ package vector;
  */
 public class Vector3D extends Vector2D {
     /**
-     * z coordinate stored as a float
+     * z coordinate stored as a double
      */
-    public float z;
+    public double z;
 
     /**
      * initialize 3D vector with a x, y and z coordinate
@@ -15,7 +15,7 @@ public class Vector3D extends Vector2D {
      * @param y coordinate
      * @param z coordinate
      */
-    public Vector3D(float x, float y, float z) {
+    public Vector3D(double x, double y, double z) {
         super(x, y);
         this.z = z;
     }

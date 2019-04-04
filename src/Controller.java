@@ -2,7 +2,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 import vector.Vector2D;
@@ -32,33 +31,42 @@ public class Controller implements Initializable {
     @FXML
     private Slider sdrZW;
 
-    @FXML
-    private Button btnReset;
-
     private Slider[] sliders;
     private String[] planes;
 
     private GraphicsContext gc;
     private MatrixHandler mh;
 
-    private static float rSpeed = 0.8f;
+    // constant for how fast the rotation will be done
+    private static double rSpeed = 0.6;
 
+    // arrays containing of points in n space
     private Vector4D[] points = new Vector4D[16];
-    private Vector3D[] proj3D = new Vector3D[16];
-    private Vector2D[] proj2D = new Vector2D[16];
+    private Vector3D[] proj3D = new Vector3D[points.length];
+    private Vector2D[] proj2D = new Vector2D[points.length];
 
+
+    //is called to initialize a controller after its root element has been completely processed.
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // filling array with the sliders
         sliders = new Slider[]{sdrX, sdrY, sdrZ, sdrXW, sdrYW, sdrZW};
+
+        // giving the axes/planes a corresponding name
         planes = new String[]{"X", "Y", "Z", "XW", "YW", "ZW"};
 
+        // getting the GraphicsContext2D
         gc = canvas.getGraphicsContext2D();
 
+        // initializing the matrixhandler
         mh = new MatrixHandler();
-        mh.calcProjTo2D((float)(canvas.getHeight() / canvas.getWidth()));
+        // generate initial projection matrix from 3D to 2D
+        mh.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
 
+        // resets first time as initialization for the arrays points, proj3D and proj2D
+        // and to draw the tesseract for the first time
         reset();
-        addHandlers();
+        addListeners();
     }
 
     @FXML
@@ -74,17 +82,17 @@ public class Controller implements Initializable {
             proj3D[i] = new Vector3D();
             proj2D[i] = new Vector2D();
         }
-        foo(points, "X", 0.0f);
+        project(points, "X", 0.0);
     }
 
-    private void foo(Vector4D[] v, String axis, float theta) {
-        clear();
+    //TODO: split up into projection and rotation
+    private void project(Vector4D[] v, String axis, double theta) {
         for (int i = 0; i < v.length; i++) {
             v[i] = mh.rot(v[i], theta, axis);
-            proj3D[i] = mh.projectTo3D(v[i]);
-            proj2D[i] = mh.projectTo2D(proj3D[i], canvas.getWidth(), canvas.getHeight());
+            proj3D[i] = mh.project4DTo3D(v[i]);
+            proj2D[i] = mh.project3DTo2D(proj3D[i], canvas.getWidth(), canvas.getHeight());
         }
-        drawPoints(proj2D);
+        draw(proj2D);
     }
 
     private void clear() {
@@ -92,50 +100,62 @@ public class Controller implements Initializable {
     }
 
     private void line(Vector2D[] p, int i, int j, int offset) {
-        gc.strokeLine((double) p[i+offset].x, (double) p[i+offset].y, (double) p[j+offset].x, (double) p[j+offset].y);
+        gc.strokeLine( p[i+offset].x,  p[i+offset].y,  p[j+offset].x,  p[j+offset].y);
     }
 
-    private void drawPoints(Vector2D[] v) {
-        for(int i = 0; i < 4; i++) {
-            line(v, i, ( i + 1 ) % 4, 0);
-            line(v, i + 4, ( ( i + 1 ) % 4 ) + 4, 0);
-            line(v, i, i + 4, 0);
-        }
+    private void draw(Vector2D[] v) {
+        clear();
         for(int i = 0; i < 4; i++) {
             line(v, i, ( i + 1 ) % 4, 8);
             line(v, i + 4, ( ( i + 1 ) % 4 ) + 4, 8);
             line(v, i, i + 4, 8);
+        }
+        for(int i = 0; i < 4; i++) {
+            line(v, i, ( i + 1 ) % 4, 0);
+            line(v, i + 4, ( ( i + 1 ) % 4 ) + 4, 0);
+            line(v, i, i + 4, 0);
         }
         for(int i = 0; i < 8; i++) {
             line(v, i, i + 8, 0);
         }
     }
 
+    /**
+     * resetting all sliders4
+     */
     private void resetSliders() {
         for(Slider slider: sliders) {
             slider.setValue(0);
         }
     }
 
-    private void addHandlers() {
+    /**
+     * adding the listeners to certain application elements
+     */
+    private void addListeners() {
         for(int i = 0; i < sliders.length; i++) {
             int finalI = i;
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
-                float theta = rSpeed * (new_val.floatValue() - old_val.floatValue());
-                foo(points, planes[finalI], theta);
+                double theta = rSpeed * (new_val.doubleValue() - old_val.doubleValue());
+                project(points, planes[finalI], theta);
             });
         }
 
+
+        // binding the width and height property to the ones of the pane
+        // a cheaty little solution to get a resizeable canvas
         canvas.widthProperty().bind(canvasPane.widthProperty());
         canvas.heightProperty().bind(canvasPane.heightProperty());
 
+        // adds a listener to the width and height property
+        // when changed it recalculates the projection matrix for the 3D to 2D projection
         canvas.heightProperty().addListener((e) -> {
-            mh.calcProjTo2D((float)(canvas.getHeight() / canvas.getWidth()));
-            foo(points, "X", 0.0f);
+            mh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+            project(points, "X", 0.0);
         });
         canvas.widthProperty().addListener((e) -> {
-            mh.calcProjTo2D((float)(canvas.getHeight() / canvas.getWidth()));
-            foo(points, "X", 0.0f);
+            mh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+            project(points, "X", 0.0);
         });
     }
 }
