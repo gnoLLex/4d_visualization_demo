@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import vector.Vector2D;
 import vector.Vector3D;
@@ -83,6 +84,8 @@ public class Controller implements Initializable {
             proj3D[i] = new Vector3D();
             proj2D[i] = new Vector2D();
         }
+        mh.zDisplacement = 4.5;
+
         horTheta = 0.0;
         verTheta = 0.0;
 
@@ -200,5 +203,14 @@ public class Controller implements Initializable {
         verTheta += (currentVector.y - oldVector.y) / 100;
         rotate(points, "X", 0.0);
         project(camera);
+    }
+
+    public void zoom(ScrollEvent s) {
+        if (mh.zDisplacement - s.getDeltaY() / 100 >= 2) {
+            mh.zDisplacement -= s.getDeltaY() / 100;
+            System.out.println(mh.zDisplacement);
+            rotate(points, "X", 0.0);
+            project(camera);
+        }
     }
 }

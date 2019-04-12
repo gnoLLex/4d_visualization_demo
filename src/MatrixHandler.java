@@ -7,6 +7,8 @@ class MatrixHandler {
     private double[][] to2D = new double[4][4];
     private double[][] to3D = new double[4][4];
 
+    public double zDisplacement = 4.5;
+
     void calcProj3DTo2D(double zAspectRatio) {
         double zNear = 0.1;
         double zFar = 1000.0;
@@ -49,7 +51,7 @@ class MatrixHandler {
 
     Vector2D project3DTo2D(Vector3D v, double w, double h) {
         Vector3D t = new Vector3D(v.x, v.y, v.z);
-        t.z += 4.5;
+        t.z += zDisplacement;
         double tempZ = t.z;
 
         t = multMatVec3D(to2D, t);

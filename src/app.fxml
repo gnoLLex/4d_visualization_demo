@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="980.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <Pane fx:id="canvasPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
-      <Canvas fx:id="canvas" height="720.0" onMouseDragged="#updateVector" onMousePressed="#setVector" onMouseReleased="#updateVector" width="770.0" />
+      <Canvas fx:id="canvas" height="720.0" onMouseDragged="#updateVector" onMousePressed="#setVector" onMouseReleased="#updateVector" onScroll="#zoom" width="770.0" />
    </Pane>
    <Separator orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0" />
    <VBox alignment="CENTER" layoutX="206.0" maxWidth="200.0" prefWidth="200.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
