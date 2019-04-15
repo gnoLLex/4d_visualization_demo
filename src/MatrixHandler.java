@@ -40,13 +40,31 @@ class MatrixHandler {
      * @param v Vector
      * @return Vector4D(product of m * v)
      */
-    private Vector4D multMatVec4D(double[][]m, Vector4D v) {
+    public Vector4D multMatVec4D(double[][]m, Vector4D v) {
         double newX = v.x * m[0][0] + v.y * m[1][0] + v.z * m[2][0] + v.w * m[3][0];
         double newY = v.x * m[0][1] + v.y * m[1][1] + v.z * m[2][1] + v.w * m[3][1];
         double newZ = v.x * m[0][2] + v.y * m[1][2] + v.z * m[2][2] + v.w * m[3][2];
         double newW = v.x * m[0][3] + v.y * m[1][3] + v.z * m[2][3] + v.w * m[3][3];
 
         return new Vector4D(newX, newY, newZ, newW);
+    }
+
+    public double[][] multMatMat(double[][] m1, double[][] m2) {
+        int l = m1.length;
+        int m = m1[0].length;
+        int n = m2[0].length;
+
+        double[][] out = new double[l][n];
+
+        for (int i = 0; i < l; i++) {
+            for (int j = 0; j < n; j++) {
+                out[i][j] = 0;
+                for (int k = 0; k < m; k++) {
+                    out[i][j] += m1[i][k] * m2[k][j];
+                }
+            }
+        }
+        return out;
     }
 
     Vector2D project3DTo2D(Vector3D v, double w, double h) {
@@ -106,7 +124,7 @@ class MatrixHandler {
         return new Vector3D(t.x, t.y, t.z);
     }
 
-    private double[][] rotX(double i) {
+    public double[][] rotX(double i) {
         double[][] m = new double[4][4];
         m[0][0] = 1.0;
         m[1][1] = Math.cos(i);
@@ -117,7 +135,7 @@ class MatrixHandler {
         return m;
     }
 
-    private double[][] rotY(double i) {
+    public double[][] rotY(double i) {
         double[][] m = new double[4][4];
         m[0][0] = Math.cos(i);
         m[1][1] = 1.0;
@@ -128,7 +146,7 @@ class MatrixHandler {
         return m;
     }
 
-    private double[][] rotZ(double i) {
+    public double[][] rotZ(double i) {
         double[][] m = new double[4][4];
         m[0][0] = Math.cos(i);
         m[0][1] = Math.sin(i);
@@ -139,7 +157,7 @@ class MatrixHandler {
         return m;
     }
 
-    private double[][] rotXW(double i) {
+    public double[][] rotXW(double i) {
         double[][] m = new double[4][4];
         m[0][0] = Math.cos(i);
         m[1][1] = 1.0;
@@ -150,7 +168,7 @@ class MatrixHandler {
         return m;
     }
 
-    private double[][] rotYW(double i) {
+    public double[][] rotYW(double i) {
         double[][] m = new double[4][4];
         m[0][0] = 1.0;
         m[1][1] = Math.cos(i);
@@ -161,7 +179,7 @@ class MatrixHandler {
         return m;
     }
 
-    private double[][] rotZW(double i) {
+    public double[][] rotZW(double i) {
         double[][] m = new double[4][4];
         m[0][0] = 1.0;
         m[1][1] = 1.0;

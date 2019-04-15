@@ -6,6 +6,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import vector.Vector2D;
 import vector.Vector3D;
 import vector.Vector4D;
@@ -42,9 +43,12 @@ public class Controller implements Initializable {
     // constant for how fast the rotation will be done
     private static double rSpeed = 0.8;
 
+    // vectors for coordinate system
+    private  Vector4D[] coord = new Vector4D[4];
+    private Vector3D[] coord3D = new Vector3D[coord.length];
+    private Vector2D[] coord2D = new Vector2D[coord.length];
     // arrays containing of points in n space
     private Vector4D[] points = new Vector4D[16];
-    private Vector4D[] camera = new Vector4D[points.length];
     private Vector3D[] proj3D = new Vector3D[points.length];
     private Vector2D[] proj2D = new Vector2D[points.length];
 
@@ -66,13 +70,21 @@ public class Controller implements Initializable {
         mh.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
 
         // resets first time as initialization for the arrays points, proj3D and proj2D
-        // and to draw the tesseract for the first time
+        // and to drawPoints the tesseract for the first time
         reset();
         addListeners();
     }
 
     public void reset() {
         resetSliders();
+
+        coord = new Vector4D[]{
+                new Vector4D(),
+                new Vector4D(1, 0, 0 ,0), // x-axis
+                new Vector4D(0, 1, 0 ,0), // y-axis
+                new Vector4D(0, 0, 1 ,0)  // z-axis
+        };
+
         points = new Vector4D[]{
                 new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
                 new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
@@ -80,35 +92,29 @@ public class Controller implements Initializable {
                 new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
         };
         for(int i = 0; i < points.length; i++) {
-            camera[i] = new Vector4D();
             proj3D[i] = new Vector3D();
             proj2D[i] = new Vector2D();
         }
         mh.zDisplacement = 4.5;
 
-        horTheta = 0.0;
-        verTheta = 0.0;
-
-        rotate(points, "X", 0.0);
-        project(camera);
+        redraw();
     }
 
     // rotates a set of 4D vectors and projects them after
     private void rotate(Vector4D[] v, String axis, double theta) {
         for (int i = 0; i < v.length; i++) {
             v[i] = mh.rot(v[i], theta, axis);
-            camera[i] = mh.rot(v[i], horTheta, "Y");
-            camera[i] = mh.rot(camera[i], verTheta, "X");
         }
     }
 
-    // projects a set of 4D vectors down to 2D and draw's them
-    private void project(Vector4D[] v) {
-        for (int i = 0; i < v.length; i++) {
-            proj3D[i] = mh.project4DTo3D(v[i]);
-            proj2D[i] = mh.project3DTo2D(proj3D[i], canvas.getWidth(), canvas.getHeight());
+    // projects a set of 4D vectors down to 2D and drawPoints's them
+    private void project(Vector4D[] v1, Vector3D[] v2, Vector2D[] v3) {
+        double w = canvas.getWidth();
+        double h = canvas.getHeight();
+        for (int i = 0; i < v1.length; i++) {
+            v2[i] = mh.project4DTo3D(v1[i]);
+            v3[i] = mh.project3DTo2D(v2[i], w, h);
         }
-        draw(proj2D);
     }
 
     // clear's the screen
@@ -117,34 +123,55 @@ public class Controller implements Initializable {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
-    // draw's line from point to another point
-    private void line(Vector2D[] p, int i, int j, int offset) {
-        gc.strokeLine( p[i+offset].x,  p[i+offset].y,  p[j+offset].x,  p[j+offset].y);
+    // drawPoints's line from point to another point
+    private void line(Vector2D[] p, int i, int j) {
+        gc.strokeLine( p[i].x,  p[i].y,  p[j].x,  p[j].y);
     }
 
-    // draw's a set of 4D vectors by connecting 2 points
-    private void draw(Vector2D[] v) {
+    // drawPoints's a set of 2D vectors by connecting 2 points
+    private void drawPoints(Vector2D[] v) {
         // clear canvas before drawing on it
         clear();
 
+        project(coord, coord3D, coord2D);
+        drawCoord(coord2D);
+
         // connects the "outer" cube
         for(int i = 0; i < 4; i++) {
-            line(v, i, ( i + 1 ) % 4, 0);
-            line(v, i + 4, ( ( i + 1 ) % 4 ) + 4, 0);
-            line(v, i, i + 4, 0);
+            line(v, i, ( i + 1 ) % 4);
+            line(v, i + 4, ( ( i + 1 ) % 4 ) + 4);
+            line(v, i, i + 4);
         }
 
         // connects the "inner" cube
         for(int i = 0; i < 4; i++) {
-            line(v, i, ( i + 1 ) % 4, 8);
-            line(v, i + 4, ( ( i + 1 ) % 4 ) + 4, 8);
-            line(v, i, i + 4, 8);
+            line(v, i + 8, ( ( i + 1 ) % 4 ) + 8);
+            line(v, i + 12, ( ( i + 1 ) % 4 ) + 12);
+            line(v, i + 8, i + 12);
         }
 
         // connects first and second cube
         for(int i = 0; i < 8; i++) {
-            line(v, i, i + 8, 0);
+            line(v, i, i + 8);
         }
+    }
+
+    private void drawCoord(Vector2D[] v) {
+        gc.setStroke(Color.BLUE);
+        line(v, 0, 1);
+        gc.setStroke(Color.RED);
+        line(v, 0, 2);
+        gc.setStroke(Color.GREEN);
+        line(v, 0, 3);
+        gc.setStroke(Color.BLACK);
+    }
+
+    private void redraw() {
+        mh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+        rotate(points, "X", 0.0);
+        rotate(coord, "X", 0.0);
+        project(points, proj3D, proj2D);
+        drawPoints(proj2D);
     }
 
 
@@ -162,7 +189,8 @@ public class Controller implements Initializable {
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
                 double theta = rSpeed * (new_val.doubleValue() - old_val.doubleValue());
                 rotate(points, planes[finalI], theta);
-                project(camera);
+                project(points, proj3D, proj2D);
+                drawPoints(proj2D);
             });
         }
 
@@ -174,35 +202,27 @@ public class Controller implements Initializable {
 
         // adds a listener to the width and height property
         // when changed it recalculates the projection matrix for the 3D to 2D projection
-        canvas.heightProperty().addListener((e) -> {
-            mh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-            rotate(points, "X", 0.0);
-            project(camera);
-        });
-        canvas.widthProperty().addListener((e) -> {
-            mh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-            rotate(points, "X", 0.0);
-            project(camera);
-        });
+        canvas.heightProperty().addListener((e) -> redraw());
+        canvas.widthProperty().addListener((e) -> redraw());
     }
 
-    private double horTheta = 0.0;
-    private double verTheta = 0.0;
-
     private Vector2D currentVector = new Vector2D();
-    private Vector2D oldVector = new Vector2D();
 
     public void setVector(MouseEvent e) {
         currentVector = new Vector2D(e.getX(), e.getY());
     }
 
     public void updateVector(MouseEvent e) {
-        oldVector = new Vector2D(currentVector.x, currentVector.y);
+        Vector2D oldVector = new Vector2D(currentVector.x, currentVector.y);
         currentVector = new Vector2D(e.getX(), e.getY());
-        horTheta += (currentVector.x - oldVector.x) / 100;
-        verTheta += (currentVector.y - oldVector.y) / 100;
-        rotate(points, "X", 0.0);
-        project(camera);
+        double horTheta = (currentVector.x - oldVector.x) / 100;
+        double verTheta = (currentVector.y - oldVector.y) / 100;
+        rotate(points, "X", verTheta);
+        rotate(points, "Y", horTheta);
+        rotate(coord, "X", verTheta);
+        rotate(coord, "Y", horTheta);
+        project(points, proj3D, proj2D);
+        drawPoints(proj2D);
     }
 
     public void zoom(ScrollEvent s) {
@@ -210,7 +230,9 @@ public class Controller implements Initializable {
             mh.zDisplacement -= s.getDeltaY() / 100;
             System.out.println(mh.zDisplacement);
             rotate(points, "X", 0.0);
-            project(camera);
+            rotate(coord, "X", 0.0);
+            project(points, proj3D, proj2D);
+            drawPoints(proj2D);
         }
     }
 }
