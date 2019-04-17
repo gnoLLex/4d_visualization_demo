@@ -1,12 +1,17 @@
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import vector.Vector2D;
 import vector.Vector3D;
 import vector.Vector4D;
@@ -22,32 +27,26 @@ public class Controller implements Initializable {
     private Canvas canvas;
 
     @FXML
-    private Slider sdrX;
+    private Slider sdrX, sdrY, sdrZ, sdrXW, sdrYW, sdrZW;
+
     @FXML
-    private Slider sdrY;
-    @FXML
-    private Slider sdrZ;
-    @FXML
-    private Slider sdrXW;
-    @FXML
-    private Slider sdrYW;
-    @FXML
-    private Slider sdrZW;
+    private CheckBox cbX, cbY, cbZ, cbXW, cbYW, cbZW;
 
     private Slider[] sliders;
+    private CheckBox[] checkBoxes;
     private String[] planes;
 
-    private Vector4D xAxis = new Vector4D(1, 0, 0 ,0);
-    private double xTheta = 0.0, yTheta = 0.0, zTheta = 0.0;
+    private double xTheta = 0, yTheta = 0;
 
     private GraphicsContext gc;
-    private MatrixHandler mh;
+    private MatrixVectorHandler mvh;
 
     // constant for how fast the rotation will be done
-    private static double rSpeed = 0.8;
+    private static double rSpeed = Math.PI / 4;
 
     // vectors for coordinate system
     private  Vector4D[] coord = new Vector4D[4];
+    private Vector4D[] coordCam = new Vector4D[4];
     private Vector3D[] coord3D = new Vector3D[coord.length];
     private Vector2D[] coord2D = new Vector2D[coord.length];
     // arrays containing of points in n space
@@ -65,28 +64,45 @@ public class Controller implements Initializable {
         // giving the axes/planes a corresponding name
         planes = new String[]{"X", "Y", "Z", "XW", "YW", "ZW"};
 
+        checkBoxes = new CheckBox[]{cbX, cbY, cbZ, cbXW, cbYW, cbZW};
+
         // getting the GraphicsContext2D
         gc = canvas.getGraphicsContext2D();
+        gc.setLineWidth(1.4);
 
         // initializing the matrixhandler
-        mh = new MatrixHandler();
+        mvh = new MatrixVectorHandler();
         // generate initial projection matrix from 3D to 2D
-        mh.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
+        mvh.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
 
         // resets first time as initialization for the arrays points, proj3D and proj2D
         // and to drawPoints the tesseract for the first time
         reset();
         addListeners();
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0),
+                        e -> {
+                            for (int i = 0; i < checkBoxes.length; i++) {
+                                if (checkBoxes[i].isSelected()) {
+                                    rotate(points, planes[i], 0.0001);
+                                }
+                            }
+                            redraw();
+                        }
+                ),
+                new KeyFrame(Duration.millis(1))
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     public void reset() {
         resetSliders();
-
         coord = new Vector4D[]{
                 new Vector4D(),
                 new Vector4D(1, 0, 0 ,0), // x-axis
                 new Vector4D(0, 1, 0 ,0), // y-axis
-                new Vector4D(0, 0, 1 ,0)  // z-axis
+                new Vector4D(0, 0, 1 ,0), // z-axis
         };
 
         points = new Vector4D[]{
@@ -102,7 +118,9 @@ public class Controller implements Initializable {
             proj2D[i] = new Vector2D();
         }
 
-        mh.zDisplacement = 4.5;
+        xTheta = 0;
+        yTheta = 0;
+        mvh.zDisplacement = 4.5;
 
         redraw();
     }
@@ -110,15 +128,15 @@ public class Controller implements Initializable {
     // rotates a set of 4D vectors and projects them after
     private void rotate(Vector4D[] v, String axis, double theta) {
         for (int i = 0; i < v.length; i++) {
-            v[i] = mh.rot(v[i], theta, axis);
+            v[i] = mvh.rot(v[i], theta, axis);
         }
     }
 
-    private void rotateAbs(Vector4D[] v){
-        for (int i = 0; i < v.length; i++) {
-            camera[i] = mh.rot(v[i], xTheta, "X");
-            camera[i] = mh.rot(camera[i], yTheta, "Y");
-            camera[i] = mh.rot(camera[i], zTheta, "Z");
+    private void rotateAbs(Vector4D[] v1, Vector4D[] v2){
+        for (int i = 0; i < v1.length; i++) {
+            v2[i] = mvh.rot(v1[i], xTheta, "X");
+            v2[i] = mvh.rot(v2[i], yTheta, "Y");
+
         }
     }
 
@@ -128,8 +146,8 @@ public class Controller implements Initializable {
         double h = canvas.getHeight();
 
         for (int i = 0; i < v1.length; i++) {
-            v2[i] = mh.project4DTo3D(v1[i]);
-            v3[i] = mh.project3DTo2D(v2[i], w, h);
+            v2[i] = mvh.project4DTo3D(v1[i]);
+            v3[i] = mvh.project3DTo2D(v2[i], w, h);
         }
     }
 
@@ -149,7 +167,7 @@ public class Controller implements Initializable {
         // clear canvas before drawing on it
         clear();
 
-        project(coord, coord3D, coord2D);
+        project(coordCam, coord3D, coord2D);
         drawCoord(coord2D);
 
         // connects the "outer" cube
@@ -183,10 +201,11 @@ public class Controller implements Initializable {
     }
 
     private void redraw() {
-        mh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-        rotate(points, "X", 0.0);
-        rotate(coord, "X", 0.0);
-        rotateAbs(points);
+        mvh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+        rotate(points, "X", 0);
+        rotate(coord, "X", 0);
+        rotateAbs(coord, coordCam);
+        rotateAbs(points , camera);
         project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
@@ -206,7 +225,7 @@ public class Controller implements Initializable {
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
                 double theta = rSpeed * (new_val.doubleValue() - old_val.doubleValue());
                 rotate(points, planes[finalI], theta);
-                rotateAbs(points);
+                rotateAbs(points, camera);
                 project(camera, proj3D, proj2D);
                 drawPoints(proj2D);
             });
@@ -232,33 +251,24 @@ public class Controller implements Initializable {
     public void updateVector(MouseEvent e) {
         Vector2D oldVector = new Vector2D(currentVector.x, currentVector.y);
         currentVector = new Vector2D(e.getX(), e.getY());
+
         double horTheta = (currentVector.x - oldVector.x) / 100;
         double verTheta = (currentVector.y - oldVector.y) / 100;
-        rotate(coord, "X", verTheta);
-        rotate(coord, "Y", horTheta);
-        for(int i = 0; i < coord.length; i++) {
-            System.out.println(coord[i].x + " " + coord[i].y + " " + coord[i].z + " " + coord[i].w);
-        }
-        Vector4D angles = Vector4D.sub(coord[1], xAxis);
 
-        yTheta = -(Math.atan2(angles.x, Math.sqrt(angles.y*angles.y + angles.z*angles.z)) * 90 / Math.PI);
-        xTheta = 0;
-        zTheta = 0;
+        xTheta += verTheta;
+        yTheta += horTheta;
 
-        rotateAbs(points);
+        rotateAbs(coord, coordCam);
+        rotateAbs(points, camera);
         project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
 
     public void zoom(ScrollEvent s) {
-        if (mh.zDisplacement - s.getDeltaY() / 100 >= 2) {
-            mh.zDisplacement -= s.getDeltaY() / 100;
-            System.out.println(mh.zDisplacement);
-            rotate(points, "X", 0.0);
-            rotate(coord, "X", 0.0);
-            rotateAbs(points);
-            project(camera, proj3D, proj2D);
-            drawPoints(proj2D);
+        if (mvh.zDisplacement - s.getDeltaY() / 100 >= 2) {
+            mvh.zDisplacement -= s.getDeltaY() / 100;
+            System.out.println(mvh.zDisplacement);
+            redraw();
         }
     }
 }

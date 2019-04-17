@@ -2,10 +2,12 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -22,21 +24,51 @@
          </font>
       </Label>
       <Separator prefWidth="200.0" />
-      <VBox alignment="CENTER" spacing="5.0">
-         <Label text="X-Axis" />
-         <Slider fx:id="sdrX" max="4.0" min="-4.0" />
-         <Label text="Y-Axis" />
-         <Slider fx:id="sdrY" max="4.0" min="-4.0" />
-         <Label text="Z-Axis" />
-         <Slider fx:id="sdrZ" max="4.0" min="-4.0" />
+      <VBox alignment="CENTER" spacing="10.0">
+         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+            <children>
+               <Label text="X-Axis" />
+               <CheckBox fx:id="cbX" mnemonicParsing="false" text="AutoAnimate" />
+            </children>
+         </HBox>
+         <Slider fx:id="sdrX" max="4.0" min="-8.0" />
+         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+            <children>
+               <Label text="Y-Axis" />
+               <CheckBox fx:id="cbY" mnemonicParsing="false" text="AutoAnimate" />
+            </children>
+         </HBox>
+         <Slider fx:id="sdrY" max="4.0" min="-8.0" />
+         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+            <children>
+               <Label text="Z-Axis" />
+               <CheckBox fx:id="cbZ" mnemonicParsing="false" text="AutoAnimate" />
+            </children>
+         </HBox>
+         <Slider fx:id="sdrZ" max="4.0" min="-8.0" />
       </VBox>
       <Separator prefWidth="200.0" />
-      <VBox alignment="TOP_CENTER" spacing="5.0">
-         <Label text="XW-Plane" />
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+            <children>
+               <Label text="XW-Plane" />
+               <CheckBox fx:id="cbXW" mnemonicParsing="false" text="AutoAnimate" />
+            </children>
+         </HBox>
          <Slider fx:id="sdrXW" max="4.0" min="-4.0" />
-         <Label text="YW-Plane" />
+         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+            <children>
+               <Label text="YW-Plane" />
+               <CheckBox fx:id="cbYW" mnemonicParsing="false" text="AutoAnimate" />
+            </children>
+         </HBox>
          <Slider fx:id="sdrYW" max="4.0" min="-4.0" />
-         <Label text="ZW-Plane" />
+         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+            <children>
+               <Label text="ZW-Plane" />
+               <CheckBox fx:id="cbZW" mnemonicParsing="false" text="AutoAnimate" />
+            </children>
+         </HBox>
          <Slider fx:id="sdrZW" max="4.0" min="-4.0" />
       </VBox>
       <Separator prefWidth="200.0" />
