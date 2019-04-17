@@ -37,6 +37,9 @@ public class Controller implements Initializable {
     private Slider[] sliders;
     private String[] planes;
 
+    private Vector4D xAxis = new Vector4D(1, 0, 0 ,0);
+    private double xTheta = 0.0, yTheta = 0.0, zTheta = 0.0;
+
     private GraphicsContext gc;
     private MatrixHandler mh;
 
@@ -49,6 +52,7 @@ public class Controller implements Initializable {
     private Vector2D[] coord2D = new Vector2D[coord.length];
     // arrays containing of points in n space
     private Vector4D[] points = new Vector4D[16];
+    private Vector4D[] camera = new Vector4D[16];
     private Vector3D[] proj3D = new Vector3D[points.length];
     private Vector2D[] proj2D = new Vector2D[points.length];
 
@@ -91,10 +95,13 @@ public class Controller implements Initializable {
                 new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
                 new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
         };
+
         for(int i = 0; i < points.length; i++) {
+            camera[i] = new Vector4D();
             proj3D[i] = new Vector3D();
             proj2D[i] = new Vector2D();
         }
+
         mh.zDisplacement = 4.5;
 
         redraw();
@@ -107,10 +114,19 @@ public class Controller implements Initializable {
         }
     }
 
+    private void rotateAbs(Vector4D[] v){
+        for (int i = 0; i < v.length; i++) {
+            camera[i] = mh.rot(v[i], xTheta, "X");
+            camera[i] = mh.rot(camera[i], yTheta, "Y");
+            camera[i] = mh.rot(camera[i], zTheta, "Z");
+        }
+    }
+
     // projects a set of 4D vectors down to 2D and drawPoints's them
     private void project(Vector4D[] v1, Vector3D[] v2, Vector2D[] v3) {
         double w = canvas.getWidth();
         double h = canvas.getHeight();
+
         for (int i = 0; i < v1.length; i++) {
             v2[i] = mh.project4DTo3D(v1[i]);
             v3[i] = mh.project3DTo2D(v2[i], w, h);
@@ -170,7 +186,8 @@ public class Controller implements Initializable {
         mh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
         rotate(points, "X", 0.0);
         rotate(coord, "X", 0.0);
-        project(points, proj3D, proj2D);
+        rotateAbs(points);
+        project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
 
@@ -189,11 +206,11 @@ public class Controller implements Initializable {
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
                 double theta = rSpeed * (new_val.doubleValue() - old_val.doubleValue());
                 rotate(points, planes[finalI], theta);
-                project(points, proj3D, proj2D);
+                rotateAbs(points);
+                project(camera, proj3D, proj2D);
                 drawPoints(proj2D);
             });
         }
-
 
         // binding the width and height property to the ones of the pane
         // a cheaty little solution to get a resizeable canvas
@@ -217,11 +234,19 @@ public class Controller implements Initializable {
         currentVector = new Vector2D(e.getX(), e.getY());
         double horTheta = (currentVector.x - oldVector.x) / 100;
         double verTheta = (currentVector.y - oldVector.y) / 100;
-        rotate(points, "X", verTheta);
-        rotate(points, "Y", horTheta);
         rotate(coord, "X", verTheta);
         rotate(coord, "Y", horTheta);
-        project(points, proj3D, proj2D);
+        for(int i = 0; i < coord.length; i++) {
+            System.out.println(coord[i].x + " " + coord[i].y + " " + coord[i].z + " " + coord[i].w);
+        }
+        Vector4D angles = Vector4D.sub(coord[1], xAxis);
+
+        yTheta = -(Math.atan2(angles.x, Math.sqrt(angles.y*angles.y + angles.z*angles.z)) * 90 / Math.PI);
+        xTheta = 0;
+        zTheta = 0;
+
+        rotateAbs(points);
+        project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
 
@@ -231,7 +256,8 @@ public class Controller implements Initializable {
             System.out.println(mh.zDisplacement);
             rotate(points, "X", 0.0);
             rotate(coord, "X", 0.0);
-            project(points, proj3D, proj2D);
+            rotateAbs(points);
+            project(camera, proj3D, proj2D);
             drawPoints(proj2D);
         }
     }

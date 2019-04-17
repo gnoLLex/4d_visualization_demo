@@ -28,4 +28,15 @@ public class Vector4D extends Vector3D {
         super();
         this.w = 0;
     }
+
+    public static Vector4D sub(Vector4D v1, Vector4D v2) {
+        Vector4D o = new Vector4D();
+
+        o.x = v1.x - v2.x;
+        o.y = v1.y - v2.y;
+        o.z = v1.z - v2.z;
+        o.w = v1.w - v2.w;
+
+        return o;
+    }
 }
