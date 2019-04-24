@@ -27,25 +27,25 @@
       <VBox alignment="CENTER" spacing="10.0">
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
-               <Label text="X-Axis" />
+               <Label text="X-Axis" textFill="BLUE" />
                <CheckBox fx:id="cbX" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrX" max="4.0" min="-8.0" />
+         <Slider fx:id="sdrX" max="4.0" min="-4.0" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
-               <Label text="Y-Axis" />
+               <Label text="Y-Axis" textFill="RED" />
                <CheckBox fx:id="cbY" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrY" max="4.0" min="-8.0" />
+         <Slider fx:id="sdrY" max="4.0" min="-4.0" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
-               <Label text="Z-Axis" />
+               <Label text="Z-Axis" textFill="LIME" />
                <CheckBox fx:id="cbZ" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrZ" max="4.0" min="-8.0" />
+         <Slider fx:id="sdrZ" max="4.0" min="-4.0" />
       </VBox>
       <Separator prefWidth="200.0" />
       <VBox alignment="TOP_CENTER" spacing="10.0">

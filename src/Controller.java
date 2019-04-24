@@ -84,7 +84,7 @@ public class Controller implements Initializable {
                         e -> {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
-                                    rotate(points, planes[i], 0.0001);
+                                    rotate(points, planes[i], 0.0005);
                                 }
                             }
                             redraw();
