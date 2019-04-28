@@ -28,15 +28,49 @@ public class Vector4D extends Vector3D {
         super();
         this.w = 0;
     }
-
-    public static Vector4D sub(Vector4D v1, Vector4D v2) {
+    /*
+    public Vector4D add(Vector4D v) {
         Vector4D o = new Vector4D();
-
-        o.x = v1.x - v2.x;
-        o.y = v1.y - v2.y;
-        o.z = v1.z - v2.z;
-        o.w = v1.w - v2.w;
-
+        o.x = this.x + v.x;
+        o.y = this.y + v.y;
+        o.z = this.z + v.z;
+        o.w = this.w + v.w;
         return o;
     }
+
+    public Vector4D sub(Vector4D v) {
+        Vector4D o = new Vector4D();
+        o.x = this.x - v.x;
+        o.y = this.y - v.y;
+        o.z = this.z - v.z;
+        o.w = this.w - v.w;
+        return o;
+    }
+
+    public double dotProd(Vector4D v) {
+        double o = 0;
+        o += this.x * v.x;
+        o += this.y * v.y;
+        o += this.z * v.z;
+        o += this.w * v.w;
+        return o;
+    }
+
+    public double magnitude() {
+        double X = this.x * this.x;
+        double Y = this.y * this.y;
+        double Z = this.z * this.z;
+        double W = this.w * this.w;
+        return Math.sqrt(X + Y + Z + W);
+    }
+
+    public Vector4D times(double d) {
+        Vector4D o = new Vector4D();
+        o.x = this.x * d;
+        o.y = this.y * d;
+        o.z = this.z * d;
+        o.w = this.w * d;
+        return o;
+    }
+    */
 }

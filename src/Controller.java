@@ -79,21 +79,6 @@ public class Controller implements Initializable {
         // and to drawPoints the tesseract for the first time
         reset();
         addListeners();
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0),
-                        e -> {
-                            for (int i = 0; i < checkBoxes.length; i++) {
-                                if (checkBoxes[i].isSelected()) {
-                                    rotate(points, planes[i], 0.0005);
-                                }
-                            }
-                            redraw();
-                        }
-                ),
-                new KeyFrame(Duration.millis(1))
-        );
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
     }
 
     public void reset() {
@@ -223,7 +208,9 @@ public class Controller implements Initializable {
         for(int i = 0; i < sliders.length; i++) {
             int finalI = i;
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
-                double theta = rSpeed * (new_val.doubleValue() - old_val.doubleValue());
+                double newD = new_val.doubleValue();
+                double oldD = old_val.doubleValue();
+                double theta = rSpeed * (newD - oldD);
                 rotate(points, planes[finalI], theta);
                 rotateAbs(points, camera);
                 project(camera, proj3D, proj2D);
@@ -240,6 +227,22 @@ public class Controller implements Initializable {
         // when changed it recalculates the projection matrix for the 3D to 2D projection
         canvas.heightProperty().addListener((e) -> redraw());
         canvas.widthProperty().addListener((e) -> redraw());
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0),
+                        e -> {
+                            for (int i = 0; i < checkBoxes.length; i++) {
+                                if (checkBoxes[i].isSelected()) {
+                                    rotate(points, planes[i], 0.0005);
+                                }
+                            }
+                            redraw();
+                        }
+                ),
+                new KeyFrame(Duration.millis(1))
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     private Vector2D currentVector = new Vector2D();

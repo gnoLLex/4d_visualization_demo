@@ -1,7 +1,5 @@
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import vector.*;
-import javafx.scene.input.MouseEvent;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
