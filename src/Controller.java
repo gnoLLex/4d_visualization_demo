@@ -36,8 +36,6 @@ public class Controller implements Initializable {
     private CheckBox[] checkBoxes;
     private String[] planes;
 
-    private double xTheta = 0, yTheta = 0;
-
     private GraphicsContext gc;
     private MatrixVectorHandler mvh;
 
@@ -45,13 +43,13 @@ public class Controller implements Initializable {
     private static double rSpeed = Math.PI / 4;
 
     // vectors for coordinate system
-    private  Vector4D[] coord = new Vector4D[4];
-    private Vector4D[] coordCam = new Vector4D[4];
+    private Vector4D[] coord = new Vector4D[4];
+    private Vector4D[] coordCam = new Vector4D[coord.length];
     private Vector3D[] coord3D = new Vector3D[coord.length];
     private Vector2D[] coord2D = new Vector2D[coord.length];
     // arrays containing of points in n space
     private Vector4D[] points = new Vector4D[16];
-    private Vector4D[] camera = new Vector4D[16];
+    private Vector4D[] camera = new Vector4D[points.length];
     private Vector3D[] proj3D = new Vector3D[points.length];
     private Vector2D[] proj2D = new Vector2D[points.length];
 
@@ -102,9 +100,6 @@ public class Controller implements Initializable {
             proj3D[i] = new Vector3D();
             proj2D[i] = new Vector2D();
         }
-
-        xTheta = 0;
-        yTheta = 0;
         mvh.zDisplacement = 4.5;
 
         redraw();
@@ -114,14 +109,6 @@ public class Controller implements Initializable {
     private void rotate(Vector4D[] v, String axis, double theta) {
         for (int i = 0; i < v.length; i++) {
             v[i] = mvh.rot(v[i], theta, axis);
-        }
-    }
-
-    private void rotateAbs(Vector4D[] v1, Vector4D[] v2){
-        for (int i = 0; i < v1.length; i++) {
-            v2[i] = mvh.rot(v1[i], xTheta, "X");
-            v2[i] = mvh.rot(v2[i], yTheta, "Y");
-
         }
     }
 
@@ -189,8 +176,8 @@ public class Controller implements Initializable {
         mvh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
         rotate(points, "X", 0);
         rotate(coord, "X", 0);
-        rotateAbs(coord, coordCam);
-        rotateAbs(points , camera);
+        rotateTo(coord, coordCam);
+        rotateTo(points , camera);
         project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
@@ -212,7 +199,7 @@ public class Controller implements Initializable {
                 double oldD = old_val.doubleValue();
                 double theta = rSpeed * (newD - oldD);
                 rotate(points, planes[finalI], theta);
-                rotateAbs(points, camera);
+                rotateTo(points, camera);
                 project(camera, proj3D, proj2D);
                 drawPoints(proj2D);
             });
@@ -258,11 +245,10 @@ public class Controller implements Initializable {
         double horTheta = (currentVector.x - oldVector.x) / 100;
         double verTheta = (currentVector.y - oldVector.y) / 100;
 
-        xTheta += verTheta;
-        yTheta += horTheta;
+        rotate(coord, "X", verTheta);
+        rotate(coord, "Y", horTheta);
 
-        rotateAbs(coord, coordCam);
-        rotateAbs(points, camera);
+        rotateTo(points, camera);
         project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
@@ -270,8 +256,25 @@ public class Controller implements Initializable {
     public void zoom(ScrollEvent s) {
         if (mvh.zDisplacement - s.getDeltaY() / 100 >= 2) {
             mvh.zDisplacement -= s.getDeltaY() / 100;
-            System.out.println(mvh.zDisplacement);
             redraw();
+        }
+    }
+
+    private void rotateTo(Vector4D[] v1, Vector4D[] v2){
+
+        Vector4D[] world = new Vector4D[]{
+                new Vector4D(),
+                new Vector4D(1, 0, 0 ,0),
+                new Vector4D(0, 1, 0 ,0),
+                new Vector4D(0, 0, 1 ,0)
+        };
+
+        double Xangle = Math.cos(world[1].dotProd(coord[1])/(world[1].magnitude() * coord[1].magnitude()));
+
+        for (int i = 0; i < v1.length; i++) {
+            v2[i] = mvh.rot(v1[i], 0, "X");
+            v2[i] = mvh.rot(v2[i], 0, "Y");
+
         }
     }
 }

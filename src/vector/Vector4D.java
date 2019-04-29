@@ -28,7 +28,7 @@ public class Vector4D extends Vector3D {
         super();
         this.w = 0;
     }
-    /*
+
     public Vector4D add(Vector4D v) {
         Vector4D o = new Vector4D();
         o.x = this.x + v.x;
@@ -64,6 +64,14 @@ public class Vector4D extends Vector3D {
         return Math.sqrt(X + Y + Z + W);
     }
 
+    public Vector4D crossProd(Vector4D v) {
+        Vector4D o = new Vector4D();
+        o.x = this.y * v.z - this.z * v.y;
+        o.y = this.z * v.x - this.x * v.z;
+        o.z = this.x * v.y - this.y * v.x;
+        return o;
+    }
+
     public Vector4D times(double d) {
         Vector4D o = new Vector4D();
         o.x = this.x * d;
@@ -72,5 +80,4 @@ public class Vector4D extends Vector3D {
         o.w = this.w * d;
         return o;
     }
-    */
 }
