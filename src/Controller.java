@@ -44,7 +44,6 @@ public class Controller implements Initializable {
 
     // vectors for coordinate system
     private Vector4D[] coord = new Vector4D[4];
-    private Vector4D[] coordCam = new Vector4D[coord.length];
     private Vector3D[] coord3D = new Vector3D[coord.length];
     private Vector2D[] coord2D = new Vector2D[coord.length];
     // arrays containing of points in n space
@@ -75,8 +74,8 @@ public class Controller implements Initializable {
 
         // resets first time as initialization for the arrays points, proj3D and proj2D
         // and to drawPoints the tesseract for the first time
-        reset();
         addListeners();
+        reset();
     }
 
     public void reset() {
@@ -100,6 +99,8 @@ public class Controller implements Initializable {
             proj3D[i] = new Vector3D();
             proj2D[i] = new Vector2D();
         }
+        rotate(coord, "Y", Math.PI / 5);
+        rotate(coord, "X", Math.PI / 20);
         mvh.zDisplacement = 4.5;
 
         redraw();
@@ -139,7 +140,7 @@ public class Controller implements Initializable {
         // clear canvas before drawing on it
         clear();
 
-        project(coordCam, coord3D, coord2D);
+        project(coord, coord3D, coord2D);
         drawCoord(coord2D);
 
         // connects the "outer" cube
@@ -170,13 +171,18 @@ public class Controller implements Initializable {
         gc.setStroke(Color.GREEN);
         line(v, 0, 3);
         gc.setStroke(Color.BLACK);
+        /*
+        System.out.println(v[0].toString());
+        System.out.println(v[1].toString());
+        System.out.println(v[2].toString());
+        System.out.println(v[3].toString());
+        */
     }
 
     private void redraw() {
         mvh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
         rotate(points, "X", 0);
         rotate(coord, "X", 0);
-        rotateTo(coord, coordCam);
         rotateTo(points , camera);
         project(camera, proj3D, proj2D);
         drawPoints(proj2D);
@@ -221,9 +227,9 @@ public class Controller implements Initializable {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
                                     rotate(points, planes[i], 0.0005);
+                                    redraw();
                                 }
                             }
-                            redraw();
                         }
                 ),
                 new KeyFrame(Duration.millis(1))
@@ -269,12 +275,29 @@ public class Controller implements Initializable {
                 new Vector4D(0, 0, 1 ,0)
         };
 
-        double Xangle = Math.cos(world[1].dotProd(coord[1])/(world[1].magnitude() * coord[1].magnitude()));
+        double firstAngle = Math.acos(world[1].dotProd(coord[1])/(world[1].magnitude() * coord[1].magnitude()));
+        System.out.println(firstAngle * 180 / Math.PI);
 
+        Vector4D firstAxis = world[1].crossProd(coord[1]);
+        System.out.println(firstAxis.toString());
+
+        for (int i = 1; i < world.length; i++) {
+            world[i] = world[i].rotateByVector(firstAxis, firstAngle);
+        }
         for (int i = 0; i < v1.length; i++) {
-            v2[i] = mvh.rot(v1[i], 0, "X");
-            v2[i] = mvh.rot(v2[i], 0, "Y");
+            v2[i] = v1[i].rotateByVector(firstAxis, firstAngle);
+        }
+        double secondAngle = Math.acos(world[2].dotProd(coord[2])/(world[2].magnitude() * coord[2].magnitude()));
+        System.out.println(secondAngle * 180 / Math.PI);
 
+        Vector4D secondAxis = world[2].crossProd(coord[2]);
+        System.out.println(secondAxis.toString());
+
+        for (int i = 1; i < world.length; i++) {
+            world[i] = world[i].rotateByVector(secondAxis, secondAngle);
+        }
+        for (int i = 0; i < v2.length; i++) {
+            v2[i] = v2[i].rotateByVector(secondAxis, secondAngle);
         }
     }
 }

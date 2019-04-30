@@ -10,6 +10,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vector/Vector2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector2D.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vector/Vector4D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector4D.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -24,12 +25,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="16" column="42" lean-forward="true" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
-              <folding>
-                <element signature="e#527#528#0" expanded="true" />
-                <element signature="e#555#556#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="126">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -37,12 +34,36 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="271" column="104" selection-start-line="271" selection-start-column="104" selection-end-line="271" selection-end-column="104" />
+            <state relative-caret-position="549">
+              <caret line="102" column="38" selection-start-line="102" selection-start-column="38" selection-end-line="102" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5002#5003#0" expanded="true" />
-                <element signature="e#5067#5068#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-648">
+              <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="33" selection-end-column="5" />
+              <folding>
+                <element signature="e#666#667#0" expanded="true" />
+                <element signature="e#746#747#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/vector/Vector2D.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="602">
+              <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
+              <folding>
+                <element signature="e#598#599#0" expanded="true" />
+                <element signature="e#672#673#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -51,17 +72,18 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MatrixVectorHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="27" column="7" lean-forward="true" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
+            <state relative-caret-position="235">
+              <caret line="96" selection-start-line="96" selection-end-line="96" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1">
-              <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+        <entry file="file://$PROJECT_DIR$/src/app.fxml">
+          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="16" column="150" selection-start-line="16" selection-start-column="150" selection-end-line="16" selection-end-column="150" />
             </state>
           </provider>
         </entry>
@@ -75,6 +97,8 @@
       <find>(double)</find>
       <find>float</find>
       <find>camera</find>
+      <find>rotateTo</find>
+      <find>coordCam</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -86,12 +110,12 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/GUI.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/src/vector/Vector2D.java" />
         <option value="$PROJECT_DIR$/src/vector/Vector3D.java" />
         <option value="$PROJECT_DIR$/src/MatrixHandler.java" />
         <option value="$PROJECT_DIR$/src/MatrixVectorHandler.java" />
         <option value="$PROJECT_DIR$/src/app.fxml" />
         <option value="$PROJECT_DIR$/src/vector/Vector4D.java" />
+        <option value="$PROJECT_DIR$/src/vector/Vector2D.java" />
         <option value="$PROJECT_DIR$/src/Controller.java" />
       </list>
     </option>
@@ -112,17 +136,17 @@
         <subPane>
           <expand>
             <path>
-              <item name="4d_visualization_demo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="4d_visualization_demo" type="462c0819:PsiDirectoryNode" />
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="4d_visualization_demo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="4d_visualization_demo" type="462c0819:PsiDirectoryNode" />
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="4d_visualization_demo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="4d_visualization_demo" type="462c0819:PsiDirectoryNode" />
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="vector" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -130,8 +154,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -141,11 +165,11 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556537900691" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556631877267" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -206,11 +230,12 @@
       <workItem from="1556398957754" duration="456000" />
       <workItem from="1556472078391" duration="2719000" />
       <workItem from="1556535316172" duration="2920000" />
+      <workItem from="1556619041836" duration="7504000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70724000" />
+    <option name="totallyTimeSpent" value="79686000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -222,10 +247,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1600" height="873" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18468468" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18710022" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -234,7 +259,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3290461" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.19131614" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.19078243" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39978564" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -242,7 +267,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3290461" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.3290461" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.15969989" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.3279743" />
       <window_info anchor="bottom" id="Python Console" order="13" />
@@ -378,55 +403,57 @@
       </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/fxml/Initializable.java" />
-    <entry file="file://$PROJECT_DIR$/src/vector/Vector2D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/beans/InvalidationListener.java" />
-    <entry file="file://$PROJECT_DIR$/src/MatrixVectorHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="27" column="7" lean-forward="true" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="16" column="42" lean-forward="true" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
-          <folding>
-            <element signature="e#527#528#0" expanded="true" />
-            <element signature="e#555#556#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="126">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app.fxml">
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
       <provider editor-type-id="text-editor">
-        <state relative-caret-position="288">
+        <state relative-caret-position="336">
           <caret line="16" column="150" selection-start-line="16" selection-start-column="150" selection-end-line="16" selection-end-column="150" />
         </state>
       </provider>
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vector/Vector2D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="602">
+          <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
+          <folding>
+            <element signature="e#598#599#0" expanded="true" />
+            <element signature="e#672#673#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MatrixVectorHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="96" selection-start-line="96" selection-end-line="96" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1">
-          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+        <state relative-caret-position="-648">
+          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="33" selection-end-column="5" />
+          <folding>
+            <element signature="e#666#667#0" expanded="true" />
+            <element signature="e#746#747#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="271" column="104" selection-start-line="271" selection-start-column="104" selection-end-line="271" selection-end-column="104" />
+        <state relative-caret-position="549">
+          <caret line="102" column="38" selection-start-line="102" selection-start-column="38" selection-end-line="102" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5002#5003#0" expanded="true" />
-            <element signature="e#5067#5068#0" expanded="true" />
           </folding>
         </state>
       </provider>

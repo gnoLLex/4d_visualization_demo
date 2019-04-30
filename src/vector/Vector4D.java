@@ -29,6 +29,10 @@ public class Vector4D extends Vector3D {
         this.w = 0;
     }
 
+    public String toString() {
+        return this.x + " " + this.y + " " + this.z + " " + this.w;
+    }
+
     public Vector4D add(Vector4D v) {
         Vector4D o = new Vector4D();
         o.x = this.x + v.x;
@@ -47,12 +51,20 @@ public class Vector4D extends Vector3D {
         return o;
     }
 
+    public Vector4D times(double d) {
+        Vector4D o = new Vector4D();
+        o.x = this.x * d;
+        o.y = this.y * d;
+        o.z = this.z * d;
+        o.w = this.w;
+        return o;
+    }
+
     public double dotProd(Vector4D v) {
         double o = 0;
         o += this.x * v.x;
         o += this.y * v.y;
         o += this.z * v.z;
-        o += this.w * v.w;
         return o;
     }
 
@@ -60,8 +72,7 @@ public class Vector4D extends Vector3D {
         double X = this.x * this.x;
         double Y = this.y * this.y;
         double Z = this.z * this.z;
-        double W = this.w * this.w;
-        return Math.sqrt(X + Y + Z + W);
+        return Math.sqrt(X + Y + Z);
     }
 
     public Vector4D crossProd(Vector4D v) {
@@ -72,12 +83,16 @@ public class Vector4D extends Vector3D {
         return o;
     }
 
-    public Vector4D times(double d) {
-        Vector4D o = new Vector4D();
-        o.x = this.x * d;
-        o.y = this.y * d;
-        o.z = this.z * d;
-        o.w = this.w * d;
-        return o;
+    public Vector4D rotateByVector(Vector4D v, double angle) {
+        Vector4D aDirB = v.times(this.dotProd(v) / v.dotProd(v));
+        Vector4D aOrthB = this.sub(aDirB);
+        Vector4D W = v.crossProd(aOrthB);
+
+        double x1 = Math.cos(angle) / aOrthB.magnitude();
+        double x2 = Math.sin(angle) / W.magnitude();
+
+        Vector4D aOrthBRot = (aOrthB.times(x1).add(W.times(x2))).times(aOrthB.magnitude());
+
+        return aDirB.add(aOrthBRot);
     }
 }
