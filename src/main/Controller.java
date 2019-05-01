@@ -1,3 +1,5 @@
+package main;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,74 +21,245 @@ import vector.Vector4D;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+import static com.sun.javafx.sg.prism.NGCanvas.LINE_WIDTH;
 
+/** Controls the JavaFx Application
+ * @author Lucas Engelmann
+ * @version 1.0
+ * @since 1.0
+ */
+public class Controller implements Initializable {
+    //region Global variables
+
+    //region JavaFX UI Elements
+
+    /**
+     * Pane containing the canvas
+     * necessary to resize the canvas
+     */
     @FXML
     private Pane canvasPane;
+
+    /**
+     * Canvas to draw tesseract on
+     */
     @FXML
     private Canvas canvas;
 
+    /**
+     * Slider to control the rotation around the x-axis
+     */
     @FXML
-    private Slider sdrX, sdrY, sdrZ, sdrXW, sdrYW, sdrZW;
+    private Slider sdrX;
 
+    /**
+     * Slider to control the rotation around the y-axis
+     */
     @FXML
-    private CheckBox cbX, cbY, cbZ, cbXW, cbYW, cbZW;
+    private Slider sdrY;
 
+    /**
+     * Slider to control the rotation around the z-axis
+     */
+    @FXML
+    private Slider sdrZ;
+
+    /**
+     * Slider to control the rotation around the xw-plane
+     */
+    @FXML
+    private Slider sdrXW;
+
+    /**
+     * Slider to control the rotation around the yw-plane
+     */
+    @FXML
+    private Slider sdrYW;
+
+    /**
+     * Slider to control the rotation around the zw-plane
+     */
+    @FXML
+    private Slider sdrZW;
+
+    /**
+     * CheckBox to control if the tesseract should rotate around the x-axis automatically
+     */
+    @FXML
+    private CheckBox cbX;
+
+    /**
+     * CheckBox to control if the tesseract should rotate around the y-axis automatically
+     */
+    @FXML
+    private CheckBox cbY;
+
+    /**
+     * CheckBox to control if the tesseract should rotate around the z-axis automatically
+     */
+    @FXML
+    private CheckBox cbZ;
+
+    /**
+     * CheckBox to control if the tesseract should rotate around the xw-plane automatically
+     */
+    @FXML
+    private CheckBox cbXW;
+
+    /**
+     * CheckBox to control if the tesseract should rotate around the yw-plane automatically
+     */
+    @FXML
+    private CheckBox cbYW;
+
+    /**
+     * CheckBox to control if the tesseract should rotate around the zw-plane automatically
+     */
+    @FXML
+    private CheckBox cbZW;
+
+    /**
+     * array containing all sliders
+     */
     private Slider[] sliders;
+
+    /**
+     * array containing all checkboxes
+     */
     private CheckBox[] checkBoxes;
-    private String[] planes;
 
+    /**
+     * array containing all names for axis or planes to rotate around
+     */
+    private String[] around;
+    //endregion
+
+    /**
+     * GraphicsContext of the Canvas for global usage
+     */
     private GraphicsContext gc;
-    private MatrixVectorHandler mvh;
 
-    // constant for how fast the rotation will be done
-    private static double rSpeed = Math.PI / 4;
+    /**
+     * RotationHandler for global usage
+     */
+    private RotationHandler rh;
 
-    // vectors for coordinate system
+    //region Vector Arrays
+
+    /**
+     * array to store coordinate system
+     */
     private Vector4D[] coord = new Vector4D[4];
+
+    /**
+     * array to store coordinate system projected to 3d-space
+     */
     private Vector3D[] coord3D = new Vector3D[coord.length];
+
+    /**
+     * array to store coordinate system projected to 2d-plane
+     */
     private Vector2D[] coord2D = new Vector2D[coord.length];
-    // arrays containing of points in n space
+
+    /**
+     * array to store the points of the tesseract
+     */
     private Vector4D[] points = new Vector4D[16];
+
+    /**
+     * array to store the points of the tesseract which are rotated by mouse-control
+     */
     private Vector4D[] camera = new Vector4D[points.length];
+
+    /**
+     * array to store the points of the tesseract projected to 3d-space
+     */
     private Vector3D[] proj3D = new Vector3D[points.length];
+
+    /**
+     * array to store the points of the tesseract projected to 2d-plane
+     */
     private Vector2D[] proj2D = new Vector2D[points.length];
 
-    //is called to initialize a controller after its root element has been completely processed.
+    //endregion
+
+    //endregion
+
+    //region Constants
+
+    /**
+     * Constant for how fast the rotation will be done
+     */
+    private static final double ROTATION_SPEED = Math.PI / 4;
+
+    /**
+     * Thickness of the lines
+     */
+    private static final double LINE_WIDTH = 1.4;
+
+
+    /**
+     * Initial rotation-angle for y-axis
+     */
+    private static final double INIT_Y_ANGLE = Math.PI / 5;
+
+    /**
+     * Initial rotation-angle for x-axis
+     */
+    private static final double INIT_X_ANGLE = Math.PI / 20;
+
+    /**
+     * Initial zoom-factor
+     */
+    private static final double INIT_ZOOM = 4.5;
+    //endregion
+
+    /**
+     * Is called to initialize the controller after its root element has been completely processed.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // filling array with the sliders
+        // filling slider-array with all sliders
         sliders = new Slider[]{sdrX, sdrY, sdrZ, sdrXW, sdrYW, sdrZW};
 
-        // giving the axes/planes a corresponding name
-        planes = new String[]{"X", "Y", "Z", "XW", "YW", "ZW"};
-
+        // filling checkbox-array with all checkboxes
         checkBoxes = new CheckBox[]{cbX, cbY, cbZ, cbXW, cbYW, cbZW};
+
+        // giving the axes/planes a corresponding name
+        around = new String[]{"X", "Y", "Z", "XW", "YW", "ZW"};
 
         // getting the GraphicsContext2D
         gc = canvas.getGraphicsContext2D();
-        gc.setLineWidth(1.4);
+        gc.setLineWidth(LINE_WIDTH);
 
         // initializing the matrixhandler
-        mvh = new MatrixVectorHandler();
+        rh = new RotationHandler();
         // generate initial projection matrix from 3D to 2D
-        mvh.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
+        rh.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
 
-        // resets first time as initialization for the arrays points, proj3D and proj2D
-        // and to drawPoints the tesseract for the first time
+        // one time use in the beginning
         addListeners();
+
+        // resets first time as initialization for the vector-arrays
+        // and to draw everything for the first time
         reset();
     }
 
+    /**
+     * Resets everything to the initial state
+     */
     public void reset() {
-        resetSliders();
+        resetUI();
+
+        // all points for a coordinate system
         coord = new Vector4D[]{
-                new Vector4D(),
+                new Vector4D(),                      // center-point
                 new Vector4D(1, 0, 0 ,0), // x-axis
                 new Vector4D(0, 1, 0 ,0), // y-axis
                 new Vector4D(0, 0, 1 ,0), // z-axis
         };
 
+        // all points in a tesseract(can also be represented as the binary-numbers from 0 to 15
         points = new Vector4D[]{
                 new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
                 new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
@@ -94,45 +267,62 @@ public class Controller implements Initializable {
                 new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
         };
 
-        for(int i = 0; i < points.length; i++) {
-            camera[i] = new Vector4D();
-            proj3D[i] = new Vector3D();
-            proj2D[i] = new Vector2D();
-        }
-        rotate(coord, "Y", Math.PI / 5);
-        rotate(coord, "X", Math.PI / 20);
-        mvh.zDisplacement = 4.5;
+        // resetting zoom
+        rh.zDisplacement = INIT_ZOOM;
+
+        // rotating to initial position
+        rotate(coord, "Y", INIT_Y_ANGLE);
+        rotate(coord, "X", INIT_X_ANGLE);
 
         redraw();
     }
 
-    // rotates a set of 4D vectors and projects them after
-    private void rotate(Vector4D[] v, String axis, double theta) {
+    /**
+     * Rotates a set of 4d vectors
+     * @param v         Set of 4d vectors to be rotated
+     * @param around    Around what it rotates the vector
+     * @param theta     Angle by how much the vector is rotated
+     */
+    private void rotate(Vector4D[] v, String around, double theta) {
         for (int i = 0; i < v.length; i++) {
-            v[i] = mvh.rot(v[i], theta, axis);
+            v[i] = rh.rot(v[i], theta, around);
         }
     }
 
-    // projects a set of 4D vectors down to 2D and drawPoints's them
+    /**
+     * projects a set of 4D vectors down to 2D
+     * @param v1    Array of points
+     * @param v2    Array to store the points projected to 3d
+     * @param v3    Array to store the points projected to 2d
+     */
     private void project(Vector4D[] v1, Vector3D[] v2, Vector2D[] v3) {
+        // getting width and height
         double w = canvas.getWidth();
         double h = canvas.getHeight();
 
+        // for each point
         for (int i = 0; i < v1.length; i++) {
-            v2[i] = mvh.project4DTo3D(v1[i]);
-            v3[i] = mvh.project3DTo2D(v2[i], w, h);
+            v2[i] = rh.project4DTo3D(v1[i]);
+            v3[i] = rh.project3DTo2D(v2[i], w, h);
         }
     }
 
-    // clear's the screen
+    /**
+     * clears the canvas
+     */
     private void clear() {
         // clear's a rectangle shape on the screen which in this case is the whole canvas
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
-    // drawPoints's line from point to another point
-    private void line(Vector2D[] p, int i, int j) {
-        gc.strokeLine( p[i].x,  p[i].y,  p[j].x,  p[j].y);
+    /**
+     * draws line between two vectors out of an array of vectors
+     * @param v Array of Vector2D
+     * @param i Index of vector one
+     * @param j Index of vector two
+     */
+    private void line(Vector2D[] v, int i, int j) {
+        gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
     }
 
     // drawPoints's a set of 2D vectors by connecting 2 points
@@ -171,16 +361,11 @@ public class Controller implements Initializable {
         gc.setStroke(Color.GREEN);
         line(v, 0, 3);
         gc.setStroke(Color.BLACK);
-        /*
-        System.out.println(v[0].toString());
-        System.out.println(v[1].toString());
-        System.out.println(v[2].toString());
-        System.out.println(v[3].toString());
-        */
+        gc.strokeOval(v[0].x, v[0].y, 1.4, 1.4);
     }
 
     private void redraw() {
-        mvh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+        rh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
         rotate(points, "X", 0);
         rotate(coord, "X", 0);
         rotateTo(points , camera);
@@ -189,22 +374,31 @@ public class Controller implements Initializable {
     }
 
 
-    //resetting all sliders4
-    private void resetSliders() {
+    /**
+     * Resets all sliders and checkboxes in the UI
+     */
+    private void resetUI() {
         for(Slider slider: sliders) {
             slider.setValue(0);
         }
+        for(CheckBox cB: checkBoxes) {
+            cB.setSelected(false);
+        }
     }
 
-    //adding the listeners to certain application elements
+
+    /**
+     * Adds the listeners to certain UI elements
+     * and in addition a timeline for automatic rotation
+     */
     private void addListeners() {
         for(int i = 0; i < sliders.length; i++) {
             int finalI = i;
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
                 double newD = new_val.doubleValue();
                 double oldD = old_val.doubleValue();
-                double theta = rSpeed * (newD - oldD);
-                rotate(points, planes[finalI], theta);
+                double theta = ROTATION_SPEED * (newD - oldD);
+                rotate(points, around[finalI], theta);
                 rotateTo(points, camera);
                 project(camera, proj3D, proj2D);
                 drawPoints(proj2D);
@@ -226,7 +420,7 @@ public class Controller implements Initializable {
                         e -> {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
-                                    rotate(points, planes[i], 0.0005);
+                                    rotate(points, around[i], 0.0005);
                                     redraw();
                                 }
                             }
@@ -237,6 +431,8 @@ public class Controller implements Initializable {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
+
+    //region Mouserotation
 
     private Vector2D currentVector = new Vector2D();
 
@@ -260,8 +456,8 @@ public class Controller implements Initializable {
     }
 
     public void zoom(ScrollEvent s) {
-        if (mvh.zDisplacement - s.getDeltaY() / 100 >= 2) {
-            mvh.zDisplacement -= s.getDeltaY() / 100;
+        if (rh.zDisplacement - s.getDeltaY() / 100 >= 2) {
+            rh.zDisplacement -= s.getDeltaY() / 100;
             redraw();
         }
     }
@@ -276,28 +472,21 @@ public class Controller implements Initializable {
         };
 
         double firstAngle = Math.acos(world[1].dotProd(coord[1])/(world[1].magnitude() * coord[1].magnitude()));
-        System.out.println(firstAngle * 180 / Math.PI);
-
         Vector4D firstAxis = world[1].crossProd(coord[1]);
-        System.out.println(firstAxis.toString());
+        rotatedAround(v1, v2, world, firstAngle, firstAxis);
 
+        double secondAngle = Math.acos(world[2].dotProd(coord[2])/(world[2].magnitude() * coord[2].magnitude()));
+        Vector4D secondAxis = world[2].crossProd(coord[2]);
+        rotatedAround(v2, v2, world, secondAngle, secondAxis);
+    }
+
+    private void rotatedAround(Vector4D[] v1, Vector4D[] v2, Vector4D[] world, double firstAngle, Vector4D firstAxis) {
         for (int i = 1; i < world.length; i++) {
             world[i] = world[i].rotateByVector(firstAxis, firstAngle);
         }
         for (int i = 0; i < v1.length; i++) {
             v2[i] = v1[i].rotateByVector(firstAxis, firstAngle);
         }
-        double secondAngle = Math.acos(world[2].dotProd(coord[2])/(world[2].magnitude() * coord[2].magnitude()));
-        System.out.println(secondAngle * 180 / Math.PI);
-
-        Vector4D secondAxis = world[2].crossProd(coord[2]);
-        System.out.println(secondAxis.toString());
-
-        for (int i = 1; i < world.length; i++) {
-            world[i] = world[i].rotateByVector(secondAxis, secondAngle);
-        }
-        for (int i = 0; i < v2.length; i++) {
-            v2[i] = v2[i].rotateByVector(secondAxis, secondAngle);
-        }
     }
+    //endregion
 }

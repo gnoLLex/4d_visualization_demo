@@ -1,9 +1,15 @@
+package main;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+/** Main Class for launching the JavaFX-Application
+ * @author Lucas Engelmann
+ * @version 1.0
+ * @since 1.0
+ */
 public class Main extends Application {
 
     @Override

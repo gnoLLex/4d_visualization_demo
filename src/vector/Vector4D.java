@@ -1,7 +1,8 @@
 package vector;
-
-/**
- * Vector4D extends Vector3D with a w-value
+/** Represents a vector in the 4 dimensional-hyperspace
+ * @author Lucas Engelmann
+ * @version 1.0
+ * @since 1.0
  */
 public class Vector4D extends Vector3D {
     /**
@@ -10,11 +11,11 @@ public class Vector4D extends Vector3D {
     public double w;
 
     /**
-     * initialize 3D vector with a x, y, z and w coordinate
-     * @param x coordinate
-     * @param y coordinate
-     * @param z coordinate
-     * @param w coordinate
+     * initialize 4D vector with x, y, z and w coordinate
+     * @param x vectors x component
+     * @param y vectors y component
+     * @param z vectors z component
+     * @param w vectors w component
      */
     public Vector4D(double x, double y, double z, double w) {
         super(x, y, z);
@@ -22,18 +23,14 @@ public class Vector4D extends Vector3D {
     }
 
     /**
-     * initialize 3D vector with a x, y, z and w coordinate as 0
+     * initialize 4D vector with x, y, z and w coordinate as 0
      */
     public Vector4D() {
         super();
         this.w = 0;
     }
 
-    public String toString() {
-        return this.x + " " + this.y + " " + this.z + " " + this.w;
-    }
-
-    public Vector4D add(Vector4D v) {
+    private Vector4D add(Vector4D v) {
         Vector4D o = new Vector4D();
         o.x = this.x + v.x;
         o.y = this.y + v.y;
@@ -42,7 +39,7 @@ public class Vector4D extends Vector3D {
         return o;
     }
 
-    public Vector4D sub(Vector4D v) {
+    private Vector4D sub(Vector4D v) {
         Vector4D o = new Vector4D();
         o.x = this.x - v.x;
         o.y = this.y - v.y;
@@ -51,7 +48,7 @@ public class Vector4D extends Vector3D {
         return o;
     }
 
-    public Vector4D times(double d) {
+    private Vector4D times(double d) {
         Vector4D o = new Vector4D();
         o.x = this.x * d;
         o.y = this.y * d;

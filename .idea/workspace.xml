@@ -7,10 +7,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0bb17bef-244c-4423-abe7-c06858dc046c" name="Default Changelist" comment="added some comments">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Lucas.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/package-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/vector/package-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MatrixVectorHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/RotationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/app.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vector/Vector2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector2D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vector/Vector3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector3D.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vector/Vector4D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector4D.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,75 +28,100 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="63">
+              <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+              <folding>
+                <element signature="e#660#661#0" expanded="true" />
+                <element signature="e#688#689#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Controller.java">
+        <entry file="file://$PROJECT_DIR$/src/main/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="549">
-              <caret line="102" column="38" selection-start-line="102" selection-start-column="38" selection-end-line="102" selection-end-column="38" />
+            <state relative-caret-position="449">
+              <caret line="321" column="35" selection-start-line="321" selection-start-column="35" selection-end-line="321" selection-end-column="35" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#781#806#0" />
+                <element signature="e#811#838#0" />
+                <element signature="e#782#827#0" />
+                <element signature="e#941#987#0" />
+                <element signature="e#1007#1074#0" />
+                <element signature="e#1114#1181#0" />
+                <element signature="e#1221#1288#0" />
+                <element signature="e#1328#1397#0" />
+                <element signature="e#1438#1507#0" />
+                <element signature="e#1548#1617#0" />
+                <element signature="e#1659#1760#0" />
+                <element signature="e#1801#1902#0" />
+                <element signature="e#1943#2044#0" />
+                <element signature="e#2085#2188#0" />
+                <element signature="e#2230#2333#0" />
+                <element signature="e#2375#2478#0" />
+                <element signature="e#2521#2568#0" />
+                <element signature="e#2603#2653#0" />
+                <element signature="e#2724#2805#0" />
+                <element signature="e#2878#2943#0" />
+                <element signature="e#2978#3029#0" />
+                <element signature="e#3184#3206#0" />
+                <element signature="e#4171#4189#0" />
+                <element signature="e#8519#8520#0" expanded="true" />
+                <element signature="e#8584#8585#0" expanded="true" />
+                <element signature="e#11551#11573#0" />
+                <element signature="e#8626#8627#0" expanded="true" />
+                <element signature="e#8690#8691#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
+        <entry file="file://$PROJECT_DIR$/src/main/RotationHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-648">
-              <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="33" selection-end-column="5" />
+            <state relative-caret-position="441">
+              <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
               <folding>
-                <element signature="e#666#667#0" expanded="true" />
-                <element signature="e#746#747#0" expanded="true" />
+                <element signature="e#124#148#0" />
+                <element signature="e#503#521#0" />
+                <element signature="e#900#937#0" />
+                <element signature="e#1679#1698#0" />
+                <element signature="e#2323#2361#0" />
+                <element signature="method#rot#0;class#MatrixVectorHandler#0" />
+                <element signature="e#3877#3913#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/vector/Vector2D.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="602">
-              <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
-              <folding>
-                <element signature="e#598#599#0" expanded="true" />
-                <element signature="e#672#673#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/MatrixVectorHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="96" selection-start-line="96" selection-end-line="96" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app.fxml">
-          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+        <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
           <provider editor-type-id="text-editor">
             <state relative-caret-position="336">
               <caret line="16" column="150" selection-start-line="16" selection-start-column="150" selection-end-line="16" selection-end-column="150" />
             </state>
           </provider>
+          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package-info" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -99,10 +132,16 @@
       <find>camera</find>
       <find>rotateTo</find>
       <find>coordCam</find>
+      <find>Con</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -110,13 +149,19 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/GUI.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/src/vector/Vector3D.java" />
         <option value="$PROJECT_DIR$/src/MatrixHandler.java" />
         <option value="$PROJECT_DIR$/src/MatrixVectorHandler.java" />
         <option value="$PROJECT_DIR$/src/app.fxml" />
+        <option value="$PROJECT_DIR$/src/Controller.java" />
+        <option value="$PROJECT_DIR$/src/main/package-info.java" />
+        <option value="$PROJECT_DIR$/src/vector/package-info.java" />
+        <option value="$PROJECT_DIR$/src/vector/Vector3D.java" />
         <option value="$PROJECT_DIR$/src/vector/Vector4D.java" />
         <option value="$PROJECT_DIR$/src/vector/Vector2D.java" />
-        <option value="$PROJECT_DIR$/src/Controller.java" />
+        <option value="$PROJECT_DIR$/src/main/MatrixVectorHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/RotationHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/Controller.java" />
       </list>
     </option>
   </component>
@@ -126,7 +171,9 @@
     <option name="width" value="1200" />
     <option name="height" value="654" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -148,14 +195,20 @@
               <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
               <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="vector" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -163,9 +216,10 @@
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556631877267" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556706693157" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -173,7 +227,12 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="terminal" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\th3ga\Desktop\Code\Java\4D_Demo\src\main" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -189,7 +248,7 @@
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
       <module name="4D_Demo" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -230,12 +289,15 @@
       <workItem from="1556398957754" duration="456000" />
       <workItem from="1556472078391" duration="2719000" />
       <workItem from="1556535316172" duration="2920000" />
-      <workItem from="1556619041836" duration="7504000" />
+      <workItem from="1556619041836" duration="8026000" />
+      <workItem from="1556701143214" duration="2511000" />
+      <workItem from="1556706923564" duration="1040000" />
+      <workItem from="1556708356414" duration="20407000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="79686000" />
+    <option name="totallyTimeSpent" value="104166000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -250,7 +312,7 @@
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18710022" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19349681" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -259,7 +321,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3290461" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.19078243" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989339" weight="0.19078243" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39978564" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -267,9 +329,9 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3290461" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.15969989" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.3279743" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.36120042" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5010661" side_tool="true" weight="0.19078243" />
+      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.49946696" weight="0.3279743" />
       <window_info anchor="bottom" id="Python Console" order="13" />
       <window_info anchor="bottom" id="Duplicate detector" order="14" weight="0.3290461" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -382,78 +444,146 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/application/Application.java" />
     <entry file="file://$PROJECT_DIR$/4D_Demo.iml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/beans/value/ChangeListener.java" />
     <entry file="file://$PROJECT_DIR$/META-INF/MANIFEST.MF">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/vector/Vector3D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="7" column="38" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
-          <caret line="17" column="36" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
-          <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/fxml/Initializable.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/beans/InvalidationListener.java" />
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/beans/value/ChangeListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="315">
+          <caret line="50" column="20" selection-start-line="50" selection-start-column="20" selection-end-line="50" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+    <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="16" column="150" selection-start-line="16" selection-start-column="150" selection-end-line="16" selection-end-column="150" />
         </state>
       </provider>
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/vector/Vector2D.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/scene/control/Slider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="602">
-          <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
-          <folding>
-            <element signature="e#598#599#0" expanded="true" />
-            <element signature="e#672#673#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="2889">
+          <caret line="219" column="32" selection-start-line="219" selection-start-column="32" selection-end-line="219" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MatrixVectorHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/vector/Vector2D.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="96" selection-start-line="96" selection-end-line="96" />
+        <state relative-caret-position="735">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vector/Vector3D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-648">
-          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="33" selection-end-column="5" />
+        <state relative-caret-position="1239">
+          <caret line="59" column="7" selection-start-line="59" selection-start-column="7" selection-end-line="59" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/src.zip!/java/lang/Override.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="562">
+          <caret line="50" column="18" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/application/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="304" column="25" selection-start-line="304" selection-start-column="25" selection-end-line="304" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vector/package-info.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="1" column="106" selection-start-line="1" selection-start-column="106" selection-end-line="1" selection-end-column="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/package-info.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="1" column="56" selection-start-line="1" selection-start-column="56" selection-end-line="1" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
           <folding>
-            <element signature="e#666#667#0" expanded="true" />
-            <element signature="e#746#747#0" expanded="true" />
+            <element signature="e#660#661#0" expanded="true" />
+            <element signature="e#688#689#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller.java">
+    <entry file="file://$PROJECT_DIR$/src/main/RotationHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="102" column="38" selection-start-line="102" selection-start-column="38" selection-end-line="102" selection-end-column="38" />
+        <state relative-caret-position="441">
+          <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#124#148#0" />
+            <element signature="e#503#521#0" />
+            <element signature="e#900#937#0" />
+            <element signature="e#1679#1698#0" />
+            <element signature="e#2323#2361#0" />
+            <element signature="method#rot#0;class#MatrixVectorHandler#0" />
+            <element signature="e#3877#3913#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="449">
+          <caret line="321" column="35" selection-start-line="321" selection-start-column="35" selection-end-line="321" selection-end-column="35" />
+          <folding>
+            <element signature="e#781#806#0" />
+            <element signature="e#811#838#0" />
+            <element signature="e#782#827#0" />
+            <element signature="e#941#987#0" />
+            <element signature="e#1007#1074#0" />
+            <element signature="e#1114#1181#0" />
+            <element signature="e#1221#1288#0" />
+            <element signature="e#1328#1397#0" />
+            <element signature="e#1438#1507#0" />
+            <element signature="e#1548#1617#0" />
+            <element signature="e#1659#1760#0" />
+            <element signature="e#1801#1902#0" />
+            <element signature="e#1943#2044#0" />
+            <element signature="e#2085#2188#0" />
+            <element signature="e#2230#2333#0" />
+            <element signature="e#2375#2478#0" />
+            <element signature="e#2521#2568#0" />
+            <element signature="e#2603#2653#0" />
+            <element signature="e#2724#2805#0" />
+            <element signature="e#2878#2943#0" />
+            <element signature="e#2978#3029#0" />
+            <element signature="e#3184#3206#0" />
+            <element signature="e#4171#4189#0" />
+            <element signature="e#8519#8520#0" expanded="true" />
+            <element signature="e#8584#8585#0" expanded="true" />
+            <element signature="e#11551#11573#0" />
+            <element signature="e#8626#8627#0" expanded="true" />
+            <element signature="e#8690#8691#0" expanded="true" />
           </folding>
         </state>
       </provider>
