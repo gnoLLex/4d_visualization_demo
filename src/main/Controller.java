@@ -190,6 +190,11 @@ public class Controller implements Initializable {
     private static final double ROTATION_SPEED = Math.PI / 4;
 
     /**
+     * Constant for how fast the automatic rotation is happening
+     */
+    private static final double ANIMATION_ROTATION_SPEED = 0.0005;
+
+    /**
      * Thickness of the lines
      */
     private static final double LINE_WIDTH = 1.4;
@@ -308,7 +313,7 @@ public class Controller implements Initializable {
      * clears the canvas
      */
     private void clearCanvas() {
-        // clearCanvas's a rectangle shape on the screen which in this case is the whole canvas
+        // clear's a rectangle shape on the screen which in this case is the whole canvas
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
@@ -324,7 +329,6 @@ public class Controller implements Initializable {
 
 
     private void drawPoints(Vector2D[] v) {
-        // clearCanvas canvas before drawing on it
         clearCanvas();
 
         project(coord, coord3D, coord2D);
@@ -417,7 +421,7 @@ public class Controller implements Initializable {
                         e -> {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
-                                    rotate(points, around[i], 0.0005);
+                                    rotate(points, around[i], ANIMATION_ROTATION_SPEED);
                                     redraw();
                                 }
                             }
