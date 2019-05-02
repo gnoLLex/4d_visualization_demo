@@ -17,11 +17,8 @@ import javafx.util.Duration;
 import vector.Vector2D;
 import vector.Vector3D;
 import vector.Vector4D;
-
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static com.sun.javafx.sg.prism.NGCanvas.LINE_WIDTH;
 
 /** Controls the JavaFx Application
  * @author Lucas Engelmann
@@ -291,27 +288,27 @@ public class Controller implements Initializable {
 
     /**
      * projects a set of 4D vectors down to 2D
-     * @param v1    Array of points
-     * @param v2    Array to store the points projected to 3d
-     * @param v3    Array to store the points projected to 2d
+     * @param toBeProjected Array of points
+     * @param inThirdDim    Array to store the points projected to 3d
+     * @param inSecondDim   Array to store the points projected to 2d
      */
-    private void project(Vector4D[] v1, Vector3D[] v2, Vector2D[] v3) {
+    private void project(Vector4D[] toBeProjected, Vector3D[] inThirdDim, Vector2D[] inSecondDim) {
         // getting width and height
         double w = canvas.getWidth();
         double h = canvas.getHeight();
 
         // for each point
-        for (int i = 0; i < v1.length; i++) {
-            v2[i] = rh.project4DTo3D(v1[i]);
-            v3[i] = rh.project3DTo2D(v2[i], w, h);
+        for (int i = 0; i < toBeProjected.length; i++) {
+            inThirdDim[i] = rh.project4DTo3D(toBeProjected[i]);
+            inSecondDim[i] = rh.project3DTo2D(inThirdDim[i], w, h);
         }
     }
 
     /**
      * clears the canvas
      */
-    private void clear() {
-        // clear's a rectangle shape on the screen which in this case is the whole canvas
+    private void clearCanvas() {
+        // clearCanvas's a rectangle shape on the screen which in this case is the whole canvas
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
@@ -325,10 +322,10 @@ public class Controller implements Initializable {
         gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
     }
 
-    // drawPoints's a set of 2D vectors by connecting 2 points
+
     private void drawPoints(Vector2D[] v) {
-        // clear canvas before drawing on it
-        clear();
+        // clearCanvas canvas before drawing on it
+        clearCanvas();
 
         project(coord, coord3D, coord2D);
         drawCoord(coord2D);
