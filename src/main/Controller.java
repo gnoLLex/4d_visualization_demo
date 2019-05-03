@@ -1,5 +1,7 @@
 package main;
 
+import handlers.ProjectionHandler;
+import handlers.RotationHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -139,7 +141,7 @@ public class Controller implements Initializable {
     /**
      * RotationHandler for global usage
      */
-    private RotationHandler rh;
+    private ProjectionHandler ph;
 
     //region Vector Arrays
 
@@ -235,9 +237,9 @@ public class Controller implements Initializable {
         gc.setLineWidth(LINE_WIDTH);
 
         // initializing the matrixhandler
-        rh = new RotationHandler();
+        ph = new ProjectionHandler();
         // generate initial projection matrix from 3D to 2D
-        rh.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
+        ph.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
 
         // one time use in the beginning
         addListeners();
@@ -270,7 +272,7 @@ public class Controller implements Initializable {
         };
 
         // resetting zoom
-        rh.zDisplacement = INIT_ZOOM;
+        ph.zDisplacement = INIT_ZOOM;
 
         // rotating to initial position
         rotate(coord, "Y", INIT_Y_ANGLE);
@@ -287,7 +289,7 @@ public class Controller implements Initializable {
      */
     private void rotate(Vector4D[] v, String around, double theta) {
         for (int i = 0; i < v.length; i++) {
-            v[i] = rh.rot(v[i], theta, around);
+            v[i] = RotationHandler.rot(v[i], theta, around);
         }
     }
 
@@ -304,8 +306,8 @@ public class Controller implements Initializable {
 
         // for each point
         for (int i = 0; i < toBeProjected.length; i++) {
-            inThirdDim[i] = rh.project4DTo3D(toBeProjected[i]);
-            inSecondDim[i] = rh.project3DTo2D(inThirdDim[i], w, h);
+            inThirdDim[i] = ph.project4DTo3D(toBeProjected[i]);
+            inSecondDim[i] = ph.project3DTo2D(inThirdDim[i], w, h);
         }
     }
 
@@ -313,7 +315,7 @@ public class Controller implements Initializable {
         clearCanvas();
 
         project(coord, coord3D, coord2D);
-        drawCoord();
+        drawCoord(coord2D);
 
         // connects the "outer" cube
         for(int i = 0; i < 4; i++) {
@@ -335,15 +337,15 @@ public class Controller implements Initializable {
         }
     }
 
-    private void drawCoord() {
+    private void drawCoord(Vector2D[] coord) {
         gc.setStroke(Color.BLUE);
-        line(coord2D, 0, 1);
+        line(coord, 0, 1);
         gc.setStroke(Color.RED);
-        line(coord2D, 0, 2);
+        line(coord, 0, 2);
         gc.setStroke(Color.GREEN);
-        line(coord2D, 0, 3);
+        line(coord, 0, 3);
         gc.setStroke(Color.BLACK);
-        gc.strokeOval(coord2D[0].x, coord2D[0].y, 1, 1);
+        gc.strokeOval(coord[0].x, coord[0].y, 1, 1);
     }
 
     /**
@@ -365,7 +367,7 @@ public class Controller implements Initializable {
     }
 
     private void redraw() {
-        rh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+        ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
         rotate(tesseract, "X", 0);
         rotate(coord, "X", 0);
         rotateToCoord(tesseract , camera);
@@ -456,8 +458,8 @@ public class Controller implements Initializable {
     }
 
     public void zoom(ScrollEvent s) {
-        if (rh.zDisplacement - s.getDeltaY() / 100 >= 2) {
-            rh.zDisplacement -= s.getDeltaY() / 100;
+        if (ph.zDisplacement - s.getDeltaY() / 100 >= 2) {
+            ph.zDisplacement -= s.getDeltaY() / 100;
             redraw();
         }
     }
