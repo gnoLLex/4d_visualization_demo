@@ -1,7 +1,6 @@
 package main;
 
 import handlers.ProjectionHandler;
-import handlers.RotationHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -16,8 +15,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import objects.Object4D;
 import vector.Vector2D;
-import vector.Vector3D;
 import vector.Vector4D;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -143,45 +142,20 @@ public class Controller implements Initializable {
      */
     private ProjectionHandler ph;
 
-    //region Vector Arrays
+    /**
+     * Coordinate System
+     */
+    private Object4D coord = new Object4D();
 
     /**
-     * array to store coordinate system
+     * Tesseract
      */
-    private Vector4D[] coord = new Vector4D[4];
+    private Object4D tesseract = new Object4D();
 
     /**
-     * array to store coordinate system projected to 3d-space
+     * Tesseract rotated by mouse
      */
-    private Vector3D[] coord3D = new Vector3D[coord.length];
-
-    /**
-     * array to store coordinate system projected to 2d-plane
-     */
-    private Vector2D[] coord2D = new Vector2D[coord.length];
-
-    /**
-     * array to store the points of the tesseract
-     */
-    private Vector4D[] tesseract = new Vector4D[16];
-
-    /**
-     * array to store the points of the tesseract which are rotated by mouse-control
-     */
-    private Vector4D[] camera = new Vector4D[tesseract.length];
-
-    /**
-     * array to store the points of the tesseract projected to 3d-space
-     */
-    private Vector3D[] proj3D = new Vector3D[tesseract.length];
-
-    /**
-     * array to store the points of the tesseract projected to 2d-plane
-     */
-    private Vector2D[] proj2D = new Vector2D[tesseract.length];
-
-    //endregion
-
+    private Object4D camera = new Object4D();
     //endregion
 
     //region Constants
@@ -256,66 +230,31 @@ public class Controller implements Initializable {
         resetUI();
 
         // all points for a coordinate system
-        coord = new Vector4D[]{
-                new Vector4D(),                      // center-point
-                new Vector4D(1, 0, 0 ,0), // x-axis
-                new Vector4D(0, 1, 0 ,0), // y-axis
-                new Vector4D(0, 0, 1 ,0), // z-axis
+        coord = new Object4D();
+        coord.points = new Vector4D[]{
+            new Vector4D(),                      // center-point
+            new Vector4D(1, 0, 0 ,0), // x-axis
+            new Vector4D(0, 1, 0 ,0), // y-axis
+            new Vector4D(0, 0, 1 ,0), // z-axis
         };
 
         // all points in a tesseract(can also be represented as the binary-numbers from 0 to 15
-        tesseract = new Vector4D[]{
-                new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
-                new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
-                new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
-                new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
-        };
+        tesseract = new Object4D();
 
         // resetting zoom
         ph.zDisplacement = INIT_ZOOM;
 
         // rotating to initial position
-        rotate(coord, "Y", INIT_Y_ANGLE);
-        rotate(coord, "X", INIT_X_ANGLE);
+        coord.rotate("Y", INIT_Y_ANGLE);
+        coord.rotate("X", INIT_X_ANGLE);
 
         redraw();
     }
 
-    /**
-     * Rotates a set of 4d vectors
-     * @param v         Set of 4d vectors to be rotated
-     * @param around    Around what it rotates the vector
-     * @param theta     Angle by how much the vector is rotated
-     */
-    private void rotate(Vector4D[] v, String around, double theta) {
-        for (int i = 0; i < v.length; i++) {
-            v[i] = RotationHandler.rot(v[i], theta, around);
-        }
-    }
-
-    /**
-     * projects a set of 4D vectors down to 2D
-     * @param toBeProjected Array of points
-     * @param inThirdDim    Array to store the points projected to 3d
-     * @param inSecondDim   Array to store the points projected to 2d
-     */
-    private void project(Vector4D[] toBeProjected, Vector3D[] inThirdDim, Vector2D[] inSecondDim) {
-        // getting width and height
-        double w = canvas.getWidth();
-        double h = canvas.getHeight();
-
-        // for each point
-        for (int i = 0; i < toBeProjected.length; i++) {
-            inThirdDim[i] = ph.project4DTo3D(toBeProjected[i]);
-            inSecondDim[i] = ph.project3DTo2D(inThirdDim[i], w, h);
-        }
-    }
-
-    private void drawPoints(Vector2D[] v) {
+    private void drawObject(Vector2D[] v) {
         clearCanvas();
 
-        project(coord, coord3D, coord2D);
-        drawCoord(coord2D);
+        drawCoord(coord.project(canvas, ph));
 
         // connects the "outer" cube
         for(int i = 0; i < 4; i++) {
@@ -368,11 +307,10 @@ public class Controller implements Initializable {
 
     private void redraw() {
         ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-        rotate(tesseract, "X", 0);
-        rotate(coord, "X", 0);
-        rotateToCoord(tesseract , camera);
-        project(camera, proj3D, proj2D);
-        drawPoints(proj2D);
+        tesseract.rotate("X", 0);
+        coord.rotate("X", 0);
+        camera = tesseract.rotateToCoord(coord);
+        drawObject(camera.project(canvas, ph));
     }
 
 
@@ -400,10 +338,9 @@ public class Controller implements Initializable {
                 double newD = new_val.doubleValue();
                 double oldD = old_val.doubleValue();
                 double theta = ROTATION_SPEED * (newD - oldD);
-                rotate(tesseract, around[finalI], theta);
-                rotateToCoord(tesseract, camera);
-                project(camera, proj3D, proj2D);
-                drawPoints(proj2D);
+                tesseract.rotate(around[finalI], theta);
+                camera = tesseract.rotateToCoord(coord);
+                drawObject(camera.project(canvas, ph));
             });
         }
 
@@ -422,7 +359,7 @@ public class Controller implements Initializable {
                         e -> {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
-                                    rotate(tesseract, around[i], ANIMATION_ROTATION_SPEED);
+                                    tesseract.rotate(around[i], ANIMATION_ROTATION_SPEED);
                                     redraw();
                                 }
                             }
@@ -449,12 +386,11 @@ public class Controller implements Initializable {
         double horTheta = (currentVector.x - oldVector.x) / 100;
         double verTheta = (currentVector.y - oldVector.y) / 100;
 
-        rotate(coord, "X", verTheta);
-        rotate(coord, "Y", horTheta);
+        coord.rotate("X", verTheta);
+        coord.rotate("Y", horTheta);
 
-        rotateToCoord(tesseract, camera);
-        project(camera, proj3D, proj2D);
-        drawPoints(proj2D);
+        camera = tesseract.rotateToCoord(coord);
+        drawObject(camera.project(canvas, ph));
     }
 
     public void zoom(ScrollEvent s) {
@@ -464,31 +400,5 @@ public class Controller implements Initializable {
         }
     }
 
-    private void rotateToCoord(Vector4D[] input, Vector4D[] output){
-
-        Vector4D[] world = new Vector4D[]{
-                new Vector4D(),
-                new Vector4D(1, 0, 0 ,0),
-                new Vector4D(0, 1, 0 ,0),
-                new Vector4D(0, 0, 1 ,0)
-        };
-
-        double firstAngle = world[1].angle3DToVec(coord[1]);
-        Vector4D firstAxis = world[1].crossProd(coord[1]);
-
-        for (int i = 0; i < world.length; i++) {
-            world[i] = world[i].rotateByVector(firstAxis, firstAngle);
-        }
-        for (int i = 0; i < input.length; i++) {
-            output[i] = input[i].rotateByVector(firstAxis, firstAngle);
-        }
-
-        double secondAngle = world[2].angle3DToVec(coord[2]);
-        Vector4D secondAxis = world[2].crossProd(coord[2]);
-
-        for (int i = 0; i < output.length; i++) {
-            output[i] = output[i].rotateByVector(secondAxis, secondAngle);
-        }
-    }
     //endregion
 }
