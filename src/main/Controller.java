@@ -161,22 +161,22 @@ public class Controller implements Initializable {
     /**
      * array to store the points of the tesseract
      */
-    private Vector4D[] points = new Vector4D[16];
+    private Vector4D[] tesseract = new Vector4D[16];
 
     /**
      * array to store the points of the tesseract which are rotated by mouse-control
      */
-    private Vector4D[] camera = new Vector4D[points.length];
+    private Vector4D[] camera = new Vector4D[tesseract.length];
 
     /**
      * array to store the points of the tesseract projected to 3d-space
      */
-    private Vector3D[] proj3D = new Vector3D[points.length];
+    private Vector3D[] proj3D = new Vector3D[tesseract.length];
 
     /**
      * array to store the points of the tesseract projected to 2d-plane
      */
-    private Vector2D[] proj2D = new Vector2D[points.length];
+    private Vector2D[] proj2D = new Vector2D[tesseract.length];
 
     //endregion
 
@@ -262,7 +262,7 @@ public class Controller implements Initializable {
         };
 
         // all points in a tesseract(can also be represented as the binary-numbers from 0 to 15
-        points = new Vector4D[]{
+        tesseract = new Vector4D[]{
                 new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
                 new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
                 new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
@@ -309,30 +309,11 @@ public class Controller implements Initializable {
         }
     }
 
-    /**
-     * clears the canvas
-     */
-    private void clearCanvas() {
-        // clear's a rectangle shape on the screen which in this case is the whole canvas
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-    }
-
-    /**
-     * draws line between two vectors out of an array of vectors
-     * @param v Array of Vector2D
-     * @param i Index of vector one
-     * @param j Index of vector two
-     */
-    private void line(Vector2D[] v, int i, int j) {
-        gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
-    }
-
-
     private void drawPoints(Vector2D[] v) {
         clearCanvas();
 
         project(coord, coord3D, coord2D);
-        drawCoord(coord2D);
+        drawCoord();
 
         // connects the "outer" cube
         for(int i = 0; i < 4; i++) {
@@ -354,22 +335,40 @@ public class Controller implements Initializable {
         }
     }
 
-    private void drawCoord(Vector2D[] v) {
+    private void drawCoord() {
         gc.setStroke(Color.BLUE);
-        line(v, 0, 1);
+        line(coord2D, 0, 1);
         gc.setStroke(Color.RED);
-        line(v, 0, 2);
+        line(coord2D, 0, 2);
         gc.setStroke(Color.GREEN);
-        line(v, 0, 3);
+        line(coord2D, 0, 3);
         gc.setStroke(Color.BLACK);
-        gc.strokeOval(v[0].x, v[0].y, 1.4, 1.4);
+        gc.strokeOval(coord2D[0].x, coord2D[0].y, 1, 1);
+    }
+
+    /**
+     * clears the canvas
+     */
+    private void clearCanvas() {
+        // clear's a rectangle shape on the screen which in this case is the whole canvas
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    /**
+     * draws line between two vectors out of an array of vectors
+     * @param v Array of Vector2D
+     * @param i Index of vector one
+     * @param j Index of vector two
+     */
+    private void line(Vector2D[] v, int i, int j) {
+        gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
     }
 
     private void redraw() {
         rh.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-        rotate(points, "X", 0);
+        rotate(tesseract, "X", 0);
         rotate(coord, "X", 0);
-        rotateTo(points , camera);
+        rotateToCoord(tesseract , camera);
         project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
@@ -399,8 +398,8 @@ public class Controller implements Initializable {
                 double newD = new_val.doubleValue();
                 double oldD = old_val.doubleValue();
                 double theta = ROTATION_SPEED * (newD - oldD);
-                rotate(points, around[finalI], theta);
-                rotateTo(points, camera);
+                rotate(tesseract, around[finalI], theta);
+                rotateToCoord(tesseract, camera);
                 project(camera, proj3D, proj2D);
                 drawPoints(proj2D);
             });
@@ -421,7 +420,7 @@ public class Controller implements Initializable {
                         e -> {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
-                                    rotate(points, around[i], ANIMATION_ROTATION_SPEED);
+                                    rotate(tesseract, around[i], ANIMATION_ROTATION_SPEED);
                                     redraw();
                                 }
                             }
@@ -451,7 +450,7 @@ public class Controller implements Initializable {
         rotate(coord, "X", verTheta);
         rotate(coord, "Y", horTheta);
 
-        rotateTo(points, camera);
+        rotateToCoord(tesseract, camera);
         project(camera, proj3D, proj2D);
         drawPoints(proj2D);
     }
@@ -463,7 +462,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void rotateTo(Vector4D[] v1, Vector4D[] v2){
+    private void rotateToCoord(Vector4D[] input, Vector4D[] output){
 
         Vector4D[] world = new Vector4D[]{
                 new Vector4D(),
@@ -472,21 +471,21 @@ public class Controller implements Initializable {
                 new Vector4D(0, 0, 1 ,0)
         };
 
-        double firstAngle = Math.acos(world[1].dotProd(coord[1])/(world[1].magnitude() * coord[1].magnitude()));
+        double firstAngle = world[1].angle3DToVec(coord[1]);
         Vector4D firstAxis = world[1].crossProd(coord[1]);
-        rotatedAround(v1, v2, world, firstAngle, firstAxis);
 
-        double secondAngle = Math.acos(world[2].dotProd(coord[2])/(world[2].magnitude() * coord[2].magnitude()));
-        Vector4D secondAxis = world[2].crossProd(coord[2]);
-        rotatedAround(v2, v2, world, secondAngle, secondAxis);
-    }
-
-    private void rotatedAround(Vector4D[] v1, Vector4D[] v2, Vector4D[] world, double firstAngle, Vector4D firstAxis) {
-        for (int i = 1; i < world.length; i++) {
+        for (int i = 0; i < world.length; i++) {
             world[i] = world[i].rotateByVector(firstAxis, firstAngle);
         }
-        for (int i = 0; i < v1.length; i++) {
-            v2[i] = v1[i].rotateByVector(firstAxis, firstAngle);
+        for (int i = 0; i < input.length; i++) {
+            output[i] = input[i].rotateByVector(firstAxis, firstAngle);
+        }
+
+        double secondAngle = world[2].angle3DToVec(coord[2]);
+        Vector4D secondAxis = world[2].crossProd(coord[2]);
+
+        for (int i = 0; i < output.length; i++) {
+            output[i] = output[i].rotateByVector(secondAxis, secondAngle);
         }
     }
     //endregion

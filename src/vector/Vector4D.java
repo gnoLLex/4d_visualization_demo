@@ -57,7 +57,7 @@ public class Vector4D extends Vector3D {
         return o;
     }
 
-    public double dotProd(Vector4D v) {
+    public double dotProd3D(Vector4D v) {
         double o = 0;
         o += this.x * v.x;
         o += this.y * v.y;
@@ -65,7 +65,7 @@ public class Vector4D extends Vector3D {
         return o;
     }
 
-    public double magnitude() {
+    public double magnitude3D() {
         double X = this.x * this.x;
         double Y = this.y * this.y;
         double Z = this.z * this.z;
@@ -80,15 +80,19 @@ public class Vector4D extends Vector3D {
         return o;
     }
 
+    public double angle3DToVec(Vector4D other) {
+        return Math.acos(this.dotProd3D(other)/(this.magnitude3D() * other.magnitude3D()));
+    }
+
     public Vector4D rotateByVector(Vector4D v, double angle) {
-        Vector4D aDirB = v.times(this.dotProd(v) / v.dotProd(v));
+        Vector4D aDirB = v.times(this.dotProd3D(v) / v.dotProd3D(v));
         Vector4D aOrthB = this.sub(aDirB);
         Vector4D W = v.crossProd(aOrthB);
 
-        double x1 = Math.cos(angle) / aOrthB.magnitude();
-        double x2 = Math.sin(angle) / W.magnitude();
+        double x1 = Math.cos(angle) / aOrthB.magnitude3D();
+        double x2 = Math.sin(angle) / W.magnitude3D();
 
-        Vector4D aOrthBRot = (aOrthB.times(x1).add(W.times(x2))).times(aOrthB.magnitude());
+        Vector4D aOrthBRot = (aOrthB.times(x1).add(W.times(x2))).times(aOrthB.magnitude3D());
 
         return aDirB.add(aOrthBRot);
     }

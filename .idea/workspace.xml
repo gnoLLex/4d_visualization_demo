@@ -7,7 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0bb17bef-244c-4423-abe7-c06858dc046c" name="Default Changelist" comment="added some comments">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/RotationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/RotationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vector/Vector4D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector4D.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,15 +21,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DefaultGradleProjectSettings">
-    <option name="testRunner" value="GRADLE" />
-    <option name="delegatedBuild" value="true" />
+    <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
+            <state relative-caret-position="63">
               <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
             </state>
           </provider>
@@ -34,13 +37,25 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="191" column="65" selection-start-line="191" selection-start-column="65" selection-end-line="191" selection-end-column="65" />
+            <state relative-caret-position="-489">
+              <caret line="297" column="20" selection-start-line="297" selection-start-column="20" selection-end-line="297" selection-end-column="20" />
               <folding>
-                <element signature="e#781#806#0" />
+                <element signature="imports" expanded="true" />
                 <element signature="e#812#839#0" />
-                <element signature="e#3084#3106#0" />
+                <element signature="e#4111#4129#0" />
+                <element signature="e#9858#9859#0" expanded="true" />
+                <element signature="e#9923#9924#0" expanded="true" />
+                <element signature="e#12332#12354#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="82" column="30" selection-start-line="82" selection-start-column="30" selection-end-line="82" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -48,10 +63,16 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/RotationHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2214">
-              <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
+            <state relative-caret-position="210">
+              <caret line="33" selection-start-line="33" selection-end-line="33" />
               <folding>
                 <element signature="e#124#148#0" />
+                <element signature="e#504#522#0" />
+                <element signature="e#673#710#0" />
+                <element signature="e#1850#1869#0" />
+                <element signature="e#3198#3236#0" />
+                <element signature="e#3707#3724#0" />
+                <element signature="e#4925#4961#0" />
               </folding>
             </state>
           </provider>
@@ -61,7 +82,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
           <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
           <provider editor-type-id="text-editor">
-            <state relative-caret-position="288">
+            <state relative-caret-position="336">
               <caret line="16" column="150" selection-start-line="16" selection-start-column="150" selection-end-line="16" selection-end-column="150" />
             </state>
           </provider>
@@ -110,10 +131,10 @@
         <option value="$PROJECT_DIR$/src/main/package-info.java" />
         <option value="$PROJECT_DIR$/src/vector/package-info.java" />
         <option value="$PROJECT_DIR$/src/vector/Vector3D.java" />
-        <option value="$PROJECT_DIR$/src/vector/Vector4D.java" />
         <option value="$PROJECT_DIR$/src/vector/Vector2D.java" />
         <option value="$PROJECT_DIR$/src/main/MatrixVectorHandler.java" />
         <option value="$PROJECT_DIR$/src/main/Main.java" />
+        <option value="$PROJECT_DIR$/src/vector/Vector4D.java" />
         <option value="$PROJECT_DIR$/src/main/RotationHandler.java" />
         <option value="$PROJECT_DIR$/src/main/Controller.java" />
       </list>
@@ -133,9 +154,30 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="vector" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -225,11 +267,13 @@
       <workItem from="1556798701242" duration="197000" />
       <workItem from="1556801107380" duration="621000" />
       <workItem from="1556803545132" duration="641000" />
+      <workItem from="1556812962192" duration="4291000" />
+      <workItem from="1556867186327" duration="2529000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="106975000" />
+    <option name="totallyTimeSpent" value="113795000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -241,10 +285,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1600" height="873" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20656371" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21108742" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -252,8 +296,8 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3283582" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989339" weight="0.18995929" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3279743" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989339" visible="true" weight="0.18971062" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39978564" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -401,13 +445,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1239">
-          <caret line="59" column="7" selection-start-line="59" selection-start-column="7" selection-end-line="59" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/src.zip!/java/lang/Override.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/application/Application.java" />
     <entry file="file://$PROJECT_DIR$/src/vector/package-info.java">
@@ -424,39 +461,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" column="150" selection-start-line="16" selection-start-column="150" selection-end-line="16" selection-end-column="150" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
+        <state relative-caret-position="63">
           <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="82" column="30" selection-start-line="82" selection-start-column="30" selection-end-line="82" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/RotationHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2214">
-          <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
+        <state relative-caret-position="210">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
           <folding>
             <element signature="e#124#148#0" />
+            <element signature="e#504#522#0" />
+            <element signature="e#673#710#0" />
+            <element signature="e#1850#1869#0" />
+            <element signature="e#3198#3236#0" />
+            <element signature="e#3707#3724#0" />
+            <element signature="e#4925#4961#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="16" column="150" selection-start-line="16" selection-start-column="150" selection-end-line="16" selection-end-column="150" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="191" column="65" selection-start-line="191" selection-start-column="65" selection-end-line="191" selection-end-column="65" />
+        <state relative-caret-position="-489">
+          <caret line="297" column="20" selection-start-line="297" selection-start-column="20" selection-end-line="297" selection-end-column="20" />
           <folding>
-            <element signature="e#781#806#0" />
+            <element signature="imports" expanded="true" />
             <element signature="e#812#839#0" />
-            <element signature="e#3084#3106#0" />
+            <element signature="e#4111#4129#0" />
+            <element signature="e#9858#9859#0" expanded="true" />
+            <element signature="e#9923#9924#0" expanded="true" />
+            <element signature="e#12332#12354#0" />
           </folding>
         </state>
       </provider>

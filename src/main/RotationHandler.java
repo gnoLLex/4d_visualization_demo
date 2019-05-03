@@ -39,7 +39,7 @@ public class RotationHandler {
      * @param v     Vector
      * @return      Vector4D(product of m * v)
      */
-    private Vector4D multMatVec(double[][] m, Vector4D v) {
+    private static Vector4D multMatVec(double[][] m, Vector4D v) {
         double newX = v.x * m[0][0] + v.y * m[1][0] + v.z * m[2][0] + v.w * m[3][0];
         double newY = v.x * m[0][1] + v.y * m[1][1] + v.z * m[2][1] + v.w * m[3][1];
         double newZ = v.x * m[0][2] + v.y * m[1][2] + v.z * m[2][2] + v.w * m[3][2];
@@ -122,13 +122,13 @@ public class RotationHandler {
      * @param aR Aspectratio
      */
     public void calcProj3DTo2D(double aR) {
-        double zNear = 0.1;
-        double zFar = 1000.0;
-        double zFov = 90.0;
-        double zFovRad = 1.0 / Math.tan(zFov * 0.5 / 180.0 *  Math.PI);
+        final double zNear = 0.1;
+        final double zFar = 1000.0;
+        final double fov = 90.0;
+        final double fovRad = 1.0 / Math.tan(fov * 0.5 / 180.0 *  Math.PI);
 
-        to2D[0][0] = aR * zFovRad;
-        to2D[1][1] = zFovRad;
+        to2D[0][0] = aR * fovRad;
+        to2D[1][1] = fovRad;
         to2D[2][2] = (zFar + zNear) / (zFar - zNear);
     }
     //endregion
@@ -142,32 +142,32 @@ public class RotationHandler {
      * @param around    Around what it rotates the vector
      * @return          Vector4D(result of rotating vector v)
      */
-    public Vector4D rot(Vector4D v, double angle, String around) {
+    public static Vector4D rot(Vector4D v, double angle, String around) {
         // stores rotation-matrix
         double[][] rM = new double[4][4];
 
         // setting rM to the calculated rotation-matrix around the specific axis/plane for a certain angle
         switch (around){
             case "X":
-                rM = this.rotX(angle);
+                rM = rotX(angle);
                 break;
             case "Y":
-                rM = this.rotY(angle);
+                rM = rotY(angle);
                 break;
             case "Z":
-                rM = this.rotZ(angle);
+                rM = rotZ(angle);
                 break;
             case "XW":
-                rM = this.rotXW(angle);
+                rM = rotXW(angle);
                 break;
             case "YW":
-                rM = this.rotYW(angle);
+                rM = rotYW(angle);
                 break;
             case "ZW":
-                rM = this.rotZW(angle);
+                rM = rotZW(angle);
                 break;
         }
-        return this.multMatVec(rM, v);
+        return multMatVec(rM, v);
     }
     //endregion
 
@@ -178,7 +178,7 @@ public class RotationHandler {
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
-    private double[][] rotX(double i) {
+    private static double[][] rotX(double i) {
         double[][] m = new double[4][4];
         m[0][0] = 1.0;
         m[1][1] = Math.cos(i);
@@ -194,7 +194,7 @@ public class RotationHandler {
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
-    private double[][] rotY(double i) {
+    private static double[][] rotY(double i) {
         double[][] m = new double[4][4];
         m[0][0] = Math.cos(i);
         m[1][1] = 1.0;
@@ -210,7 +210,7 @@ public class RotationHandler {
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
-    private double[][] rotZ(double i) {
+    private static double[][] rotZ(double i) {
         double[][] m = new double[4][4];
         m[0][0] = Math.cos(i);
         m[0][1] = Math.sin(i);
@@ -226,7 +226,7 @@ public class RotationHandler {
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
-    private double[][] rotXW(double i) {
+    private static double[][] rotXW(double i) {
         double[][] m = new double[4][4];
         m[0][0] = Math.cos(i);
         m[1][1] = 1.0;
@@ -242,7 +242,7 @@ public class RotationHandler {
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
-    private double[][] rotYW(double i) {
+    private static double[][] rotYW(double i) {
         double[][] m = new double[4][4];
         m[0][0] = 1.0;
         m[1][1] = Math.cos(i);
@@ -258,7 +258,7 @@ public class RotationHandler {
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
-    private double[][] rotZW(double i) {
+    private static double[][] rotZW(double i) {
         double[][] m = new double[4][4];
         m[0][0] = 1.0;
         m[1][1] = 1.0;
