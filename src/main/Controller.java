@@ -16,8 +16,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import objects.Object4D;
+import parser.Connection;
+import parser.Object4DLoader;
 import vector.Vector2D;
 import vector.Vector4D;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -145,17 +148,17 @@ public class Controller implements Initializable {
     /**
      * Coordinate System
      */
-    private Object4D coord = new Object4D();
+    private Object4D coordinateSystem;
 
     /**
      * Tesseract
      */
-    private Object4D tesseract = new Object4D();
+    private Object4D tesseract;
 
     /**
      * Tesseract rotated by mouse
      */
-    private Object4D camera = new Object4D();
+    private Object4D camera;
     //endregion
 
     //region Constants
@@ -228,69 +231,34 @@ public class Controller implements Initializable {
      */
     public void reset() {
         resetUI();
-
-        // all points for a coordinate system
-        coord = new Object4D();
-        coord.points = new Vector4D[]{
-            new Vector4D(),                      // center-point
-            new Vector4D(1, 0, 0 ,0), // x-axis
-            new Vector4D(0, 1, 0 ,0), // y-axis
-            new Vector4D(0, 0, 1 ,0), // z-axis
-        };
-
-        // all points in a tesseract(can also be represented as the binary-numbers from 0 to 15
-        tesseract = new Object4D();
+        try {
+            coordinateSystem = Object4DLoader.parseObj4D("C:\\Users\\th3ga\\Desktop\\Code\\Java\\4D_Demo\\src\\objects\\.coordinateSystem.obj4d");
+            tesseract = Object4DLoader.parseObj4D("C:\\Users\\th3ga\\Desktop\\Code\\Java\\4D_Demo\\src\\objects\\tesseract.obj4d");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // resetting zoom
         ph.zDisplacement = INIT_ZOOM;
 
         // rotating to initial position
-        coord.rotate("Y", INIT_Y_ANGLE);
-        coord.rotate("X", INIT_X_ANGLE);
+        coordinateSystem.rotate("Y", INIT_Y_ANGLE);
+        coordinateSystem.rotate("X", INIT_X_ANGLE);
 
         redraw();
     }
 
-    private void drawObject(Vector2D[] v) {
-        clearCanvas();
-
-        drawCoord(coord.project(canvas, ph));
-
-        // connects the "outer" cube
-        for(int i = 0; i < 4; i++) {
-            line(v, i, ( i + 1 ) % 4);
-            line(v, i + 4, ( ( i + 1 ) % 4 ) + 4);
-            line(v, i, i + 4);
+    public void drawObject4D(Object4D obj4d) {
+        for (Connection con: obj4d.getConnections()) {
+            gc.setStroke(con.getColor());
+            line(obj4d.project(canvas, ph), con.getIndexOne(), con.getIndexTwo());
         }
-
-        // connects the "inner" cube
-        for(int i = 0; i < 4; i++) {
-            line(v, i + 8, ( ( i + 1 ) % 4 ) + 8);
-            line(v, i + 12, ( ( i + 1 ) % 4 ) + 12);
-            line(v, i + 8, i + 12);
-        }
-
-        // connects first and second cube
-        for(int i = 0; i < 8; i++) {
-            line(v, i, i + 8);
-        }
-    }
-
-    private void drawCoord(Vector2D[] coord) {
-        gc.setStroke(Color.BLUE);
-        line(coord, 0, 1);
-        gc.setStroke(Color.RED);
-        line(coord, 0, 2);
-        gc.setStroke(Color.GREEN);
-        line(coord, 0, 3);
-        gc.setStroke(Color.BLACK);
-        gc.strokeOval(coord[0].x, coord[0].y, 1, 1);
     }
 
     /**
      * clears the canvas
      */
-    private void clearCanvas() {
+    public void clearCanvas() {
         // clear's a rectangle shape on the screen which in this case is the whole canvas
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
@@ -302,15 +270,20 @@ public class Controller implements Initializable {
      * @param j Index of vector two
      */
     private void line(Vector2D[] v, int i, int j) {
+        //System.out.println(i + " " + j);
+        //System.out.println(v[i].toString() + " " + v[j].toString());
         gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
     }
 
     private void redraw() {
         ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
         tesseract.rotate("X", 0);
-        coord.rotate("X", 0);
-        camera = tesseract.rotateToCoord(coord);
-        drawObject(camera.project(canvas, ph));
+        coordinateSystem.rotate("X", 0);
+        camera = tesseract.rotateToCoord(coordinateSystem);
+        //drawObject(camera.project(canvas, ph));
+        clearCanvas();
+        drawObject4D(coordinateSystem);
+        drawObject4D(camera);
     }
 
 
@@ -339,8 +312,7 @@ public class Controller implements Initializable {
                 double oldD = old_val.doubleValue();
                 double theta = ROTATION_SPEED * (newD - oldD);
                 tesseract.rotate(around[finalI], theta);
-                camera = tesseract.rotateToCoord(coord);
-                drawObject(camera.project(canvas, ph));
+                redraw();
             });
         }
 
@@ -386,11 +358,10 @@ public class Controller implements Initializable {
         double horTheta = (currentVector.x - oldVector.x) / 100;
         double verTheta = (currentVector.y - oldVector.y) / 100;
 
-        coord.rotate("X", verTheta);
-        coord.rotate("Y", horTheta);
+        coordinateSystem.rotate("X", verTheta);
+        coordinateSystem.rotate("Y", horTheta);
 
-        camera = tesseract.rotateToCoord(coord);
-        drawObject(camera.project(canvas, ph));
+        redraw();
     }
 
     public void zoom(ScrollEvent s) {

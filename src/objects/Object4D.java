@@ -3,17 +3,41 @@ package objects;
 import handlers.ProjectionHandler;
 import handlers.RotationHandler;
 import javafx.scene.canvas.Canvas;
+import parser.Connection;
 import vector.Vector2D;
 import vector.Vector3D;
 import vector.Vector4D;
 
 public class Object4D {
-    public Vector4D[] points = new Vector4D[]{
-                new Vector4D(-1, -1, -1, -1), new Vector4D(1, -1, -1, -1), new Vector4D(1, 1, -1, -1), new Vector4D(-1, 1, -1, -1),
-                new Vector4D(-1, -1, 1, -1), new Vector4D(1, -1, 1, -1), new Vector4D(1, 1, 1, -1), new Vector4D(-1, 1, 1, -1),
-                new Vector4D(-1, -1, -1, 1), new Vector4D(1, -1, -1, 1), new Vector4D(1, 1, -1, 1), new Vector4D(-1, 1, -1, 1),
-                new Vector4D(-1, -1, 1, 1), new Vector4D(1, -1, 1, 1), new Vector4D(1, 1, 1, 1), new Vector4D(-1, 1, 1, 1)
-    };
+    private Vector4D[] points;
+    private Connection[] connections;
+
+    public Object4D(int pLength, int cLength) {
+        points = new Vector4D[pLength];
+        connections = new Connection[cLength];
+    }
+
+    public Object4D(Vector4D[] inputPoints, Connection[] inputConnections) {
+        this.points = new Vector4D[inputPoints.length];
+        this.connections = new Connection[inputConnections.length];
+        for (int i = 0; i < inputPoints.length; i++) {
+            this.points[i] = new Vector4D(inputPoints[i]);
+        }
+        for (int i = 0; i < inputConnections.length; i++) {
+            this.connections[i] = new Connection(inputConnections[i]);
+        }
+    }
+
+    public Object4D(Object4D obj4d) {
+        this.points = new Vector4D[obj4d.getPoints().length];
+        this.connections = new Connection[obj4d.getConnections().length];
+        for (int i = 0; i < obj4d.getPoints().length; i++) {
+            this.points[i] = new Vector4D(obj4d.getPoints()[i]);
+        }
+        for (int i = 0; i < obj4d.getConnections().length; i++) {
+            this.connections[i] = new Connection(obj4d.getConnections()[i]);
+        }
+    }
 
     /**
      * Rotates a set of 4d vectors
@@ -30,8 +54,10 @@ public class Object4D {
      * projects a set of 4D vectors down to 2D
      */
     public Vector2D[] project(Canvas canvas, ProjectionHandler ph) {
+
         Vector3D[] inThirdDim = new Vector3D[this.points.length];
         Vector2D[] inSecondDim = new Vector2D[this.points.length];
+
         // getting width and height
         double w = canvas.getWidth();
         double h = canvas.getHeight();
@@ -54,7 +80,7 @@ public class Object4D {
                 new Vector4D(0, 0, 1 ,0)
         };
 
-        Object4D output = new Object4D();
+        Object4D output = new Object4D(this);
 
         double firstAngle = world[1].angle3DToVec(coord.getPoints()[1]);
         Vector4D firstAxis = world[1].crossProd(coord.getPoints()[1]);
@@ -78,5 +104,9 @@ public class Object4D {
 
     public Vector4D[] getPoints() {
         return points;
+    }
+
+    public Connection[] getConnections() {
+        return connections;
     }
 }

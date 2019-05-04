@@ -22,6 +22,11 @@ public class Vector4D extends Vector3D {
         this.w = w;
     }
 
+    public Vector4D(Vector4D input) {
+        super(input.x, input.y, input.z);
+        this.w = input.w;
+    }
+
     /**
      * initialize 4D vector with x, y, z and w coordinate as 0
      */

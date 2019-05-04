@@ -57,26 +57,26 @@ public class ProjectionHandler {
      * @return  projected Vector2D
      */
     public Vector2D project3DTo2D(Vector3D v, double w, double h) {
-        Vector3D t = new Vector3D(v.x, v.y, v.z);
+        Vector3D temp = new Vector3D(v.x, v.y, v.z);
 
         // translating vector further back
-        t.z += zDisplacement;
-        double tempZ = t.z;
+        temp.z += zDisplacement;
+        double tempZ = temp.z;
 
         // projection via multiplication with projection matrix
-        t = MatrixHandler.multMatVec(to2D, t);
+        temp = MatrixHandler.multMatVec(to2D, temp);
 
         // normalizing
-        t.x /= tempZ;
-        t.y /= tempZ;
+        temp.x /= tempZ;
+        temp.y /= tempZ;
 
         // translating the vector into the center of the canvas
-        t.x += 1.0;
-        t.y += 1.0;
-        t.x *= 0.5 * w;
-        t.y *= 0.5 * h;
+        temp.x += 1.0;
+        temp.y += 1.0;
+        temp.x *= 0.5 * w;
+        temp.y *= 0.5 * h;
 
-        return new Vector2D(t.x, t.y);
+        return new Vector2D(temp.x, temp.y);
     }
 
     /**
