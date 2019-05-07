@@ -12,9 +12,8 @@ public class Object4DLoader {
     private final static String VECTOR = "v";
     private final static String CONNECTION = "c";
 
-    public static Object4D parseObj4D(String path) throws Exception{
+    public static Object4D parseObj4D(File obj4dFile) throws Exception{
 
-        File obj4dFile = new File(path);
         FileReader fileReader = new FileReader(obj4dFile);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 

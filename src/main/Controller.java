@@ -4,23 +4,27 @@ import handlers.ProjectionHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import objects.Object4D;
 import parser.Connection;
 import parser.Object4DLoader;
 import vector.Vector2D;
-import vector.Vector4D;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,6 +34,7 @@ import java.util.ResourceBundle;
  * @since 1.0
  */
 public class Controller implements Initializable {
+    public Button btnLoadObj4d;
     //region Global variables
 
     //region JavaFX UI Elements
@@ -42,7 +47,7 @@ public class Controller implements Initializable {
     private Pane canvasPane;
 
     /**
-     * Canvas to draw tesseract on
+     * Canvas to draw everything on
      */
     @FXML
     private Canvas canvas;
@@ -84,37 +89,37 @@ public class Controller implements Initializable {
     private Slider sdrZW;
 
     /**
-     * CheckBox to control if the tesseract should rotate around the x-axis automatically
+     * CheckBox to control if the obj4DToDraw should rotate around the x-axis automatically
      */
     @FXML
     private CheckBox cbX;
 
     /**
-     * CheckBox to control if the tesseract should rotate around the y-axis automatically
+     * CheckBox to control if the obj4DToDraw should rotate around the y-axis automatically
      */
     @FXML
     private CheckBox cbY;
 
     /**
-     * CheckBox to control if the tesseract should rotate around the z-axis automatically
+     * CheckBox to control if the obj4DToDraw should rotate around the z-axis automatically
      */
     @FXML
     private CheckBox cbZ;
 
     /**
-     * CheckBox to control if the tesseract should rotate around the xw-plane automatically
+     * CheckBox to control if the obj4DToDraw should rotate around the xw-plane automatically
      */
     @FXML
     private CheckBox cbXW;
 
     /**
-     * CheckBox to control if the tesseract should rotate around the yw-plane automatically
+     * CheckBox to control if the obj4DToDraw should rotate around the yw-plane automatically
      */
     @FXML
     private CheckBox cbYW;
 
     /**
-     * CheckBox to control if the tesseract should rotate around the zw-plane automatically
+     * CheckBox to control if the obj4DToDraw should rotate around the zw-plane automatically
      */
     @FXML
     private CheckBox cbZW;
@@ -146,6 +151,14 @@ public class Controller implements Initializable {
     private ProjectionHandler ph;
 
     /**
+     * FileChooser for loading in .obj4d files
+     */
+    private FileChooser fileChooser;
+
+    private File obj;
+    private File co;
+
+    /**
      * Coordinate System
      */
     private Object4D coordinateSystem;
@@ -153,12 +166,8 @@ public class Controller implements Initializable {
     /**
      * Tesseract
      */
-    private Object4D tesseract;
+    private Object4D obj4DToDraw;
 
-    /**
-     * Tesseract rotated by mouse
-     */
-    private Object4D camera;
     //endregion
 
     //region Constants
@@ -215,8 +224,11 @@ public class Controller implements Initializable {
 
         // initializing the matrixhandler
         ph = new ProjectionHandler();
-        // generate initial projection matrix from 3D to 2D
-        ph.calcProj3DTo2D(canvas.getHeight() / canvas.getWidth());
+
+        co = new File("src/objects/.coordinateSystem.obj4d");
+        obj = new File("src/objects/tesseract.obj4d");
+
+        fileChooser = new FileChooser();
 
         // one time use in the beginning
         addListeners();
@@ -232,8 +244,8 @@ public class Controller implements Initializable {
     public void reset() {
         resetUI();
         try {
-            coordinateSystem = Object4DLoader.parseObj4D("C:\\Users\\th3ga\\Desktop\\Code\\Java\\4D_Demo\\src\\objects\\.coordinateSystem.obj4d");
-            tesseract = Object4DLoader.parseObj4D("C:\\Users\\th3ga\\Desktop\\Code\\Java\\4D_Demo\\src\\objects\\tesseract.obj4d");
+            coordinateSystem = Object4DLoader.parseObj4D(co);
+            obj4DToDraw = Object4DLoader.parseObj4D(obj);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -263,6 +275,17 @@ public class Controller implements Initializable {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
+    public void loadObj4DFile(Event e) {
+        //TODO:printing if loaded successful
+        Node source = (Node) e.getSource();
+        Window stage = source.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+        String path = file.toString();
+        String fileType = path.substring(path.lastIndexOf("."));
+        if (file != null && fileType == ".obj4d") obj = file;
+        reset();
+    }
+
     /**
      * draws line between two vectors out of an array of vectors
      * @param v Array of Vector2D
@@ -277,10 +300,9 @@ public class Controller implements Initializable {
 
     private void redraw() {
         ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-        tesseract.rotate("X", 0);
+        obj4DToDraw.rotate("X", 0);
         coordinateSystem.rotate("X", 0);
-        camera = tesseract.rotateToCoord(coordinateSystem);
-        //drawObject(camera.project(canvas, ph));
+        Object4D camera = obj4DToDraw.rotateToCoord(coordinateSystem);
         clearCanvas();
         drawObject4D(coordinateSystem);
         drawObject4D(camera);
@@ -311,7 +333,7 @@ public class Controller implements Initializable {
                 double newD = new_val.doubleValue();
                 double oldD = old_val.doubleValue();
                 double theta = ROTATION_SPEED * (newD - oldD);
-                tesseract.rotate(around[finalI], theta);
+                obj4DToDraw.rotate(around[finalI], theta);
                 redraw();
             });
         }
@@ -331,7 +353,7 @@ public class Controller implements Initializable {
                         e -> {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
-                                    tesseract.rotate(around[i], ANIMATION_ROTATION_SPEED);
+                                    obj4DToDraw.rotate(around[i], ANIMATION_ROTATION_SPEED);
                                     redraw();
                                 }
                             }

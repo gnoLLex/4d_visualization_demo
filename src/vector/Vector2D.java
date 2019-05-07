@@ -33,4 +33,8 @@ public class Vector2D {
         this.x = 0;
         this.y = 0;
     }
+
+    public String toString() {
+        return x + " " + y;
+    }
 }
