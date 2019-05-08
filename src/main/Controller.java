@@ -12,6 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -34,7 +35,6 @@ import java.util.ResourceBundle;
  * @since 1.0
  */
 public class Controller implements Initializable {
-    public Button btnLoadObj4d;
     //region Global variables
 
     //region JavaFX UI Elements
@@ -51,6 +51,18 @@ public class Controller implements Initializable {
      */
     @FXML
     private Canvas canvas;
+
+    /**
+     * Button for opening the File-Chooser
+     */
+    @FXML
+    public Button btnLoadObj4d;
+
+    /**
+     * Label for the Name of the 4D Object
+     */
+    @FXML
+    public Label lbl4DObj;
 
     /**
      * Slider to control the rotation around the x-axis
@@ -246,6 +258,7 @@ public class Controller implements Initializable {
         try {
             coordinateSystem = Object4DLoader.parseObj4D(co);
             obj4DToDraw = Object4DLoader.parseObj4D(obj);
+            lbl4DObj.setText(obj4DToDraw.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -282,8 +295,10 @@ public class Controller implements Initializable {
         File file = fileChooser.showOpenDialog(stage);
         String path = file.toString();
         String fileType = path.substring(path.lastIndexOf("."));
-        if (file != null && fileType == ".obj4d") obj = file;
-        reset();
+        if (fileType.equals(".obj4d")) {
+            obj = file;
+            reset();
+        }
     }
 
     /**
@@ -300,8 +315,6 @@ public class Controller implements Initializable {
 
     private void redraw() {
         ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-        obj4DToDraw.rotate("X", 0);
-        coordinateSystem.rotate("X", 0);
         Object4D camera = obj4DToDraw.rotateToCoord(coordinateSystem);
         clearCanvas();
         drawObject4D(coordinateSystem);

@@ -18,7 +18,7 @@ public class StringUtils {
 
     public static double[] parseDoubleList(int numDoubles, String list) {
         double[] output = new double[numDoubles];
-
+        int returnArrayCount = 0;
         // Copy list into a char array.
         char[] charList;
         charList = new char[list.length()];
@@ -29,7 +29,6 @@ public class StringUtils {
         int itemStart;
         int itemLength;
 
-        int returnArrayCount = 0;
         while (count < listLength) {
             // Skip any leading whitespace
             int itemEnd = skipWhiteSpace(count, charList);
@@ -76,6 +75,8 @@ public class StringUtils {
     public static Color parseColor(String list) {
         Color output;
 
+        String colorShort = "";
+
         char[] charList;
         charList = new char[list.length()];
         list.getChars(0, list.length(), charList, 0);
@@ -84,8 +85,6 @@ public class StringUtils {
         int count = 1;
         int itemStart;
         int itemLength;
-
-        String colorShort = "";
         while (count < listLength) {
             // Skip any leading whitespace
             int itemEnd = skipWhiteSpace(count, charList);
@@ -108,9 +107,6 @@ public class StringUtils {
             count = itemEnd;
         }
         switch (colorShort){
-            case "d":
-                output = Color.BLACK;
-                break;
             case "b":
                 output = Color.BLUE;
                 break;

@@ -9,6 +9,7 @@ import vector.Vector3D;
 import vector.Vector4D;
 
 public class Object4D {
+    private String name;
     private Vector4D[] points;
     private Connection[] connections;
 
@@ -17,7 +18,8 @@ public class Object4D {
         connections = new Connection[cLength];
     }
 
-    public Object4D(Vector4D[] inputPoints, Connection[] inputConnections) {
+    public Object4D(String name, Vector4D[] inputPoints, Connection[] inputConnections) {
+        this.name = name;
         this.points = new Vector4D[inputPoints.length];
         this.connections = new Connection[inputConnections.length];
         for (int i = 0; i < inputPoints.length; i++) {
@@ -29,13 +31,17 @@ public class Object4D {
     }
 
     public Object4D(Object4D obj4d) {
-        this.points = new Vector4D[obj4d.getPoints().length];
-        this.connections = new Connection[obj4d.getConnections().length];
-        for (int i = 0; i < obj4d.getPoints().length; i++) {
-            this.points[i] = new Vector4D(obj4d.getPoints()[i]);
+        this.name = obj4d.name;
+
+
+        this.points = new Vector4D[obj4d.points.length];
+
+        for (int i = 0; i < obj4d.points.length; i++) {
+            this.points[i] = new Vector4D(obj4d.points[i]);
         }
-        for (int i = 0; i < obj4d.getConnections().length; i++) {
-            this.connections[i] = new Connection(obj4d.getConnections()[i]);
+        this.connections = new Connection[obj4d.connections.length];
+        for (int i = 0; i < obj4d.connections.length; i++) {
+            this.connections[i] = new Connection(obj4d.connections[i]);
         }
     }
 
@@ -67,7 +73,6 @@ public class Object4D {
             inThirdDim[i] = ph.project4DTo3D(this.points[i]);
             inSecondDim[i] = ph.project3DTo2D(inThirdDim[i], w, h);
         }
-
         return inSecondDim;
     }
 
@@ -108,5 +113,9 @@ public class Object4D {
 
     public Connection[] getConnections() {
         return connections;
+    }
+
+    public String getName() {
+        return name;
     }
 }
