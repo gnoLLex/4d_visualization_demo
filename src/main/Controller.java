@@ -17,6 +17,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -51,6 +52,12 @@ public class Controller implements Initializable {
      */
     @FXML
     private Canvas canvas;
+
+    /**
+     * Label for loading status
+     */
+    @FXML
+    public Label lblLoading;
 
     /**
      * Button for opening the File-Chooser
@@ -293,12 +300,22 @@ public class Controller implements Initializable {
         Node source = (Node) e.getSource();
         Window stage = source.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
-        String path = file.toString();
-        String fileType = path.substring(path.lastIndexOf("."));
-        if (fileType.equals(".obj4d")) {
-            obj = file;
-            reset();
+        lblLoading.setText("Loading");
+        String loadingMessage = "";
+        if (file != null) {
+            String path = file.toString();
+            String fileType = path.substring(path.lastIndexOf("."));
+            if (fileType.equals(".obj4d")) {
+                obj = file;
+                reset();
+                loadingMessage = "Loading successful";
+            } else {
+                loadingMessage = "Loading failed. Not .obj4d file!";
+            }
+        } else {
+            loadingMessage = "Loading Failed. No file selected!";
         }
+        lblLoading.setText(loadingMessage);
     }
 
     /**
