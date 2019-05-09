@@ -300,8 +300,8 @@ public class Controller implements Initializable {
         Node source = (Node) e.getSource();
         Window stage = source.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
-        lblLoading.setText("Loading");
-        String loadingMessage = "";
+        lblLoading.setText("Loading...");
+        String loadingMessage;
         if (file != null) {
             String path = file.toString();
             String fileType = path.substring(path.lastIndexOf("."));

@@ -32,8 +32,6 @@ public class Object4D {
 
     public Object4D(Object4D obj4d) {
         this.name = obj4d.name;
-
-
         this.points = new Vector4D[obj4d.points.length];
 
         for (int i = 0; i < obj4d.points.length; i++) {
