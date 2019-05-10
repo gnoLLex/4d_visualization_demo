@@ -93,17 +93,20 @@ public class Vector4D extends Vector3D {
         return Math.acos(this.dotProd3D(other)/(this.magnitude3D() * other.magnitude3D()));
     }
 
-    public Vector4D rotateByVector(Vector4D v, double angle) {
+    public Vector4D rotateByVector(Vector4D axis, double angle) {
+        if (axis.magnitude3D() <= 0.001) {
+            if (angle != 0) return this.times(-1);
+            return this;
+        }
         Vector4D aDirB;
-        double dotWithOther = this.dotProd3D(v);
-        double dotWithSelf = v.dotProd3D(v);
+        double dotWithOther = this.dotProd3D(axis);
+        double dotWithSelf = axis.dotProd3D(axis);
         if (Double.isNaN(dotWithOther) || dotWithSelf == 0) {
             return new Vector4D( 0, 0, 0, this.w);
         } else {
-            aDirB = v.times(dotWithOther / dotWithSelf);
-            System.out.println(aDirB.toString());
+            aDirB = axis.times(dotWithOther / dotWithSelf);
             Vector4D aOrthB = this.sub(aDirB);
-            Vector4D W = v.crossProd(aOrthB);
+            Vector4D W = axis.crossProd(aOrthB);
 
             double x1 = Math.cos(angle) / aOrthB.magnitude3D();
             double x2 = Math.sin(angle) / W.magnitude3D();

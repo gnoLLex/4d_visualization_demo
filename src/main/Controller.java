@@ -296,7 +296,6 @@ public class Controller implements Initializable {
     }
 
     public void loadObj4DFile(Event e) {
-        //TODO:printing if loaded successful
         Node source = (Node) e.getSource();
         Window stage = source.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);

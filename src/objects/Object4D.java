@@ -85,21 +85,23 @@ public class Object4D {
 
         Object4D output = new Object4D(this);
 
-        double firstAngle = world[1].angle3DToVec(coord.getPoints()[1]);
-        Vector4D firstAxis = world[1].crossProd(coord.getPoints()[1]);
+        double firstAngle = world[1].angle3DToVec(coord.points[1]);
+        Vector4D firstAxis = world[1].crossProd(coord.points[1]);
+        //System.out.println("Axis: " + firstAxis.toString() + "| Angle: " + firstAngle);
 
         for (int i = 0; i < world.length; i++) {
             world[i] = world[i].rotateByVector(firstAxis, firstAngle);
+
         }
         for (int i = 0; i < this.points.length; i++) {
-            output.getPoints()[i] = this.points[i].rotateByVector(firstAxis, firstAngle);
+            output.points[i] = this.points[i].rotateByVector(firstAxis, firstAngle);
         }
 
-        double secondAngle = world[2].angle3DToVec(coord.getPoints()[2]);
-        Vector4D secondAxis = world[2].crossProd(coord.getPoints()[2]);
+        double secondAngle = world[2].angle3DToVec(coord.points[2]);
+        Vector4D secondAxis = world[2].crossProd(coord.points[2]);
 
         for (int i = 0; i < output.points.length; i++) {
-            output.getPoints()[i] = output.getPoints()[i].rotateByVector(secondAxis, secondAngle);
+            output.points[i] = output.points[i].rotateByVector(secondAxis, secondAngle);
         }
 
         return output;
