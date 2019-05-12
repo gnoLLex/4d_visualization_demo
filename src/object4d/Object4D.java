@@ -1,9 +1,8 @@
-package objects;
+package object4d;
 
 import handlers.ProjectionHandler;
 import handlers.RotationHandler;
 import javafx.scene.canvas.Canvas;
-import parser.Connection;
 import vector.Vector2D;
 import vector.Vector3D;
 import vector.Vector4D;
@@ -12,11 +11,6 @@ public class Object4D {
     private String name;
     private Vector4D[] points;
     private Connection[] connections;
-
-    public Object4D(int pLength, int cLength) {
-        points = new Vector4D[pLength];
-        connections = new Connection[cLength];
-    }
 
     public Object4D(String name, Vector4D[] inputPoints, Connection[] inputConnections) {
         this.name = name;

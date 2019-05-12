@@ -1,4 +1,4 @@
-package parser;
+package object4d;
 
 import javafx.scene.paint.Color;
 

@@ -17,12 +17,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
-import objects.Object4D;
-import parser.Connection;
+import object4d.Object4D;
+import object4d.Connection;
 import parser.Object4DLoader;
 import vector.Vector2D;
 

@@ -1,6 +1,7 @@
 package parser;
 
-import objects.Object4D;
+import object4d.Connection;
+import object4d.Object4D;
 import vector.Vector4D;
 
 import java.io.BufferedReader;
@@ -14,7 +15,6 @@ public class Object4DLoader {
     private final static String NAME = "n";
 
     public static Object4D parseObj4D(File obj4dFile) throws Exception{
-
         BufferedReader bufferedReader = new BufferedReader(new FileReader(obj4dFile));
 
         String name = "4D-Object";
