@@ -1,24 +1,24 @@
 package parser;
 
+import javafx.scene.paint.Color;
 import object4d.Connection;
 import object4d.Object4D;
+import object4d.Point;
 import vector.Vector4D;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 
-public class Object4DLoader {
+public class Object4DSerializer {
     private final static String VECTOR = "v";
     private final static String CONNECTION = "c";
     private final static String NAME = "n";
 
-    public static Object4D parseObj4D(File obj4dFile) throws Exception{
+    public static Object4D loadObj4D(File obj4dFile) throws Exception{
         BufferedReader bufferedReader = new BufferedReader(new FileReader(obj4dFile));
 
         String name = "4D-Object";
-        ArrayList<Vector4D> pointList = new ArrayList<>();
+        ArrayList<Point> pointList = new ArrayList<>();
         ArrayList<Connection> connectionList = new ArrayList<>();
 
         while (true) {
@@ -31,8 +31,8 @@ public class Object4DLoader {
 
             if (line.startsWith(VECTOR)) {
                 double[] values = StringUtils.parseDoubleList(4, line);
-                Vector4D v = new Vector4D(values[0], values[1], values[2], values[3]);
-                pointList.add(v);
+                Point point = new Point(new Vector4D(values[0], values[1], values[2], values[3]), Color.BLACK);
+                pointList.add(point);
             } else if (line.startsWith(CONNECTION)) {
                 Connection c = StringUtils.parseConnection(line);
                 connectionList.add(c);
@@ -42,7 +42,7 @@ public class Object4DLoader {
         }
         bufferedReader.close();
 
-        Vector4D[] outputPoints = new Vector4D[pointList.size()];
+        Point[] outputPoints = new Point[pointList.size()];
         outputPoints = pointList.toArray(outputPoints);
 
         Connection[] outputConnections = new Connection[connectionList.size()];
@@ -50,5 +50,21 @@ public class Object4DLoader {
         Object4D output = new Object4D(name, outputPoints, outputConnections);
 
         return output;
+    }
+
+    public static void saveObj4d(Object4D object4D, File destination) {
+        try {
+            PrintWriter out = new PrintWriter(destination);
+            out.println("n " + object4D.getName());
+            for (Point point: object4D.getPoints()) {
+                out.println("p " + point.toString());
+            }
+            for (Connection connection: object4D.getConnections()) {
+                out.println("c " + connection.toString());
+            }
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

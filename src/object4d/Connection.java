@@ -2,7 +2,9 @@ package object4d;
 
 import javafx.scene.paint.Color;
 
-public class Connection {
+import java.io.Serializable;
+
+public class Connection implements Serializable {
     private int indexOne;
     private int indexTwo;
     private Color color;
@@ -17,6 +19,10 @@ public class Connection {
         this.indexOne = c.getIndexOne();
         this.indexTwo = c.getIndexTwo();
         this.color = c.getColor();
+    }
+
+    public String toString() {
+        return indexOne + " " + indexTwo + " " + color;
     }
 
     public int getIndexOne() {

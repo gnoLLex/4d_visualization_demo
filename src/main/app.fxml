@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -17,68 +18,126 @@
       <Canvas fx:id="canvas" height="720.0" onMouseDragged="#updateVector" onMousePressed="#setVector" onMouseReleased="#updateVector" onScroll="#zoom" width="770.0" />
    </Pane>
    <Separator orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0" />
-   <VBox alignment="CENTER" layoutX="206.0" maxWidth="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <VBox alignment="TOP_CENTER" layoutX="206.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
       <VBox alignment="CENTER" spacing="5.0">
          <children>
             <Label fx:id="lblLoading" />
-            <Button fx:id="btnLoadObj4d" mnemonicParsing="false" onAction="#loadObj4DFile" text="Load 4D Object" />
+            <HBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Button fx:id="btnLoadObj4d" mnemonicParsing="false" onAction="#loadObj4DFile" text="Load" />
+                  <Button fx:id="btnSaveObj4D" mnemonicParsing="false" onAction="#saveObj4DFile" text="Save" />
+               </children>
+            </HBox>
          </children>
       </VBox>
       <Separator layoutX="10.0" layoutY="165.0" prefWidth="200.0" />
-      <Label fx:id="lbl4DObj">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
+      <TextField fx:id="text4DObj" alignment="CENTER"/>
+      <Separator layoutX="10.0" layoutY="115.0" prefWidth="200.0" />
+      <VBox alignment="CENTER" spacing="5.0">
+         <children>
+            <Label text="Point Editor">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER">
+               <children>
+                  <Label ellipsisString="" minWidth="20.0" text="x: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textXValue" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+               <children>
+                  <Label ellipsisString="" minWidth="20.0" text="y: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textYValue" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+               <children>
+                  <Label ellipsisString="" minWidth="20.0" text="z: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textZValue" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+               <children>
+                  <Label ellipsisString="" minWidth="20.0" text="w: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textWValue" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
       <Separator prefWidth="200.0" />
       <VBox alignment="CENTER" spacing="10.0">
+         <Label text="Rotation">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
                <Label minWidth="60.0" text="X-Axis" textFill="BLUE" />
                <CheckBox fx:id="cbX" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrX" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" />
+         <Slider fx:id="sdrX" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
                <Label minWidth="60.0" text="Y-Axis" textFill="RED" />
                <CheckBox fx:id="cbY" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrY" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" />
+         <Slider fx:id="sdrY" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
                <Label minWidth="60.0" text="Z-Axis" textFill="LIME" />
                <CheckBox fx:id="cbZ" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrZ" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" />
-      </VBox>
-      <Separator prefWidth="200.0" />
-      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Slider fx:id="sdrZ" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
                <Label minWidth="60.0" text="XW-Plane" />
                <CheckBox fx:id="cbXW" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrXW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" />
+         <Slider fx:id="sdrXW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
                <Label minWidth="60.0" text="YW-Plane" />
                <CheckBox fx:id="cbYW" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrYW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" />
+         <Slider fx:id="sdrYW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
             <children>
                <Label minWidth="60.0" text="ZW-Plane" />
                <CheckBox fx:id="cbZW" mnemonicParsing="false" text="AutoAnimate" />
             </children>
          </HBox>
-         <Slider fx:id="sdrZW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" />
+         <Slider fx:id="sdrZW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
       </VBox>
       <Separator prefWidth="200.0" />
-      <Button fx:id="btnReset" mnemonicParsing="false" onAction="#reset" text="Reset" />
+      <HBox alignment="CENTER" spacing="5.0">
+         <children>
+            <Button fx:id="btnResetRotation" mnemonicParsing="false" onAction="#resetUI" text="Reset Rotation" />
+            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#reset" text="Reset" />
+         </children>
+      </HBox>
    </VBox>
 </AnchorPane>

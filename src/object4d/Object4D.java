@@ -7,17 +7,19 @@ import vector.Vector2D;
 import vector.Vector3D;
 import vector.Vector4D;
 
-public class Object4D {
+import java.io.Serializable;
+
+public class Object4D implements Serializable {
     private String name;
-    private Vector4D[] points;
+    private Point[] points;
     private Connection[] connections;
 
-    public Object4D(String name, Vector4D[] inputPoints, Connection[] inputConnections) {
+    public Object4D(String name, Point[] inputPoints, Connection[] inputConnections) {
         this.name = name;
-        this.points = new Vector4D[inputPoints.length];
+        this.points = new Point[inputPoints.length];
         this.connections = new Connection[inputConnections.length];
         for (int i = 0; i < inputPoints.length; i++) {
-            this.points[i] = new Vector4D(inputPoints[i]);
+            this.points[i] = new Point(inputPoints[i]);
         }
         for (int i = 0; i < inputConnections.length; i++) {
             this.connections[i] = new Connection(inputConnections[i]);
@@ -26,10 +28,10 @@ public class Object4D {
 
     public Object4D(Object4D obj4d) {
         this.name = obj4d.name;
-        this.points = new Vector4D[obj4d.points.length];
+        this.points = new Point[obj4d.points.length];
 
         for (int i = 0; i < obj4d.points.length; i++) {
-            this.points[i] = new Vector4D(obj4d.points[i]);
+            this.points[i] = new Point(obj4d.points[i]);
         }
         this.connections = new Connection[obj4d.connections.length];
         for (int i = 0; i < obj4d.connections.length; i++) {
@@ -52,8 +54,6 @@ public class Object4D {
      * projects a set of 4D vectors down to 2D
      */
     public Vector2D[] project(Canvas canvas, ProjectionHandler ph) {
-
-        Vector3D[] inThirdDim = new Vector3D[this.points.length];
         Vector2D[] inSecondDim = new Vector2D[this.points.length];
 
         // getting width and height
@@ -62,8 +62,7 @@ public class Object4D {
 
         // for each point
         for (int i = 0; i < this.points.length; i++) {
-            inThirdDim[i] = ph.project4DTo3D(this.points[i]);
-            inSecondDim[i] = ph.project3DTo2D(inThirdDim[i], w, h);
+            inSecondDim[i] = this.points[i].get2DContext(ph, w, h);
         }
         return inSecondDim;
     }
@@ -79,8 +78,8 @@ public class Object4D {
 
         Object4D output = new Object4D(this);
 
-        double firstAngle = world[1].angle3DToVec(coord.points[1]);
-        Vector4D firstAxis = world[1].crossProd(coord.points[1]);
+        double firstAngle = world[1].angle3DToVec(coord.points[1].getValues());
+        Vector4D firstAxis = world[1].crossProd(coord.points[1].getValues());
         //System.out.println("Axis: " + firstAxis.toString() + "| Angle: " + firstAngle);
 
         for (int i = 0; i < world.length; i++) {
@@ -88,11 +87,11 @@ public class Object4D {
 
         }
         for (int i = 0; i < this.points.length; i++) {
-            output.points[i] = this.points[i].rotateByVector(firstAxis, firstAngle);
+            output.points[i] = output.points[i].rotateByVector(firstAxis, firstAngle);
         }
 
-        double secondAngle = world[2].angle3DToVec(coord.points[2]);
-        Vector4D secondAxis = world[2].crossProd(coord.points[2]);
+        double secondAngle = world[2].angle3DToVec(coord.points[2].getValues());
+        Vector4D secondAxis = world[2].crossProd(coord.points[2].getValues());
 
         for (int i = 0; i < output.points.length; i++) {
             output.points[i] = output.points[i].rotateByVector(secondAxis, secondAngle);
@@ -101,7 +100,7 @@ public class Object4D {
         return output;
     }
 
-    public Vector4D[] getPoints() {
+    public Point[] getPoints() {
         return points;
     }
 
@@ -111,5 +110,9 @@ public class Object4D {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

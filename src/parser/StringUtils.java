@@ -98,19 +98,7 @@ public class StringUtils {
         String[] lineArray = parseString(NUM_ARGS_CONNECTION, list);
         String colorShort = lineArray[lineArray.length-1];
         if (colorShort != null) {
-            switch (colorShort) {
-                case "b":
-                    output = Color.BLUE;
-                    break;
-                case "r":
-                    output = Color.RED;
-                    break;
-                case "g":
-                    output = Color.GREEN;
-                    break;
-                default:
-                    output = Color.BLACK;
-            }
+            output = Color.valueOf(colorShort);
         } else {
             output = Color.BLACK;
         }

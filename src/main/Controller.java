@@ -10,24 +10,27 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import object4d.Object4D;
 import object4d.Connection;
-import parser.Object4DLoader;
+import object4d.Point;
+import parser.Object4DSerializer;
 import vector.Vector2D;
+import vector.Vector4D;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 /** Controls the JavaFx Application
  * @author Lucas Engelmann
@@ -35,6 +38,7 @@ import java.util.ResourceBundle;
  * @since 1.0
  */
 public class Controller implements Initializable {
+
     //region Global variables
 
     //region JavaFX UI Elements
@@ -59,93 +63,38 @@ public class Controller implements Initializable {
     public Label lblLoading;
 
     /**
-     * Button for opening the File-Chooser
-     */
-    @FXML
-    public Button btnLoadObj4d;
-
-    /**
      * Label for the Name of the 4D Object
      */
     @FXML
-    public Label lbl4DObj;
+    public TextField text4DObj;
 
     /**
-     * Slider to control the rotation around the x-axis
+     * Textfields containing coordinates of a Point
      */
     @FXML
-    private Slider sdrX;
+    private TextField textXValue, textYValue, textZValue, textWValue;
 
     /**
-     * Slider to control the rotation around the y-axis
+     * Array containing all Textfields
      */
-    @FXML
-    private Slider sdrY;
+    private TextField[] textFields;
 
     /**
-     * Slider to control the rotation around the z-axis
+     * Slider to control the rotation around the an axis
      */
     @FXML
-    private Slider sdrZ;
-
-    /**
-     * Slider to control the rotation around the xw-plane
-     */
-    @FXML
-    private Slider sdrXW;
-
-    /**
-     * Slider to control the rotation around the yw-plane
-     */
-    @FXML
-    private Slider sdrYW;
-
-    /**
-     * Slider to control the rotation around the zw-plane
-     */
-    @FXML
-    private Slider sdrZW;
-
-    /**
-     * CheckBox to control if the obj4DToDraw should rotate around the x-axis automatically
-     */
-    @FXML
-    private CheckBox cbX;
-
-    /**
-     * CheckBox to control if the obj4DToDraw should rotate around the y-axis automatically
-     */
-    @FXML
-    private CheckBox cbY;
-
-    /**
-     * CheckBox to control if the obj4DToDraw should rotate around the z-axis automatically
-     */
-    @FXML
-    private CheckBox cbZ;
-
-    /**
-     * CheckBox to control if the obj4DToDraw should rotate around the xw-plane automatically
-     */
-    @FXML
-    private CheckBox cbXW;
-
-    /**
-     * CheckBox to control if the obj4DToDraw should rotate around the yw-plane automatically
-     */
-    @FXML
-    private CheckBox cbYW;
-
-    /**
-     * CheckBox to control if the obj4DToDraw should rotate around the zw-plane automatically
-     */
-    @FXML
-    private CheckBox cbZW;
+    private Slider sdrX, sdrY, sdrZ, sdrXW, sdrYW, sdrZW;
 
     /**
      * array containing all sliders
      */
     private Slider[] sliders;
+
+    /**
+     * CheckBoxes to control if the obj4DToDraw should rotate around an axis automatically
+     */
+    @FXML
+    private CheckBox cbX, cbY, cbZ, cbXW, cbYW, cbZW;
 
     /**
      * array containing all checkboxes
@@ -190,6 +139,8 @@ public class Controller implements Initializable {
 
     //region Constants
 
+    private static final File INITIAL_DIRECTORY = new File("src/objects");
+
     /**
      * Constant for how fast the rotation will be done
      */
@@ -227,6 +178,9 @@ public class Controller implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // filling textfield-array with textfields
+        textFields = new TextField[]{textXValue, textYValue, textZValue, textWValue};
+
         // filling slider-array with all sliders
         sliders = new Slider[]{sdrX, sdrY, sdrZ, sdrXW, sdrYW, sdrZW};
 
@@ -247,6 +201,8 @@ public class Controller implements Initializable {
         obj = new File("src/objects/tesseract.obj4d");
 
         fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("4D Object Files", "*.obj4d"));
+        fileChooser.setInitialDirectory(INITIAL_DIRECTORY);
 
         // one time use in the beginning
         addListeners();
@@ -262,9 +218,12 @@ public class Controller implements Initializable {
     public void reset() {
         resetUI();
         try {
-            coordinateSystem = Object4DLoader.parseObj4D(co);
-            obj4DToDraw = Object4DLoader.parseObj4D(obj);
-            lbl4DObj.setText(obj4DToDraw.getName());
+            coordinateSystem = Object4DSerializer.loadObj4D(co);
+            for (Point point: coordinateSystem.getPoints()) {
+                point.isSelectable = false;
+            }
+            obj4DToDraw = Object4DSerializer.loadObj4D(obj);
+            text4DObj.setText(obj4DToDraw.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -279,17 +238,22 @@ public class Controller implements Initializable {
         redraw();
     }
 
-    public void drawObject4D(Object4D obj4d) {
+    private void drawObject4D(Object4D obj4d) {
+        Vector2D[] context2D = obj4d.project(canvas, ph);
+        for (Point point: obj4d.getPoints()) {
+            gc.setStroke(point.getColor());
+            gc.strokeOval(point.getValues().x, point.getValues().y, 1, 1);
+        }
         for (Connection con: obj4d.getConnections()) {
             gc.setStroke(con.getColor());
-            line(obj4d.project(canvas, ph), con.getIndexOne(), con.getIndexTwo());
+            line(context2D, con.getIndexOne(), con.getIndexTwo());
         }
     }
 
     /**
      * clears the canvas
      */
-    public void clearCanvas() {
+    private void clearCanvas() {
         // clear's a rectangle shape on the screen which in this case is the whole canvas
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
@@ -301,19 +265,24 @@ public class Controller implements Initializable {
         lblLoading.setText("Loading...");
         String loadingMessage;
         if (file != null) {
-            String path = file.toString();
-            String fileType = path.substring(path.lastIndexOf("."));
-            if (fileType.equals(".obj4d")) {
-                obj = file;
-                reset();
-                loadingMessage = "Loading successful";
-            } else {
-                loadingMessage = "Loading failed. Not .obj4d file!";
-            }
+            obj = file;
+            reset();
+            loadingMessage = "Loading successful";
         } else {
             loadingMessage = "Loading Failed. No file selected!";
         }
         lblLoading.setText(loadingMessage);
+    }
+
+    public void saveObj4DFile(Event e) {
+        //TODO: do it
+        Node source = (Node) e.getSource();
+        Window stage = source.getScene().getWindow();
+        File destination = fileChooser.showSaveDialog(stage);
+        if (destination != null) {
+            Object4DSerializer.saveObj4d(obj4DToDraw, destination);
+        }
+
     }
 
     /**
@@ -340,7 +309,7 @@ public class Controller implements Initializable {
     /**
      * Resets all sliders and checkboxes in the UI
      */
-    private void resetUI() {
+    public void resetUI() {
         for(Slider slider: sliders) {
             slider.setValue(0);
         }
@@ -349,12 +318,87 @@ public class Controller implements Initializable {
         }
     }
 
+    //region Mouserotation
 
+    private Vector2D currentVector = new Vector2D();
+
+    public void setVector(MouseEvent e) {
+        currentVector = new Vector2D(e.getX(), e.getY());
+    }
+
+    public void updateVector(MouseEvent e) {
+        Vector2D oldVector = new Vector2D(currentVector.x, currentVector.y);
+        currentVector = new Vector2D(e.getX(), e.getY());
+
+        double horTheta = (currentVector.x - oldVector.x) / 100;
+        double verTheta = (currentVector.y - oldVector.y) / 100;
+
+        coordinateSystem.rotate("X", verTheta);
+        coordinateSystem.rotate("Y", horTheta);
+
+        redraw();
+    }
+
+    public void zoom(ScrollEvent s) {
+        if (ph.zDisplacement - s.getDeltaY() / 100 >= 2) {
+            ph.zDisplacement -= s.getDeltaY() / 100;
+            redraw();
+        }
+    }
+
+    //endregion
+
+    //region Point-Editor
+
+
+    //endregion
+
+    //region Ugly ListenerStuff
     /**
      * Adds the listeners to certain UI elements
      * and in addition a timeline for automatic rotation
      */
     private void addListeners() {
+        text4DObj.textProperty().addListener((ov, old_val, new_val) -> {
+            if (old_val != new_val) {
+                obj4DToDraw.setName(new_val);
+            }
+        });
+
+        //region Point-Editor
+        // credits to https://stackoverflow.com/a/45981297
+        Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
+
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            String text = c.getControlNewText();
+            if (validEditingState.matcher(text).matches()) {
+                return c ;
+            } else {
+                return null ;
+            }
+        };
+
+        StringConverter<Double> converter = new StringConverter<Double>() {
+            @Override
+            public Double fromString(String s) {
+                if (s.isEmpty() || "-".equals(s) || ".".equals(s) || "-.".equals(s)) {
+                    return 0.0 ;
+                } else {
+                    return Double.valueOf(s);
+                }
+            }
+
+            @Override
+            public String toString(Double d) {
+                return d.toString();
+            }
+        };
+        for (TextField t: textFields) {
+            TextFormatter<Double> textFormatter = new TextFormatter<>(converter, 0.0, filter);
+            t.setTextFormatter(textFormatter);
+        }
+        //endregion
+
         for(int i = 0; i < sliders.length; i++) {
             int finalI = i;
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
@@ -389,37 +433,9 @@ public class Controller implements Initializable {
                 ),
                 new KeyFrame(Duration.millis(1))
         );
+
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
-
-    //region Mouserotation
-
-    private Vector2D currentVector = new Vector2D();
-
-    public void setVector(MouseEvent e) {
-        currentVector = new Vector2D(e.getX(), e.getY());
-    }
-
-    public void updateVector(MouseEvent e) {
-        Vector2D oldVector = new Vector2D(currentVector.x, currentVector.y);
-        currentVector = new Vector2D(e.getX(), e.getY());
-
-        double horTheta = (currentVector.x - oldVector.x) / 100;
-        double verTheta = (currentVector.y - oldVector.y) / 100;
-
-        coordinateSystem.rotate("X", verTheta);
-        coordinateSystem.rotate("Y", horTheta);
-
-        redraw();
-    }
-
-    public void zoom(ScrollEvent s) {
-        if (ph.zDisplacement - s.getDeltaY() / 100 >= 2) {
-            ph.zDisplacement -= s.getDeltaY() / 100;
-            redraw();
-        }
-    }
-
     //endregion
 }
