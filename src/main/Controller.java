@@ -11,10 +11,10 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -251,9 +251,17 @@ public class Controller implements Initializable {
             line(context2D, con.getIndexOne(), con.getIndexTwo());
         }
         for (int i = 0; i < points.length; i++) {
-            if (points[i].isSelected()) {
+            //TODO: function
+            if (points[i].isSelectable()) {
                 gc.setStroke(points[i].getColor());
-                double diameter = points[i].getDiameter();
+                double diameter = 2.0;
+                double x = context2D[i].x - diameter / 2;
+                double y = context2D[i].y - diameter / 2;
+                gc.strokeOval(x, y, diameter, diameter);
+            }
+            if (points[i].isSelected()){
+                gc.setStroke(Color.RED);
+                double diameter = 10.0;
                 double x = context2D[i].x - diameter / 2;
                 double y = context2D[i].y - diameter / 2;
                 gc.strokeOval(x, y, diameter, diameter);
@@ -269,6 +277,7 @@ public class Controller implements Initializable {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
+    //region File-Loading-Saving
     public void loadObj4DFile(Event e) {
         Node source = (Node) e.getSource();
         Window stage = source.getScene().getWindow();
@@ -293,6 +302,7 @@ public class Controller implements Initializable {
             Object4DSerializer.saveObj4d(obj4DToDraw, destination);
         }
     }
+    //endregion
 
     /**
      * draws line between two vectors out of an array of vectors
@@ -329,30 +339,20 @@ public class Controller implements Initializable {
 
     //region Mouserotation
 
-    private Vector2D currentVector = new Vector2D();
+    private Vector2D mousePosition = new Vector2D();
 
     public void setVector(MouseEvent e) {
-        currentVector = new Vector2D(e.getX(), e.getY());
-        Vector2D[] points = camera.project(canvas, ph);
-        double smallestDist = 10;
-        for (int i = 0; i < points.length; i++) {
-            double dist = points[i].dist(currentVector);
-            if ( dist < smallestDist) {
-                smallestDist = dist;
-                obj4DToDraw.getPoints()[i].select();
-            } else {
-                obj4DToDraw.getPoints()[i].deselect();
-            }
-        }
-        redraw();
+        mousePosition = new Vector2D(e.getX(), e.getY());
+        //TODO: on mouse released
+        highlightPoint();
     }
 
     public void updateVector(MouseEvent e) {
-        Vector2D oldVector = new Vector2D(currentVector.x, currentVector.y);
-        currentVector = new Vector2D(e.getX(), e.getY());
+        Vector2D oldVector = new Vector2D(mousePosition.x, mousePosition.y);
+        mousePosition = new Vector2D(e.getX(), e.getY());
 
-        double horTheta = (currentVector.x - oldVector.x) / 100;
-        double verTheta = (currentVector.y - oldVector.y) / 100;
+        double horTheta = (mousePosition.x - oldVector.x) / 100;
+        double verTheta = (mousePosition.y - oldVector.y) / 100;
 
         coordinateSystem.rotate("X", verTheta);
         coordinateSystem.rotate("Y", horTheta);
@@ -369,6 +369,36 @@ public class Controller implements Initializable {
 
     //endregion
 
+    //region Point highlighting
+    private int highlightedPointIndex;
+
+    private void highlightPoint() {
+        Vector2D[] points = camera.project(canvas, ph);
+        double smallestDist = 10;
+        highlightedPointIndex = -1;
+        for (int i = 0; i < points.length; i++) {
+            double dist = points[i].dist(mousePosition);
+            if ( dist < smallestDist) {
+                smallestDist = dist;
+                highlightedPointIndex = i;
+                obj4DToDraw.getPoints()[i].select();
+            } else {
+                obj4DToDraw.getPoints()[i].deselect();
+            }
+        }
+        Vector4D point;
+        if (highlightedPointIndex != -1) {
+            point = obj4DToDraw.getPoints()[highlightedPointIndex].getValues();
+        } else {
+            point = new Vector4D();
+        }
+        textXValue.setText(Double.toString(point.x));
+        textYValue.setText(Double.toString(point.y));
+        textZValue.setText(Double.toString(point.z));
+        textWValue.setText(Double.toString(point.w));
+        redraw();
+    }
+    //endregion
 
     //region Ugly ListenerStuff
     /**
@@ -377,14 +407,13 @@ public class Controller implements Initializable {
      */
     private void addListeners() {
         text4DObj.textProperty().addListener((ov, old_val, new_val) -> {
-            if (old_val != new_val) {
-                obj4DToDraw.setName(new_val);
-            }
+            obj4DToDraw.setName(new_val);
         });
 
         //region Point-Editor
         // credits to https://stackoverflow.com/a/45981297
-        Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
+        Pattern validEditingState;
+        validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
 
         UnaryOperator<TextFormatter.Change> filter = c -> {
             String text = c.getControlNewText();
@@ -414,9 +443,34 @@ public class Controller implements Initializable {
             TextFormatter<Double> textFormatter = new TextFormatter<>(converter, 0.0, filter);
             t.setTextFormatter(textFormatter);
         }
+
+        textXValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (highlightedPointIndex != -1) {
+                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().x = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
+        textYValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (highlightedPointIndex != -1) {
+                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().y = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
+        textZValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (highlightedPointIndex != -1) {
+                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().z = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
+        textWValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (highlightedPointIndex != -1) {
+                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().w = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
         //endregion
 
-        for(int i = 0; i < sliders.length; i++) {
+        for (int i = 0; i < sliders.length; i++) {
             int finalI = i;
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
                 double newD = new_val.doubleValue();

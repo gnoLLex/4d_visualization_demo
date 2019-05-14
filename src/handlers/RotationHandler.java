@@ -2,10 +2,11 @@ package handlers;
 
 import javafx.scene.paint.Color;
 import object4d.Point;
+import vector.Vector4D;
 
 public class RotationHandler {
     /**
-     * Rotates a vector by calculating a rotation-matrix and multiplying it with the vector
+     * Rotates a point by calculating a rotation-matrix and multiplying it with the vector-values of the point
      * @param point     Point to be rotated
      * @param angle     Angle by how much the vector is rotated
      * @param around    Around what it rotates the vector
@@ -36,8 +37,8 @@ public class RotationHandler {
                 rM = rotZW(angle);
                 break;
         }
-        Point output = new Point(MatrixHandler.multMatVec(rM, point.getValues()), Color.BLACK, point.isSelected());
-        return output;
+        Vector4D rotatedValues = MatrixHandler.multMatVec(rM, point.getValues());
+        return new Point(rotatedValues, Color.BLACK, point.isSelectable(), point.isSelected());
     }
 
     //region Rotation-Matrix calculation

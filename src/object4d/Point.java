@@ -11,7 +11,6 @@ public class Point {
     private Vector4D values;
     private Color color;
 
-    private static final double diameter = 5.0;
 
     /**
      * indicates if the vector can be selected
@@ -20,15 +19,23 @@ public class Point {
 
     private boolean selected;
 
+    public Point() {
+        this.values = new Vector4D();
+        this.color = Color.BLACK;
+        this.selected = false;
+    }
+
     public Point(Point point) {
         this.values = point.values;
         this.color = point.color;
+        this.selectable = point.selectable;
         this.selected = point.selected;
     }
 
-    public Point(Vector4D values, Color color, boolean selected) {
+    public Point(Vector4D values, Color color, boolean selectable, boolean selected) {
         this.values = new Vector4D(values);
         this.color = color;
+        this.selectable = selectable;
         this.selected = selected;
     }
 
@@ -51,11 +58,7 @@ public class Point {
     }
 
     public Point rotateByVector(Vector4D axis, double angle) {
-        return new Point(this.values.rotateByVector(axis, angle), this.color, this.selected);
-    }
-
-    public double getDiameter() {
-        return diameter;
+        return new Point(this.values.rotateByVector(axis, angle), this.color, this.selectable, this.selected);
     }
 
     public boolean isSelected() {
@@ -66,11 +69,16 @@ public class Point {
         this.selectable = selectable;
     }
 
+    public boolean isSelectable() {
+        return selectable;
+    }
+
     public void select() {
         if (this.selectable && !this.selected) {
+            System.out.println("selected");
             this.selected = true;
         } else {
-            this.selected = false;
+            this.deselect();
         }
     }
 

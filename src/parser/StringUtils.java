@@ -89,7 +89,7 @@ public class StringUtils {
     public static Point parsePoint(String list) {
         double[] values = StringUtils.parseDoubleList(4, list);
         Color color = StringUtils.parseColor(NUM_ARGS_POINT, list);
-        return new Point(new Vector4D(values[0], values[1], values[2], values[3]), color, false);
+        return new Point(new Vector4D(values[0], values[1], values[2], values[3]), color, true, false);
     }
 
     public static int[] parseIntList(int numInts, String list) {
