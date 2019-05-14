@@ -131,9 +131,14 @@ public class Controller implements Initializable {
     private Object4D coordinateSystem;
 
     /**
-     * Tesseract
+     * Object4D
      */
     private Object4D obj4DToDraw;
+
+    /**
+     * Camera Object with total rotation
+     */
+    private Object4D camera;
 
     //endregion
 
@@ -220,7 +225,7 @@ public class Controller implements Initializable {
         try {
             coordinateSystem = Object4DSerializer.loadObj4D(co);
             for (Point point: coordinateSystem.getPoints()) {
-                point.isSelectable = false;
+                point.setSelectable(false);
             }
             obj4DToDraw = Object4DSerializer.loadObj4D(obj);
             text4DObj.setText(obj4DToDraw.getName());
@@ -240,13 +245,19 @@ public class Controller implements Initializable {
 
     private void drawObject4D(Object4D obj4d) {
         Vector2D[] context2D = obj4d.project(canvas, ph);
-        for (Point point: obj4d.getPoints()) {
-            gc.setStroke(point.getColor());
-            gc.strokeOval(point.getValues().x, point.getValues().y, 1, 1);
-        }
+        Point[] points = obj4d.getPoints();
         for (Connection con: obj4d.getConnections()) {
             gc.setStroke(con.getColor());
             line(context2D, con.getIndexOne(), con.getIndexTwo());
+        }
+        for (int i = 0; i < points.length; i++) {
+            if (points[i].isSelected()) {
+                gc.setStroke(points[i].getColor());
+                double diameter = points[i].getDiameter();
+                double x = context2D[i].x - diameter / 2;
+                double y = context2D[i].y - diameter / 2;
+                gc.strokeOval(x, y, diameter, diameter);
+            }
         }
     }
 
@@ -275,14 +286,12 @@ public class Controller implements Initializable {
     }
 
     public void saveObj4DFile(Event e) {
-        //TODO: do it
         Node source = (Node) e.getSource();
         Window stage = source.getScene().getWindow();
         File destination = fileChooser.showSaveDialog(stage);
         if (destination != null) {
             Object4DSerializer.saveObj4d(obj4DToDraw, destination);
         }
-
     }
 
     /**
@@ -299,7 +308,7 @@ public class Controller implements Initializable {
 
     private void redraw() {
         ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-        Object4D camera = obj4DToDraw.rotateToCoord(coordinateSystem);
+        camera = obj4DToDraw.rotateToCoord(coordinateSystem);
         clearCanvas();
         drawObject4D(coordinateSystem);
         drawObject4D(camera);
@@ -324,6 +333,18 @@ public class Controller implements Initializable {
 
     public void setVector(MouseEvent e) {
         currentVector = new Vector2D(e.getX(), e.getY());
+        Vector2D[] points = camera.project(canvas, ph);
+        double smallestDist = 10;
+        for (int i = 0; i < points.length; i++) {
+            double dist = points[i].dist(currentVector);
+            if ( dist < smallestDist) {
+                smallestDist = dist;
+                obj4DToDraw.getPoints()[i].select();
+            } else {
+                obj4DToDraw.getPoints()[i].deselect();
+            }
+        }
+        redraw();
     }
 
     public void updateVector(MouseEvent e) {
@@ -348,10 +369,6 @@ public class Controller implements Initializable {
 
     //endregion
 
-    //region Point-Editor
-
-
-    //endregion
 
     //region Ugly ListenerStuff
     /**

@@ -36,7 +36,7 @@ public class RotationHandler {
                 rM = rotZW(angle);
                 break;
         }
-        Point output = new Point(MatrixHandler.multMatVec(rM, point.getValues()), Color.BLACK);
+        Point output = new Point(MatrixHandler.multMatVec(rM, point.getValues()), Color.BLACK, point.isSelected());
         return output;
     }
 

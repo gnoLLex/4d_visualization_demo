@@ -34,6 +34,10 @@ public class Vector2D {
         this.y = 0;
     }
 
+    public double dist(Vector2D input) {
+        return Math.sqrt((input.x - this.x) * (input.x - this.x) + (input.y - this.y) * (input.y - this.y));
+    }
+
     public String toString() {
         return x + " " + y;
     }

@@ -2,11 +2,14 @@ package parser;
 
 import javafx.scene.paint.Color;
 import object4d.Connection;
+import object4d.Point;
+import vector.Vector4D;
 
 public class StringUtils {
 
     //region Constants
 
+    private static final int NUM_ARGS_POINT = 5;
     private static final int NUM_ARGS_CONNECTION = 3;
 
     //endregion
@@ -77,10 +80,16 @@ public class StringUtils {
         return output;
     }
 
-    public static Connection parseConnection(String list){
+    public static Connection parseConnection(String list) {
         int[] values = StringUtils.parseIntList(2, list);
-        Color color = StringUtils.parseColor(list);
+        Color color = StringUtils.parseColor(NUM_ARGS_CONNECTION, list);
         return new Connection(values[0], values[1], color);
+    }
+
+    public static Point parsePoint(String list) {
+        double[] values = StringUtils.parseDoubleList(4, list);
+        Color color = StringUtils.parseColor(NUM_ARGS_POINT, list);
+        return new Point(new Vector4D(values[0], values[1], values[2], values[3]), color, false);
     }
 
     public static int[] parseIntList(int numInts, String list) {
@@ -92,10 +101,10 @@ public class StringUtils {
         return output;
     }
 
-    public static Color parseColor(String list) {
+    public static Color parseColor(int start, String list) {
         Color output;
 
-        String[] lineArray = parseString(NUM_ARGS_CONNECTION, list);
+        String[] lineArray = parseString(start, list);
         String colorShort = lineArray[lineArray.length-1];
         if (colorShort != null) {
             output = Color.valueOf(colorShort);

@@ -10,7 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Object4DSerializer {
-    private final static String VECTOR = "v";
+    private final static String POINT = "p";
     private final static String CONNECTION = "c";
     private final static String NAME = "n";
 
@@ -29,9 +29,8 @@ public class Object4DSerializer {
 
             line = line.trim();
 
-            if (line.startsWith(VECTOR)) {
-                double[] values = StringUtils.parseDoubleList(4, line);
-                Point point = new Point(new Vector4D(values[0], values[1], values[2], values[3]), Color.BLACK);
+            if (line.startsWith(POINT)) {
+                Point point = StringUtils.parsePoint(line);
                 pointList.add(point);
             } else if (line.startsWith(CONNECTION)) {
                 Connection c = StringUtils.parseConnection(line);
