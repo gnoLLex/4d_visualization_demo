@@ -146,6 +146,9 @@ public class Controller implements Initializable {
 
     //region Constants
 
+    /**
+     * Initial path to the directory
+     */
     private static final File INITIAL_DIRECTORY = new File("src/objects");
 
     /**
@@ -162,7 +165,6 @@ public class Controller implements Initializable {
      * Thickness of the lines
      */
     private static final double LINE_WIDTH = 1.4;
-
 
     /**
      * Initial rotation-angle for y-axis
@@ -196,6 +198,9 @@ public class Controller implements Initializable {
 
         // giving the axes/planes a corresponding name
         around = new String[]{"X", "Y", "Z", "XW", "YW", "ZW"};
+
+        // Setting colorpicker to Black
+        colorPickerPoint.setValue(Color.BLACK);
 
         // getting the GraphicsContext2D
         gc = canvas.getGraphicsContext2D();
@@ -255,8 +260,8 @@ public class Controller implements Initializable {
         for (int i = 0; i < points.size(); i++) {
             //TODO: function
             if (points.get(i).isSelectable()) {
-                gc.setStroke(points.get(i).getColor());
-                double diameter = 2.0;
+                gc.setFill(points.get(i).getColor());
+                double diameter = 5.0;
                 double x = context2D[i].x - diameter / 2;
                 double y = context2D[i].y - diameter / 2;
                 gc.fillOval(x, y, diameter, diameter);
@@ -374,7 +379,7 @@ public class Controller implements Initializable {
     //region Pointslection
     private int selectedPointIndex = -1;
 
-    private void selectPoint() {
+    public void selectPoint() {
         Vector2D[] points = camera.project(canvas, ph);
         double smallestDist = 5;
         selectedPointIndex = -1;
@@ -387,14 +392,18 @@ public class Controller implements Initializable {
         }
         Vector4D point;
         if (selectedPointIndex != -1) {
-            point = obj4DToDraw.getPoints().get(selectedPointIndex).getValues();
+            Point p = obj4DToDraw.getPoints().get(selectedPointIndex);
+            point = p.getValues();
+            colorPickerPoint.setValue(p.getColor());
         } else {
             point = new Vector4D();
+            colorPickerPoint.setValue(Color.BLACK);
         }
         textXValue.setText(Double.toString(point.x));
         textYValue.setText(Double.toString(point.y));
         textZValue.setText(Double.toString(point.z));
         textWValue.setText(Double.toString(point.w));
+
         redraw();
     }
 
@@ -419,6 +428,13 @@ public class Controller implements Initializable {
                     con.remove(i);
                 }
             }
+            redraw();
+        }
+    }
+
+    public void changeColor() {
+        if (selectedPointIndex != -1) {
+            obj4DToDraw.getPoints().get(selectedPointIndex).setColor(colorPickerPoint.getValue());
             redraw();
         }
     }
