@@ -11,7 +11,6 @@ public class Point {
     private Vector4D values;
     private Color color;
 
-
     /**
      * indicates if the vector can be selected
      */
@@ -49,6 +48,10 @@ public class Point {
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Point rotateByVector(Vector4D axis, double angle) {

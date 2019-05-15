@@ -4,6 +4,7 @@ import handlers.ProjectionHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -255,8 +256,8 @@ public class Controller implements Initializable {
         for (int i = 0; i < points.size(); i++) {
             //TODO: function
             if (points.get(i).isSelectable()) {
-                gc.setStroke(points.get(i).getColor());
-                double diameter = 2.0;
+                gc.setFill(points.get(i).getColor());
+                double diameter = 5.0;
                 double x = context2D[i].x - diameter / 2;
                 double y = context2D[i].y - diameter / 2;
                 gc.fillOval(x, y, diameter, diameter);
@@ -387,14 +388,18 @@ public class Controller implements Initializable {
         }
         Vector4D point;
         if (selectedPointIndex != -1) {
-            point = obj4DToDraw.getPoints().get(selectedPointIndex).getValues();
+            Point p = obj4DToDraw.getPoints().get(selectedPointIndex);
+            point = p.getValues();
+            colorPickerPoint.setValue(p.getColor());
         } else {
             point = new Vector4D();
+            colorPickerPoint.setValue(Color.BLACK);
         }
         textXValue.setText(Double.toString(point.x));
         textYValue.setText(Double.toString(point.y));
         textZValue.setText(Double.toString(point.z));
         textWValue.setText(Double.toString(point.w));
+
         redraw();
     }
 
@@ -419,6 +424,13 @@ public class Controller implements Initializable {
                     con.remove(i);
                 }
             }
+            redraw();
+        }
+    }
+
+    public void changeColor() {
+        if (selectedPointIndex != -1) {
+            obj4DToDraw.getPoints().get(selectedPointIndex).setColor(colorPickerPoint.getValue());
             redraw();
         }
     }

@@ -78,7 +78,7 @@
                <children>
                   <Button mnemonicParsing="false" onAction="#addPoint" text="Add" />
                   <Button mnemonicParsing="false" onAction="#removePoint" text="Remove" />
-                  <ColorPicker fx:id="colorPickerPoint" maxWidth="50.0" promptText="Point Color" />
+                  <ColorPicker fx:id="colorPickerPoint" maxWidth="50.0" onAction="#changeColor" promptText="Point Color" />
                </children>
             </HBox>
          </children>
