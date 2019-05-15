@@ -39,7 +39,6 @@ import java.util.regex.Pattern;
  * @since 1.0
  */
 public class Controller implements Initializable {
-
     //region Global variables
 
     //region JavaFX UI Elements
@@ -106,6 +105,8 @@ public class Controller implements Initializable {
      * array containing all names for axis or planes to rotate around
      */
     private String[] around;
+
+    public ColorPicker colorPickerPoint;
     //endregion
 
     /**
@@ -259,13 +260,13 @@ public class Controller implements Initializable {
                 double x = context2D[i].x - diameter / 2;
                 double y = context2D[i].y - diameter / 2;
                 gc.fillOval(x, y, diameter, diameter);
-            }
-            if (points.get(i).isSelected()){
-                gc.setStroke(Color.RED);
-                double diameter = 10.0;
-                double x = context2D[i].x - diameter / 2;
-                double y = context2D[i].y - diameter / 2;
-                gc.strokeOval(x, y, diameter, diameter);
+                if (selectedPointIndex != -1) {
+                    gc.setStroke(Color.RED);
+                    diameter = 10.0;
+                    x = context2D[selectedPointIndex].x - diameter / 2;
+                    y = context2D[selectedPointIndex].y - diameter / 2;
+                    gc.strokeOval(x, y, diameter, diameter);
+                }
             }
         }
     }
@@ -345,7 +346,7 @@ public class Controller implements Initializable {
     public void setVector(MouseEvent e) {
         mousePosition = new Vector2D(e.getX(), e.getY());
         //TODO: on mouse released
-        highlightPoint();
+        selectPoint();
     }
 
     public void updateVector(MouseEvent e) {
@@ -370,26 +371,23 @@ public class Controller implements Initializable {
 
     //endregion
 
-    //region Point highlighting
-    private int highlightedPointIndex;
+    //region Pointslection
+    private int selectedPointIndex = -1;
 
-    private void highlightPoint() {
+    private void selectPoint() {
         Vector2D[] points = camera.project(canvas, ph);
-        double smallestDist = 10;
-        highlightedPointIndex = -1;
+        double smallestDist = 5;
+        selectedPointIndex = -1;
         for (int i = 0; i < points.length; i++) {
             double dist = points[i].dist(mousePosition);
             if ( dist < smallestDist) {
                 smallestDist = dist;
-                highlightedPointIndex = i;
-                obj4DToDraw.getPoints().get(i).select();
-            } else {
-                obj4DToDraw.getPoints().get(i).deselect();
+                selectedPointIndex = i;
             }
         }
         Vector4D point;
-        if (highlightedPointIndex != -1) {
-            point = obj4DToDraw.getPoints().get(highlightedPointIndex).getValues();
+        if (selectedPointIndex != -1) {
+            point = obj4DToDraw.getPoints().get(selectedPointIndex).getValues();
         } else {
             point = new Vector4D();
         }
@@ -399,6 +397,31 @@ public class Controller implements Initializable {
         textWValue.setText(Double.toString(point.w));
         redraw();
     }
+
+    public void addPoint() {
+        double outputX = Double.parseDouble(textXValue.getText());
+        double outputY = Double.parseDouble(textYValue.getText());
+        double outputZ = Double.parseDouble(textZValue.getText());
+        double outputW = Double.parseDouble(textWValue.getText());
+        Vector4D values = new Vector4D(outputX, outputY, outputZ, outputW);
+        Color color = colorPickerPoint.getValue();
+        obj4DToDraw.getPoints().add(new Point(values, color, true));
+        selectedPointIndex = obj4DToDraw.getPoints().size() - 1;
+        redraw();
+    }
+
+    public void removePoint() {
+        if (selectedPointIndex != -1) {
+            obj4DToDraw.getPoints().remove(selectedPointIndex);
+            ArrayList<Connection> con = obj4DToDraw.getConnections();
+            for (int i = 0; i < con.size(); i++) {
+                if (con.get(i).containsPoint(selectedPointIndex)) {
+                    con.remove(i);
+                }
+            }
+            redraw();
+        }
+    }
     //endregion
 
     //region Ugly ListenerStuff
@@ -407,69 +430,9 @@ public class Controller implements Initializable {
      * and in addition a timeline for automatic rotation
      */
     private void addListeners() {
-        text4DObj.textProperty().addListener((ov, old_val, new_val) -> {
-            obj4DToDraw.setName(new_val);
-        });
+        text4DObj.textProperty().addListener((ov, old_val, new_val) -> obj4DToDraw.setName(new_val));
 
-        //region Point-Editor
-        // credits to https://stackoverflow.com/a/45981297
-        Pattern validEditingState;
-        validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
-
-        UnaryOperator<TextFormatter.Change> filter = c -> {
-            String text = c.getControlNewText();
-            if (validEditingState.matcher(text).matches()) {
-                return c ;
-            } else {
-                return null ;
-            }
-        };
-
-        StringConverter<Double> converter = new StringConverter<Double>() {
-            @Override
-            public Double fromString(String s) {
-                if (s.isEmpty() || "-".equals(s) || ".".equals(s) || "-.".equals(s)) {
-                    return 0.0 ;
-                } else {
-                    return Double.valueOf(s);
-                }
-            }
-
-            @Override
-            public String toString(Double d) {
-                return d.toString();
-            }
-        };
-        for (TextField t: textFields) {
-            TextFormatter<Double> textFormatter = new TextFormatter<>(converter, 0.0, filter);
-            t.setTextFormatter(textFormatter);
-        }
-
-        textXValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (isValid(new_val)) {
-                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().x = Double.parseDouble(new_val);
-                redraw();
-            }
-        });
-        textYValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (isValid(new_val)) {
-                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().y = Double.parseDouble(new_val);
-                redraw();
-            }
-        });
-        textZValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (isValid(new_val)) {
-                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().z = Double.parseDouble(new_val);
-                redraw();
-            }
-        });
-        textWValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (isValid(new_val)) {
-                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().w = Double.parseDouble(new_val);
-                redraw();
-            }
-        });
-        //endregion
+        addTextFieldListeners();
 
         for (int i = 0; i < sliders.length; i++) {
             int finalI = i;
@@ -509,9 +472,72 @@ public class Controller implements Initializable {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
+    //endregion
+
+    //region Point-Editor
+
+    private void addTextFieldListeners() {
+        // credits to https://stackoverflow.com/a/45981297
+        Pattern validEditingState;
+        validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
+
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            String text = c.getControlNewText();
+            if (validEditingState.matcher(text).matches()) {
+                return c;
+            } else {
+                return null;
+            }
+        };
+
+        StringConverter<Double> converter = new StringConverter<Double>() {
+            @Override
+            public Double fromString(String s) {
+                if (s.isEmpty() || "-".equals(s) || ".".equals(s) || "-.".equals(s)) {
+                    return 0.0;
+                } else {
+                    return Double.valueOf(s);
+                }
+            }
+
+            @Override
+            public String toString(Double d) {
+                return d.toString();
+            }
+        };
+        for (TextField t : textFields) {
+            TextFormatter<Double> textFormatter = new TextFormatter<>(converter, 0.0, filter);
+            t.setTextFormatter(textFormatter);
+        }
+
+        textXValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(selectedPointIndex).getValues().x = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
+        textYValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(selectedPointIndex).getValues().y = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
+        textZValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(selectedPointIndex).getValues().z = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
+        textWValue.textProperty().addListener((ov, old_val, new_val) -> {
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(selectedPointIndex).getValues().w = Double.parseDouble(new_val);
+                redraw();
+            }
+        });
+    }
 
     private boolean isValid(String value) {
-        return highlightedPointIndex != -1 && !value.equals("") && !value.equals("-");
+        return selectedPointIndex != -1 && !value.equals("") && !value.equals("-");
     }
     //endregion
 }

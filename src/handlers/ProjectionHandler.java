@@ -28,7 +28,7 @@ public class ProjectionHandler {
     /**
      * Distance to the lightsource for 4d to 3d projection
      */
-    private static final double DIST_TO_LIGHT = 2.0;
+    private static final double DIST_TO_LIGHT = -2.0;
     //endregion
 
     /**

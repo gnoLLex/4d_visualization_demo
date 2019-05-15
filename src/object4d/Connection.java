@@ -2,9 +2,8 @@ package object4d;
 
 import javafx.scene.paint.Color;
 
-import java.io.Serializable;
 
-public class Connection implements Serializable {
+public class Connection {
     private int indexOne;
     private int indexTwo;
     private Color color;
@@ -13,12 +12,6 @@ public class Connection implements Serializable {
         this.indexOne = indexOne;
         this.indexTwo = indexTwo;
         this.color = color;
-    }
-
-    public Connection(Connection c) {
-        this.indexOne = c.getIndexOne();
-        this.indexTwo = c.getIndexTwo();
-        this.color = c.getColor();
     }
 
     public String toString() {
@@ -35,5 +28,9 @@ public class Connection implements Serializable {
 
     public Color getColor() {
         return color;
+    }
+
+    public boolean containsPoint(int index) {
+        return indexOne == index || indexTwo == index;
     }
 }

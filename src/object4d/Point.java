@@ -17,26 +17,21 @@ public class Point {
      */
     private boolean selectable = true;
 
-    private boolean selected;
-
     public Point() {
         this.values = new Vector4D();
         this.color = Color.BLACK;
-        this.selected = false;
     }
 
     public Point(Point point) {
         this.values = point.values;
         this.color = point.color;
         this.selectable = point.selectable;
-        this.selected = point.selected;
     }
 
-    public Point(Vector4D values, Color color, boolean selectable, boolean selected) {
+    public Point(Vector4D values, Color color, boolean selectable) {
         this.values = new Vector4D(values);
         this.color = color;
         this.selectable = selectable;
-        this.selected = selected;
     }
 
     public Vector2D get2DContext(ProjectionHandler ph, double w, double h) {
@@ -57,12 +52,9 @@ public class Point {
     }
 
     public Point rotateByVector(Vector4D axis, double angle) {
-        return new Point(this.values.rotateByVector(axis, angle), this.color, this.selectable, this.selected);
+        return new Point(this.values.rotateByVector(axis, angle), this.color, this.selectable);
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
 
     public void setSelectable(boolean selectable) {
         this.selectable = selectable;
@@ -70,17 +62,5 @@ public class Point {
 
     public boolean isSelectable() {
         return selectable;
-    }
-
-    public void select() {
-        if (this.selectable && !this.selected) {
-            this.selected = true;
-        } else {
-            this.deselect();
-        }
-    }
-
-    public void deselect() {
-        this.selected = false;
     }
 }
