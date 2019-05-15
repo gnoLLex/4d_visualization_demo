@@ -41,8 +41,7 @@ public class Point {
 
     public Vector2D get2DContext(ProjectionHandler ph, double w, double h) {
         Vector3D inThirdDim = ph.project4DTo3D(this.values);
-        Vector2D inSecondDim = ph.project3DTo2D(inThirdDim, w, h);
-        return inSecondDim;
+        return ph.project3DTo2D(inThirdDim, w, h);
     }
 
     public String toString() {
@@ -75,7 +74,6 @@ public class Point {
 
     public void select() {
         if (this.selectable && !this.selected) {
-            System.out.println("selected");
             this.selected = true;
         } else {
             this.deselect();

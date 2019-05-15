@@ -28,6 +28,7 @@ import vector.Vector4D;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
@@ -245,21 +246,21 @@ public class Controller implements Initializable {
 
     private void drawObject4D(Object4D obj4d) {
         Vector2D[] context2D = obj4d.project(canvas, ph);
-        Point[] points = obj4d.getPoints();
         for (Connection con: obj4d.getConnections()) {
             gc.setStroke(con.getColor());
             line(context2D, con.getIndexOne(), con.getIndexTwo());
         }
-        for (int i = 0; i < points.length; i++) {
+        ArrayList<Point> points = obj4d.getPoints();
+        for (int i = 0; i < points.size(); i++) {
             //TODO: function
-            if (points[i].isSelectable()) {
-                gc.setStroke(points[i].getColor());
+            if (points.get(i).isSelectable()) {
+                gc.setStroke(points.get(i).getColor());
                 double diameter = 2.0;
                 double x = context2D[i].x - diameter / 2;
                 double y = context2D[i].y - diameter / 2;
-                gc.strokeOval(x, y, diameter, diameter);
+                gc.fillOval(x, y, diameter, diameter);
             }
-            if (points[i].isSelected()){
+            if (points.get(i).isSelected()){
                 gc.setStroke(Color.RED);
                 double diameter = 10.0;
                 double x = context2D[i].x - diameter / 2;
@@ -381,14 +382,14 @@ public class Controller implements Initializable {
             if ( dist < smallestDist) {
                 smallestDist = dist;
                 highlightedPointIndex = i;
-                obj4DToDraw.getPoints()[i].select();
+                obj4DToDraw.getPoints().get(i).select();
             } else {
-                obj4DToDraw.getPoints()[i].deselect();
+                obj4DToDraw.getPoints().get(i).deselect();
             }
         }
         Vector4D point;
         if (highlightedPointIndex != -1) {
-            point = obj4DToDraw.getPoints()[highlightedPointIndex].getValues();
+            point = obj4DToDraw.getPoints().get(highlightedPointIndex).getValues();
         } else {
             point = new Vector4D();
         }
@@ -445,26 +446,26 @@ public class Controller implements Initializable {
         }
 
         textXValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (highlightedPointIndex != -1) {
-                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().x = Double.parseDouble(new_val);
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().x = Double.parseDouble(new_val);
                 redraw();
             }
         });
         textYValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (highlightedPointIndex != -1) {
-                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().y = Double.parseDouble(new_val);
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().y = Double.parseDouble(new_val);
                 redraw();
             }
         });
         textZValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (highlightedPointIndex != -1) {
-                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().z = Double.parseDouble(new_val);
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().z = Double.parseDouble(new_val);
                 redraw();
             }
         });
         textWValue.textProperty().addListener((ov, old_val, new_val) -> {
-            if (highlightedPointIndex != -1) {
-                obj4DToDraw.getPoints()[highlightedPointIndex].getValues().w = Double.parseDouble(new_val);
+            if (isValid(new_val)) {
+                obj4DToDraw.getPoints().get(highlightedPointIndex).getValues().w = Double.parseDouble(new_val);
                 redraw();
             }
         });
@@ -507,6 +508,10 @@ public class Controller implements Initializable {
 
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    private boolean isValid(String value) {
+        return highlightedPointIndex != -1 && !value.equals("") && !value.equals("-");
     }
     //endregion
 }

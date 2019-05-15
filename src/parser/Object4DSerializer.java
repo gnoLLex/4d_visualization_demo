@@ -41,14 +41,7 @@ public class Object4DSerializer {
         }
         bufferedReader.close();
 
-        Point[] outputPoints = new Point[pointList.size()];
-        outputPoints = pointList.toArray(outputPoints);
-
-        Connection[] outputConnections = new Connection[connectionList.size()];
-        outputConnections = connectionList.toArray(outputConnections);
-        Object4D output = new Object4D(name, outputPoints, outputConnections);
-
-        return output;
+        return new Object4D(name, pointList, connectionList);
     }
 
     public static void saveObj4d(Object4D object4D, File destination) {
