@@ -26,11 +26,23 @@ public class Connection {
         return indexTwo;
     }
 
+    public void setIndexOne(int index) {
+        this.indexOne = index;
+    }
+
+    public void setIndexTwo(int index) {
+        this.indexTwo = index;
+    }
+
     public Color getColor() {
         return color;
     }
 
-    public boolean containsPoint(int index) {
-        return indexOne == index || indexTwo == index;
+    public int containsPoint(int index)
+    {
+        int out = 0;
+        if (indexOne == index) out++;
+        if (indexTwo == index) out = out + 2;
+        return out;
     }
 }

@@ -15,74 +15,82 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="980.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
-   <Pane fx:id="canvasPane" minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
-      <Canvas fx:id="canvas" height="720.0" onMouseDragged="#updateVector" onMousePressed="#setVector" onMouseReleased="#selectPoint" onScroll="#zoom" width="770.0" />
-   </Pane>
-   <Separator minWidth="2.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0" />
-   <VBox alignment="TOP_CENTER" layoutX="206.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+<AnchorPane prefHeight="720.0" prefWidth="1180.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+   <VBox alignment="CENTER" layoutX="990.0" layoutY="30.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0"
+         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <padding>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </padding>
       <VBox alignment="CENTER" spacing="5.0">
-         <children>
-            <Label fx:id="lblLoading" />
-            <HBox alignment="CENTER" spacing="5.0">
-               <children>
-                  <Button fx:id="btnLoadObj4d" mnemonicParsing="false" onAction="#loadObj4DFile" text="Load" />
-                  <Button fx:id="btnSaveObj4D" mnemonicParsing="false" onAction="#saveObj4DFile" text="Save" />
-               </children>
-            </HBox>
-         </children>
+         <Label fx:id="lblLoading"/>
+         <HBox alignment="CENTER" spacing="5.0">
+            <Button mnemonicParsing="false" onAction="#loadObj4DFile" text="Load"/>
+            <Button mnemonicParsing="false" onAction="#saveObj4DFile" text="Save"/>
+         </HBox>
       </VBox>
-      <Separator layoutX="10.0" layoutY="165.0" prefWidth="200.0" />
-      <TextField fx:id="text4DObj" alignment="CENTER" />
-      <Separator layoutX="10.0" layoutY="115.0" prefWidth="200.0" />
-      <VBox alignment="CENTER" spacing="5.0">
-         <children>
-            <Label text="Point Editor">
+      <Separator layoutX="10.0" layoutY="165.0" prefWidth="200.0"/>
+      <Label text="Name">
+         <font>
+            <Font size="18.0"/>
+         </font>
+      </Label>
+      <TextField fx:id="text4DObj" alignment="CENTER"/>
+      <Separator layoutX="10.0" layoutY="115.0" prefWidth="200.0"/>
+      <VBox alignment="CENTER" spacing="10.0">
+         <Label text="Point Editor">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Label>
+         <HBox alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="x:">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0"/>
                </font>
             </Label>
-            <HBox alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="x:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="textXValue" />
-                  <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="y:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="textYValue" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="z:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="textZValue" />
-                  <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="w:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="textWValue" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" spacing="5.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#addPoint" text="Add" />
-                  <Button mnemonicParsing="false" onAction="#removePoint" text="Remove" />
-                  <ColorPicker fx:id="colorPickerPoint" maxWidth="50.0" onAction="#changeColor" promptText="Point Color" />
-               </children>
-            </HBox>
-         </children>
+            <TextField fx:id="textXValue"/>
+         </HBox>
+         <HBox alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="y:">
+               <font>
+                  <Font size="16.0"/>
+               </font>
+            </Label>
+            <TextField fx:id="textYValue"/>
+         </HBox>
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+            <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="z:">
+               <font>
+                  <Font size="16.0"/>
+               </font>
+            </Label>
+            <TextField fx:id="textZValue"/>
+         </HBox>
+         <HBox alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="TOP" ellipsisString="" minWidth="20.0" text="w:">
+               <font>
+                  <Font size="16.0"/>
+               </font>
+            </Label>
+            <TextField fx:id="textWValue"/>
+         </HBox>
+         <HBox alignment="CENTER" spacing="5.0">
+            <Button mnemonicParsing="false" onAction="#addPoint" text="Add"/>
+            <Button mnemonicParsing="false" onAction="#removePoint" text="Remove"/>
+            <ColorPicker fx:id="colorPickerPoint" maxWidth="50.0" onAction="#changeColor"
+                         promptText="Point Color"/>
+         </HBox>
       </VBox>
+      <HBox alignment="CENTER" spacing="5.0"/>
+      <Separator layoutX="15.0" layoutY="157.0" prefWidth="200.0"/>
+      <Button mnemonicParsing="false" onAction="#reset" text="Reset"/>
+   </VBox>
+   <Separator minWidth="2.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
+   <Pane fx:id="canvasPane" minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
+      <Canvas fx:id="canvas" height="720.0" onMouseClicked="#selectPoint" onMouseDragged="#updateVector" onMousePressed="#setVector" onScroll="#zoom" width="770.0" />
+   </Pane>
+   <Separator minWidth="2.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0" />
+   <VBox alignment="CENTER" layoutX="206.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
       <Separator prefWidth="200.0" />
       <VBox alignment="CENTER" spacing="10.0">
          <Label text="Rotation">
@@ -90,56 +98,40 @@
                <Font size="18.0" />
             </font>
          </Label>
+         <CheckBox fx:id="cBshowCS" mnemonicParsing="false" selected="true" text="show coordinatesystem" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
-            <children>
-               <Label minWidth="60.0" text="X-Axis" textFill="BLUE" />
-               <CheckBox fx:id="cbX" mnemonicParsing="false" text="AutoAnimate" />
-            </children>
+            <Label minWidth="60.0" text="X-Axis" textFill="BLUE"/>
+            <CheckBox fx:id="cbX" mnemonicParsing="false" text="AutoAnimate"/>
          </HBox>
          <Slider fx:id="sdrX" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
-            <children>
-               <Label minWidth="60.0" text="Y-Axis" textFill="RED" />
-               <CheckBox fx:id="cbY" mnemonicParsing="false" text="AutoAnimate" />
-            </children>
+            <Label minWidth="60.0" text="Y-Axis" textFill="RED"/>
+            <CheckBox fx:id="cbY" mnemonicParsing="false" text="AutoAnimate"/>
          </HBox>
          <Slider fx:id="sdrY" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
-            <children>
-               <Label minWidth="60.0" text="Z-Axis" textFill="LIME" />
-               <CheckBox fx:id="cbZ" mnemonicParsing="false" text="AutoAnimate" />
-            </children>
+            <Label minWidth="60.0" text="Z-Axis" textFill="LIME"/>
+            <CheckBox fx:id="cbZ" mnemonicParsing="false" text="AutoAnimate"/>
          </HBox>
          <Slider fx:id="sdrZ" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
-            <children>
-               <Label minWidth="60.0" text="XW-Plane" />
-               <CheckBox fx:id="cbXW" mnemonicParsing="false" text="AutoAnimate" />
-            </children>
+            <Label minWidth="60.0" text="XW-Plane"/>
+            <CheckBox fx:id="cbXW" mnemonicParsing="false" text="AutoAnimate"/>
          </HBox>
          <Slider fx:id="sdrXW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
-            <children>
-               <Label minWidth="60.0" text="YW-Plane" />
-               <CheckBox fx:id="cbYW" mnemonicParsing="false" text="AutoAnimate" />
-            </children>
+            <Label minWidth="60.0" text="YW-Plane"/>
+            <CheckBox fx:id="cbYW" mnemonicParsing="false" text="AutoAnimate"/>
          </HBox>
          <Slider fx:id="sdrYW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
          <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
-            <children>
-               <Label minWidth="60.0" text="ZW-Plane" />
-               <CheckBox fx:id="cbZW" mnemonicParsing="false" text="AutoAnimate" />
-            </children>
+            <Label minWidth="60.0" text="ZW-Plane"/>
+            <CheckBox fx:id="cbZW" mnemonicParsing="false" text="AutoAnimate"/>
          </HBox>
          <Slider fx:id="sdrZW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
+         <Button mnemonicParsing="false" onAction="#resetUI" text="Reset Rotation" />
       </VBox>
-      <Button fx:id="btnResetRotation" mnemonicParsing="false" onAction="#resetUI" text="Reset Rotation" />
-      <Separator prefWidth="200.0" />
-      <HBox alignment="CENTER" spacing="5.0">
-         <children>
-            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#reset" text="Reset" />
-         </children>
-      </HBox>
+      <Separator layoutX="13.0" layoutY="170.0" prefWidth="200.0" />
       <padding>
          <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
       </padding>

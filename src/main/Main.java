@@ -16,7 +16,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("app.fxml"));
         primaryStage.setTitle("4D Rotation");
-        primaryStage.setScene(new Scene(root, 980, 720));
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setMinHeight(720);
+        primaryStage.setMinWidth(1180);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

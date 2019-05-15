@@ -107,6 +107,11 @@ public class Controller implements Initializable {
      */
     private String[] around;
 
+    /**
+     * CheckBox for whether the coordinatesystem is shown or not
+     */
+    public CheckBox cBshowCS;
+
     public ColorPicker colorPickerPoint;
     //endregion
 
@@ -328,7 +333,7 @@ public class Controller implements Initializable {
         ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
         camera = obj4DToDraw.rotateToCoord(coordinateSystem);
         clearCanvas();
-        drawObject4D(coordinateSystem);
+        if (cBshowCS.isSelected()) drawObject4D(coordinateSystem);
         drawObject4D(camera);
     }
 
@@ -391,19 +396,19 @@ public class Controller implements Initializable {
                 selectedPointIndex = i;
             }
         }
-        Vector4D point;
+        Vector4D vector;
         if (selectedPointIndex != -1) {
-            Point p = obj4DToDraw.getPoints().get(selectedPointIndex);
-            point = p.getValues();
-            colorPickerPoint.setValue(p.getColor());
+            Point point = obj4DToDraw.getPoints().get(selectedPointIndex);
+            vector = point.getValues();
+            colorPickerPoint.setValue(point.getColor());
         } else {
-            point = new Vector4D();
+            vector = new Vector4D();
             colorPickerPoint.setValue(Color.BLACK);
         }
-        textXValue.setText(Double.toString(point.x));
-        textYValue.setText(Double.toString(point.y));
-        textZValue.setText(Double.toString(point.z));
-        textWValue.setText(Double.toString(point.w));
+        textXValue.setText(Double.toString(vector.x));
+        textYValue.setText(Double.toString(vector.y));
+        textZValue.setText(Double.toString(vector.z));
+        textWValue.setText(Double.toString(vector.w));
 
         redraw();
     }
@@ -422,14 +427,39 @@ public class Controller implements Initializable {
 
     public void removePoint() {
         if (selectedPointIndex != -1) {
-            obj4DToDraw.getPoints().remove(selectedPointIndex);
-            ArrayList<Connection> con = obj4DToDraw.getConnections();
-            for (int i = 0; i < con.size(); i++) {
-                if (con.get(i).containsPoint(selectedPointIndex)) {
-                    con.remove(i);
+            ArrayList<Point> points = obj4DToDraw.getPoints();
+            ArrayList<Connection> connections = obj4DToDraw.getConnections();
+
+            for (int i = 0; i < connections.size(); i++) {
+                testAndRemoveConnection(connections, i, selectedPointIndex);
+            }
+
+            for (Connection con: connections) {
+                for (int i = selectedPointIndex; i < points.size(); i++) {
+                    int pointIndex = con.containsPoint(i);
+                    switch (pointIndex) {
+                        case 1:
+                            con.setIndexOne(con.getIndexOne() - 1);
+                            break;
+                        case 2:
+                            con.setIndexTwo(con.getIndexTwo() - 1);
+                            break;
+                    }
                 }
             }
+            points.remove(selectedPointIndex);
+            
+            selectedPointIndex = -1;
             redraw();
+        }
+    }
+
+    private void testAndRemoveConnection(ArrayList<Connection> connections, int index, int indexToCompare) {
+        if (index < connections.size()) {
+            if (connections.get(index).containsPoint(indexToCompare) != 0) {
+                connections.remove(connections.get(index));
+                testAndRemoveConnection(connections, index, indexToCompare);
+            }
         }
     }
 
@@ -471,6 +501,8 @@ public class Controller implements Initializable {
         // when changed it recalculates the projection matrix for the 3D to 2D projection
         canvas.heightProperty().addListener((e) -> redraw());
         canvas.widthProperty().addListener((e) -> redraw());
+
+        cBshowCS.selectedProperty().addListener(e -> {redraw();});
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0),
