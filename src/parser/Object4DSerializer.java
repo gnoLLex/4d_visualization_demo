@@ -1,10 +1,8 @@
 package parser;
 
-import javafx.scene.paint.Color;
 import object4d.Connection;
 import object4d.Object4D;
 import object4d.Point;
-import vector.Vector4D;
 
 import java.io.*;
 import java.util.ArrayList;

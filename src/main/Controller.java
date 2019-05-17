@@ -4,6 +4,8 @@ import handlers.ProjectionHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -16,6 +18,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -112,7 +116,20 @@ public class Controller implements Initializable {
      */
     public CheckBox cBshowCS;
 
+    /**
+     * Colorpicker for coloring the selected point or if nothing is selected the color for the point to add
+     */
     public ColorPicker colorPickerPoint;
+
+    /**
+     * Colorpicker for coloring the selected connection or if nothing is selected the color for the connection to add
+     */
+    public ColorPicker colorPickerConnection;
+
+    /**
+     * Listview for listing all connections of the 4d object or those which contain the selected point
+     */
+    public ListView listViewConnections;
     //endregion
 
     /**
@@ -130,7 +147,14 @@ public class Controller implements Initializable {
      */
     private FileChooser fileChooser;
 
+    /**
+     * File for the drawn 4D object
+     */
     private File obj;
+
+    /**
+     * File for the coordinate
+     */
     private File co;
 
     /**
@@ -139,7 +163,7 @@ public class Controller implements Initializable {
     private Object4D coordinateSystem;
 
     /**
-     * Object4D
+     * Object4D with relative rotation
      */
     private Object4D obj4DToDraw;
 
@@ -171,6 +195,16 @@ public class Controller implements Initializable {
      * Thickness of the lines
      */
     private static final double LINE_WIDTH = 1.4;
+
+    /**
+     * Diameter of the highlight circle
+     */
+    private static final double DIAMETER_HIGHLIGHT = 10.0;
+
+    /**
+     * Diameter of the points
+     */
+    private static final double DIAMETER_POINT = 3.0;
 
     /**
      * Initial rotation-angle for y-axis
@@ -207,6 +241,7 @@ public class Controller implements Initializable {
 
         // Setting colorpicker to Black
         colorPickerPoint.setValue(Color.BLACK);
+        colorPickerConnection.setValue(Color.BLACK);
 
         // getting the GraphicsContext2D
         gc = canvas.getGraphicsContext2D();
@@ -246,6 +281,8 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
 
+        setListViewConnections();
+
         // resetting zoom
         ph.zDisplacement = INIT_ZOOM;
 
@@ -264,22 +301,40 @@ public class Controller implements Initializable {
         }
         ArrayList<Point> points = obj4d.getPoints();
         for (int i = 0; i < points.size(); i++) {
-            //TODO: function
             if (points.get(i).isSelectable()) {
                 gc.setFill(points.get(i).getColor());
-                double diameter = 5.0;
-                double x = context2D[i].x - diameter / 2;
-                double y = context2D[i].y - diameter / 2;
-                gc.fillOval(x, y, diameter, diameter);
+                double x = context2D[i].x - DIAMETER_POINT / 2;
+                double y = context2D[i].y - DIAMETER_POINT / 2;
+                gc.fillOval(x, y, DIAMETER_POINT, DIAMETER_POINT);
                 if (selectedPointIndex != -1) {
-                    gc.setStroke(Color.RED);
-                    diameter = 10.0;
-                    x = context2D[selectedPointIndex].x - diameter / 2;
-                    y = context2D[selectedPointIndex].y - diameter / 2;
-                    gc.strokeOval(x, y, diameter, diameter);
+                   highlightPoint(context2D, selectedPointIndex);
                 }
             }
         }
+    }
+
+    private void highlightPoint(Vector2D[] context2D, int index) {
+        gc.setStroke(Color.RED);
+        double x = context2D[index].x - DIAMETER_HIGHLIGHT / 2;
+        double y = context2D[index].y - DIAMETER_HIGHLIGHT / 2;
+        gc.strokeOval(x, y, DIAMETER_HIGHLIGHT, DIAMETER_HIGHLIGHT);
+    }
+
+    private void setListViewConnections() {
+        ArrayList<Connection> connectionsToView = new ArrayList<>(0);
+        if (selectedPointIndex != -1) {
+            ArrayList<Connection> connections = obj4DToDraw.getConnections();
+            for (int i = 0; i < obj4DToDraw.getConnections().size(); i++) {
+                Connection connection = connections.get(i);
+                if (connection.containsPoint(selectedPointIndex) > 0) {
+                    connectionsToView.add(connection);
+                }
+            }
+        } else {
+            connectionsToView.addAll(obj4DToDraw.getConnections());
+        }
+        ObservableList<Connection> obsConnections = FXCollections.observableArrayList(connectionsToView);
+        listViewConnections.setItems(obsConnections);
     }
 
     /**
@@ -288,6 +343,38 @@ public class Controller implements Initializable {
     private void clearCanvas() {
         // clear's a rectangle shape on the screen which in this case is the whole canvas
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    /**
+     * draws line between two vectors out of an array of vectors
+     * @param v Array of Vector2D
+     * @param i Index of vector one
+     * @param j Index of vector two
+     */
+    private void line(Vector2D[] v, int i, int j) {
+        //System.out.println(i + " " + j);
+        //System.out.println(v[i].toString() + " " + v[j].toString());
+        gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
+    }
+
+    private void redraw() {
+        ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+        camera = obj4DToDraw.rotateToCoord(coordinateSystem);
+        clearCanvas();
+        if (cBshowCS.isSelected()) drawObject4D(coordinateSystem);
+        drawObject4D(camera);
+    }
+
+    /**
+     * Resets all sliders and checkboxes in the UI
+     */
+    public void resetUI() {
+        for(Slider slider: sliders) {
+            slider.setValue(0);
+        }
+        for(CheckBox cB: checkBoxes) {
+            cB.setSelected(false);
+        }
     }
 
     //region File-Loading-Saving
@@ -317,46 +404,12 @@ public class Controller implements Initializable {
     }
     //endregion
 
-    /**
-     * draws line between two vectors out of an array of vectors
-     * @param v Array of Vector2D
-     * @param i Index of vector one
-     * @param j Index of vector two
-     */
-    private void line(Vector2D[] v, int i, int j) {
-        //System.out.println(i + " " + j);
-        //System.out.println(v[i].toString() + " " + v[j].toString());
-        gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
-    }
-
-    private void redraw() {
-        ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
-        camera = obj4DToDraw.rotateToCoord(coordinateSystem);
-        clearCanvas();
-        if (cBshowCS.isSelected()) drawObject4D(coordinateSystem);
-        drawObject4D(camera);
-    }
-
-
-    /**
-     * Resets all sliders and checkboxes in the UI
-     */
-    public void resetUI() {
-        for(Slider slider: sliders) {
-            slider.setValue(0);
-        }
-        for(CheckBox cB: checkBoxes) {
-            cB.setSelected(false);
-        }
-    }
-
     //region Mouserotation
 
     private Vector2D mousePosition = new Vector2D();
 
     public void setVector(MouseEvent e) {
         mousePosition = new Vector2D(e.getX(), e.getY());
-        //TODO: on mouse released
         selectPoint();
     }
 
@@ -409,65 +462,8 @@ public class Controller implements Initializable {
         textYValue.setText(Double.toString(vector.y));
         textZValue.setText(Double.toString(vector.z));
         textWValue.setText(Double.toString(vector.w));
-
+        setListViewConnections();
         redraw();
-    }
-
-    public void addPoint() {
-        double outputX = Double.parseDouble(textXValue.getText());
-        double outputY = Double.parseDouble(textYValue.getText());
-        double outputZ = Double.parseDouble(textZValue.getText());
-        double outputW = Double.parseDouble(textWValue.getText());
-        Vector4D values = new Vector4D(outputX, outputY, outputZ, outputW);
-        Color color = colorPickerPoint.getValue();
-        obj4DToDraw.getPoints().add(new Point(values, color, true));
-        selectedPointIndex = obj4DToDraw.getPoints().size() - 1;
-        redraw();
-    }
-
-    public void removePoint() {
-        if (selectedPointIndex != -1) {
-            ArrayList<Point> points = obj4DToDraw.getPoints();
-            ArrayList<Connection> connections = obj4DToDraw.getConnections();
-
-            for (int i = 0; i < connections.size(); i++) {
-                testAndRemoveConnection(connections, i, selectedPointIndex);
-            }
-
-            for (Connection con: connections) {
-                for (int i = selectedPointIndex; i < points.size(); i++) {
-                    int pointIndex = con.containsPoint(i);
-                    switch (pointIndex) {
-                        case 1:
-                            con.setIndexOne(con.getIndexOne() - 1);
-                            break;
-                        case 2:
-                            con.setIndexTwo(con.getIndexTwo() - 1);
-                            break;
-                    }
-                }
-            }
-            points.remove(selectedPointIndex);
-            
-            selectedPointIndex = -1;
-            redraw();
-        }
-    }
-
-    private void testAndRemoveConnection(ArrayList<Connection> connections, int index, int indexToCompare) {
-        if (index < connections.size()) {
-            if (connections.get(index).containsPoint(indexToCompare) != 0) {
-                connections.remove(connections.get(index));
-                testAndRemoveConnection(connections, index, indexToCompare);
-            }
-        }
-    }
-
-    public void changeColor() {
-        if (selectedPointIndex != -1) {
-            obj4DToDraw.getPoints().get(selectedPointIndex).setColor(colorPickerPoint.getValue());
-            redraw();
-        }
     }
     //endregion
 
@@ -520,6 +516,18 @@ public class Controller implements Initializable {
 
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
+        listViewConnections.getSelectionModel().selectedIndexProperty().addListener((ov, old_val, new_val) -> {
+            Connection connection = (Connection) listViewConnections.getSelectionModel().getSelectedItem();
+            redraw();
+            if (connection != null) {
+                colorPickerConnection.setValue(connection.getColor());
+                Vector2D[] context2D = camera.project(canvas, ph);
+                highlightPoint(context2D, connection.getIndexOne());
+                highlightPoint(context2D, connection.getIndexTwo());
+                setListViewConnections();
+            }
+        });
     }
     //endregion
 
@@ -588,5 +596,50 @@ public class Controller implements Initializable {
     private boolean isValid(String value) {
         return selectedPointIndex != -1 && !value.equals("") && !value.equals("-");
     }
+
+    public void addPoint() {
+        double outputX = Double.parseDouble(textXValue.getText());
+        double outputY = Double.parseDouble(textYValue.getText());
+        double outputZ = Double.parseDouble(textZValue.getText());
+        double outputW = Double.parseDouble(textWValue.getText());
+        Vector4D values = new Vector4D(outputX, outputY, outputZ, outputW);
+        Color color = colorPickerPoint.getValue();
+        obj4DToDraw.getPoints().add(new Point(values, color, true));
+        selectedPointIndex = obj4DToDraw.getPoints().size() - 1;
+        redraw();
+    }
+
+    public void removePoint() {
+        obj4DToDraw.removePointFrom(selectedPointIndex);
+        selectedPointIndex = -1;
+        redraw();
+    }
+
+    public void changeColorPoint() {
+        if (selectedPointIndex != -1) {
+            obj4DToDraw.getPoints().get(selectedPointIndex).setColor(colorPickerPoint.getValue());
+            redraw();
+        }
+    }
+    //endregion
+
+    //region Connection-Editor
+
+    public void addConnection() {
+        //TODO: do it
+    }
+
+    public void removeConnection() {
+        obj4DToDraw.getConnections().remove(listViewConnections.getSelectionModel().getSelectedItem());
+        setListViewConnections();
+        redraw();
+    }
+
+    public void changeColorConnection() {
+        Connection connection = obj4DToDraw.getConnections().get(listViewConnections.getSelectionModel().getSelectedIndex());
+        connection.setColor(colorPickerConnection.getValue());
+        redraw();
+    }
+
     //endregion
 }

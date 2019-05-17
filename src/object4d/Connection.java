@@ -15,7 +15,7 @@ public class Connection {
     }
 
     public String toString() {
-        return indexOne + " " + indexTwo + " " + color;
+        return indexOne + "\t" + indexTwo;
     }
 
     public int getIndexOne() {
@@ -36,6 +36,10 @@ public class Connection {
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public int containsPoint(int index)

@@ -86,6 +86,41 @@ public class Object4D {
         return output;
     }
 
+    public void removePointFrom(int index) {
+        if (index != -1) {
+            ArrayList<Point> points = this.points;
+            ArrayList<Connection> connections = this.connections;
+
+            for (int i = 0; i < connections.size(); i++) {
+                testAndRemoveConnection(i, index);
+            }
+
+            for (Connection con: connections) {
+                for (int i = index; i < points.size(); i++) {
+                    int pointIndex = con.containsPoint(i);
+                    switch (pointIndex) {
+                        case 1:
+                            con.setIndexOne(con.getIndexOne() - 1);
+                            break;
+                        case 2:
+                            con.setIndexTwo(con.getIndexTwo() - 1);
+                            break;
+                    }
+                }
+            }
+            points.remove(index);
+        }
+    }
+
+    public void testAndRemoveConnection(int index, int indexToCompare) {
+        if (index < connections.size()) {
+            if (connections.get(index).containsPoint(indexToCompare) != 0) {
+                connections.remove(connections.get(index));
+                testAndRemoveConnection(index, indexToCompare);
+            }
+        }
+    }
+
     public ArrayList<Point> getPoints() {
         return points;
     }
