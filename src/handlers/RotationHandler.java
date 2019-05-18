@@ -4,9 +4,12 @@ import javafx.scene.paint.Color;
 import object4d.Point;
 import vector.Vector4D;
 
+/**
+ * Utility functions for rotation.
+ */
 public class RotationHandler {
     /**
-     * Rotates a point by calculating a rotation-matrix and multiplying it with the vector-values of the point
+     * Rotates a point by calculating a rotation-matrix and multiplying it with the vector-values of the point.
      * @param point     Point to be rotated
      * @param angle     Angle by how much the vector is rotated
      * @param around    Around what it rotates the vector
@@ -60,7 +63,7 @@ public class RotationHandler {
     }
 
     /**
-     * Calculates rotation-matrix for rotation around y-axis
+     * Calculates rotation-matrix for rotation around y-axis.
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
@@ -76,7 +79,7 @@ public class RotationHandler {
     }
 
     /**
-     * Calculates rotation-matrix for rotation around z-axis
+     * Calculates rotation-matrix for rotation around z-axis.
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
@@ -92,7 +95,7 @@ public class RotationHandler {
     }
 
     /**
-     * Calculates rotation-matrix for rotation around xw-plane
+     * Calculates rotation-matrix for rotation around xw-plane.
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
@@ -108,7 +111,7 @@ public class RotationHandler {
     }
 
     /**
-     * Calculates rotation-matrix for rotation around yw-plane
+     * Calculates rotation-matrix for rotation around yw-plane.
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */
@@ -124,7 +127,7 @@ public class RotationHandler {
     }
 
     /**
-     * Calculates rotation-matrix for rotation around zw-plane
+     * Calculates rotation-matrix for rotation around zw-plane.
      * @param i angle for how much to rotate
      * @return  4x4 rotation matrix
      */

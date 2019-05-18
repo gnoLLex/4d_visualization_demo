@@ -1,4 +1,4 @@
 /**
- * main package of the Application 4d_visualisation_demo
+ * Main package of the Application 4d_visualisation_demo
  */
 package main;

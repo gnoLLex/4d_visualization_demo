@@ -1,17 +1,15 @@
 package vector;
-/** Represents a vector in the 4 dimensional-hyperspace
+/** Represents a vector in the 4 dimensional-hyperspace.
  * @author Lucas Engelmann
- * @version 1.0
- * @since 1.0
  */
 public class Vector4D extends Vector3D {
     /**
-     * w coordinate stored as a double
+     * W coordinate stored as a double.
      */
     public double w;
 
     /**
-     * initialize 4D vector with x, y, z and w coordinate
+     * Initialize 4D vector with x, y, z and w coordinate.
      * @param x vectors x component
      * @param y vectors y component
      * @param z vectors z component
@@ -22,80 +20,107 @@ public class Vector4D extends Vector3D {
         this.w = w;
     }
 
+    /**
+     * Initialize 4D vector with x, y, z and w coordinate copied from another 4D vector.
+     * @param input 4D vector to be copied
+     */
     public Vector4D(Vector4D input) {
         super(input.x, input.y, input.z);
         this.w = input.w;
     }
 
     /**
-     * initialize 4D vector with x, y, z and w coordinate as 0
+     * Initialize 4D vector with x, y, z and w coordinate as 0.
      */
     public Vector4D() {
         super();
         this.w = 0;
     }
 
-    public String toString(){
-        return x + " " + y + " " + z + " " + w;
+    /**
+     * Calculates the sum of this 4D vector and the 4D vector to be added.
+     * @param toBeAdded vector to be added to this vector
+     * @return sum of the two 4D vectors
+     */
+    private Vector4D add(Vector4D toBeAdded) {
+        Vector4D output = new Vector4D();
+        output.x = this.x + toBeAdded.x;
+        output.y = this.y + toBeAdded.y;
+        output.z = this.z + toBeAdded.z;
+        output.w = this.w + toBeAdded.w;
+        return output;
     }
 
-    private Vector4D add(Vector4D v) {
+    /**
+     * Calculates the difference of this 4D vector and the 4D vector to be subtracted.
+     * @param toBeSubtracted 4D vector to be subtracted from this 4D vector
+     * @return difference of the two 4D vectors
+     */
+    private Vector4D sub(Vector4D toBeSubtracted) {
         Vector4D o = new Vector4D();
-        o.x = this.x + v.x;
-        o.y = this.y + v.y;
-        o.z = this.z + v.z;
-        o.w = this.w + v.w;
+        o.x = this.x - toBeSubtracted.x;
+        o.y = this.y - toBeSubtracted.y;
+        o.z = this.z - toBeSubtracted.z;
+        o.w = this.w - toBeSubtracted.w;
         return o;
     }
 
-    private Vector4D sub(Vector4D v) {
+    private Vector4D times3D(double amount) {
         Vector4D o = new Vector4D();
-        o.x = this.x - v.x;
-        o.y = this.y - v.y;
-        o.z = this.z - v.z;
-        o.w = this.w - v.w;
-        return o;
-    }
-
-    private Vector4D times(double d) {
-        Vector4D o = new Vector4D();
-        o.x = this.x * d;
-        o.y = this.y * d;
-        o.z = this.z * d;
+        o.x = this.x * amount;
+        o.y = this.y * amount;
+        o.z = this.z * amount;
         o.w = this.w;
         return o;
     }
 
-    public double dotProd3D(Vector4D v) {
+    private double dotProd3D(Vector4D other) {
         double o = 0;
-        o += this.x * v.x;
-        o += this.y * v.y;
-        o += this.z * v.z;
+        o += this.x * other.x;
+        o += this.y * other.y;
+        o += this.z * other.z;
         return o;
     }
 
-    public double magnitude3D() {
+    private double magnitude3D() {
         double X = this.x * this.x;
         double Y = this.y * this.y;
         double Z = this.z * this.z;
         return Math.sqrt(X + Y + Z);
     }
 
-    public Vector4D crossProd(Vector4D v) {
+    /**
+     * Calculates the cross-product of two 4D vectors in 3D context.
+     * @param other other vector
+     * @return cross-product of both 4D vectors
+     */
+    public Vector4D crossProd3D(Vector4D other) {
         Vector4D o = new Vector4D();
-        o.x = this.y * v.z - this.z * v.y;
-        o.y = this.z * v.x - this.x * v.z;
-        o.z = this.x * v.y - this.y * v.x;
+        o.x = this.y * other.z - this.z * other.y;
+        o.y = this.z * other.x - this.x * other.z;
+        o.z = this.x * other.y - this.y * other.x;
         return o;
     }
 
+    /**
+     * Calculates the angle between two 4D vectors in 3D context.
+     * @param other other vector
+     * @return angle between both 4D vectors
+     */
     public double angle3DToVec(Vector4D other) {
         return Math.acos(this.dotProd3D(other)/(this.magnitude3D() * other.magnitude3D()));
     }
 
+    /**
+     * Rotates a 4D vector around an custom axis for a certain angle.
+     * @see <a target="blank" href="https://math.stackexchange.com/a/1432182">Solution inspired and explained by MNKY.</a>
+     * @param axis axis to be rotated around
+     * @param angle angle in radiant's to be rotated
+     * @return rotated 4D vector
+     */
     public Vector4D rotateByVector(Vector4D axis, double angle) {
-        if (axis.magnitude3D() <= 0.001) {
-            if (angle != 0) return this.times(-1);
+        if (axis.magnitude3D() <= 0.000001) {
+            if (angle != 0) return this.times3D(-1);
             return this;
         }
         Vector4D aDirB;
@@ -104,14 +129,14 @@ public class Vector4D extends Vector3D {
         if (Double.isNaN(dotWithOther) || dotWithSelf == 0) {
             return new Vector4D( 0, 0, 0, this.w);
         } else {
-            aDirB = axis.times(dotWithOther / dotWithSelf);
+            aDirB = axis.times3D(dotWithOther / dotWithSelf);
             Vector4D aOrthB = this.sub(aDirB);
-            Vector4D W = axis.crossProd(aOrthB);
+            Vector4D W = axis.crossProd3D(aOrthB);
 
             double x1 = Math.cos(angle) / aOrthB.magnitude3D();
             double x2 = Math.sin(angle) / W.magnitude3D();
 
-            Vector4D aOrthBRot = (aOrthB.times(x1).add(W.times(x2))).times(aOrthB.magnitude3D());
+            Vector4D aOrthBRot = (aOrthB.times3D(x1).add(W.times3D(x2))).times3D(aOrthB.magnitude3D());
             return aDirB.add(aOrthBRot);
         }
     }

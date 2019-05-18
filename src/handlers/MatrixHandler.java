@@ -3,6 +3,9 @@ package handlers;
 import vector.Vector3D;
 import vector.Vector4D;
 
+/**
+ * Utility functions for matrix-vector multiplication.
+ */
 public class MatrixHandler {
 
     /**

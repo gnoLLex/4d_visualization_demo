@@ -19,9 +19,12 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="1180.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
    <VBox alignment="CENTER" layoutX="990.0" layoutY="30.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <padding>
-         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-      </padding>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#loadTesseract" text="Tesseract" />
+            <Button mnemonicParsing="false" onAction="#loadSimplex" text="Simplex" />
+         </children>
+      </HBox>
       <Label layoutX="86.0" layoutY="233.0" text="File">
          <font>
             <Font size="18.0" />
@@ -31,7 +34,6 @@
          <Button mnemonicParsing="false" onAction="#loadObj4DFile" text="Load" />
          <Button mnemonicParsing="false" onAction="#saveObj4DFile" text="Save" />
       </HBox>
-      <Label fx:id="lblLoading" text="load or save a file" />
       <Separator layoutX="10.0" layoutY="165.0" prefWidth="200.0" />
       <Label text="Name">
          <font>
@@ -95,20 +97,17 @@
             <ListView fx:id="listViewConnections" maxWidth="100.0" />
             <VBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#addConnection" text="Add" />
+                  <Button fx:id="btnAddConnection" mnemonicParsing="false" onAction="#addConnection" text="Add" />
                   <Button mnemonicParsing="false" onAction="#removeConnection" text="Remove" />
                   <ColorPicker fx:id="colorPickerConnection" maxWidth="50.0" onAction="#changeColorConnection" promptText="Point Color" />
                </children>
             </VBox>
          </children></HBox>
-      <Button mnemonicParsing="false" onAction="#reset" text="Reset">
-         <tooltip>
-            <Tooltip text="resets to Savestate" />
-         </tooltip></Button>
    </VBox>
    <Separator minWidth="2.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
    <Pane fx:id="canvasPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
       <Canvas fx:id="canvas" height="720.0" onMouseClicked="#selectPoint" onMouseDragged="#updateVector" onMousePressed="#setVector" onScroll="#zoom" width="770.0" />
+      <Label fx:id="lblTipp" layoutX="13.0" layoutY="5.0" />
    </Pane>
    <Separator minWidth="2.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0" />
    <VBox alignment="CENTER" layoutX="206.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -158,6 +157,10 @@
          <Slider fx:id="sdrZW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" />
       </VBox>
       <Separator layoutX="13.0" layoutY="170.0" prefWidth="200.0" />
+      <Button mnemonicParsing="false" onAction="#reset" text="Reset">
+         <tooltip>
+            <Tooltip text="resets to Savestate" />
+         </tooltip></Button>
       <padding>
          <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
       </padding>

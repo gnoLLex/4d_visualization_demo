@@ -1,23 +1,21 @@
 package vector;
 
-/** Represents a vector in the 2 dimensional-plane
+/** Represents a vector in the 2 dimensional-plane.
  * @author Lucas Engelmann
- * @version 1.0
- * @since 1.0
  */
 public class Vector2D {
 
     /**
-     * x coordinate stored as double
+     * X coordinate stored as double.
      */
     public double x;
     /**
-     * y coordinate stored as double
+     * Y coordinate stored as double.
      */
     public double y;
 
     /**
-     * initialize 2D vector with x and y coordinate
+     * Initialize 2D vector with x and y coordinate.
      * @param x vectors x component
      * @param y vectors y component
      */
@@ -27,18 +25,19 @@ public class Vector2D {
     }
 
     /**
-     * initialize 2D vector with x and y coordinate as 0
+     * Initialize 2D vector with x and y coordinate as 0.
      */
     public Vector2D() {
         this.x = 0;
         this.y = 0;
     }
 
-    public double dist(Vector2D input) {
-        return Math.sqrt((input.x - this.x) * (input.x - this.x) + (input.y - this.y) * (input.y - this.y));
-    }
-
-    public String toString() {
-        return x + " " + y;
+    /**
+     * Calculates the distance between two vectors
+     * @param to vector to measure the distance to
+     * @return distance between both vectors
+     */
+    public double dist(Vector2D to) {
+        return Math.sqrt((to.x - this.x) * (to.x - this.x) + (to.y - this.y) * (to.y - this.y));
     }
 }
