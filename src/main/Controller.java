@@ -135,12 +135,12 @@ public class Controller implements Initializable {
     /**
      * GraphicsContext of the Canvas for global usage
      */
-    private GraphicsContext gc;
+    private GraphicsContext graphicsContext;
 
     /**
      * RotationHandler for global usage
      */
-    private ProjectionHandler ph;
+    private ProjectionHandler projectionHandler;
 
     /**
      * FileChooser for loading in .obj4d files
@@ -150,12 +150,12 @@ public class Controller implements Initializable {
     /**
      * Path for the drawn 4D object
      */
-    private String obj;
+    private String objFilePath;
 
     /**
      * Path for the coordinate
      */
-    private String co;
+    private String coordinateSystemFilePath;
 
     /**
      * Coordinate System
@@ -175,10 +175,19 @@ public class Controller implements Initializable {
     //endregion
 
     //region Constants
+    /**
+     * relative path to the .obj4d-file for the coordinate-system
+     */
     private static final String PATH_TO_COORDINATESYSTEM = "/objects/.coordinateSystem.obj4d";
 
+    /**
+     * relative path to the .obj4d-file for the tesseract
+     */
     private static final String PATH_TO_TESSERACT = "/objects/tesseract.obj4d";
 
+    /**
+     * relative path to the .obj4d-file for the simplex
+     */
     private static final String PATH_TO_SIMPLEX = "/objects/simplex.obj4d";
 
     /**
@@ -240,15 +249,14 @@ public class Controller implements Initializable {
         around = new String[]{"X", "Y", "Z", "XW", "YW", "ZW"};
 
         // getting the GraphicsContext2D
-        gc = canvas.getGraphicsContext2D();
-        gc.setLineWidth(LINE_WIDTH);
+        graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext.setLineWidth(LINE_WIDTH);
 
         // initializing the matrixhandler
-        ph = new ProjectionHandler();
+        projectionHandler = new ProjectionHandler();
 
-        //
-        co = PATH_TO_COORDINATESYSTEM;
-        obj = PATH_TO_TESSERACT;
+        coordinateSystemFilePath = PATH_TO_COORDINATESYSTEM;
+        objFilePath = PATH_TO_TESSERACT;
 
         // initializing filechooser and adding a extensionfilter
         fileChooser = new FileChooser();
@@ -269,14 +277,21 @@ public class Controller implements Initializable {
         // reset the UI first because of the listeners, which change the object
         resetUI();
         try {
-            coordinateSystem = Object4DSerializer.loadObj4D(co, this);
+            // loading coordinate-system
+            coordinateSystem = Object4DSerializer.loadObj4D(coordinateSystemFilePath, this);
+
+            // configuring the coordinate-system to not be selectable
             for (Point point: coordinateSystem.getPoints()) {
                 point.setSelectable(false);
             }
-            if (!obj.equals(PATH_TO_TESSERACT) && !obj.equals(PATH_TO_SIMPLEX)) {
-                obj4DToDraw = Object4DSerializer.loadObj4D(new File(obj));
+
+            // checking if the 4D object is loaded from custom source
+            if (!objFilePath.equals(PATH_TO_TESSERACT) && !objFilePath.equals(PATH_TO_SIMPLEX)) {
+                // loading custom 4D object
+                obj4DToDraw = Object4DSerializer.loadObj4D(objFilePath);
             } else {
-                obj4DToDraw = Object4DSerializer.loadObj4D(obj, this);
+                // loading sample 4D object
+                obj4DToDraw = Object4DSerializer.loadObj4D(objFilePath, this);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -286,11 +301,13 @@ public class Controller implements Initializable {
         text4DObj.setText(obj4DToDraw.getName());
 
         // resetting zoom
-        ph.zDisplacement = INIT_ZOOM;
+        projectionHandler.zDisplacement = INIT_ZOOM;
 
         // rotating to initial position
         coordinateSystem.rotate("Y", INIT_Y_ANGLE);
         coordinateSystem.rotate("X", INIT_X_ANGLE);
+
+        selectedPointIndex = -1;
 
         setListViewConnections();
         redraw();
@@ -306,29 +323,50 @@ public class Controller implements Initializable {
         for(CheckBox cB: checkBoxes) {
             cB.setSelected(false);
         }
-        // Setting colorpicker to Black
+        // setting colorpicker to Black
         colorPickerPoint.setValue(Color.BLACK);
         colorPickerConnection.setValue(Color.BLACK);
-        // Disabling button for adding connections
+        // disabling button for adding connection (point needs to be selected first)
         btnAddConnection.setDisable(true);
     }
 
     //region Drawing
+
+    /**
+     * Draws a 4D object on the canvas of this application
+     * @param obj4d 4D object to be drawn
+     */
     private void drawObject4D(Object4D obj4d) {
-        Vector2D[] context2D = obj4d.project(canvas, ph);
+        // projecting to 2D
+        Vector2D[] context2D = obj4d.project(canvas, projectionHandler);
+
+        // draw a line for every connection in the 4D object
         for (Connection con: obj4d.getConnections()) {
-            gc.setStroke(con.getColor());
+            graphicsContext.setStroke(con.getColor());
             line(context2D, con.getIndexOne(), con.getIndexTwo());
         }
+
+        // if connection is selected highlight it
+        Connection connection = (Connection) listViewConnections.getSelectionModel().getSelectedItem();
+        if (connection != null) {
+            highlightConnection(connection);
+        }
+
+        // draw a circle for every point in the 4D object
         ArrayList<Point> points = obj4d.getPoints();
         for (int i = 0; i < points.size(); i++) {
+            // only draw the point when it is selectable
             if (points.get(i).isSelectable()) {
-                gc.setFill(points.get(i).getColor());
-                double x = context2D[i].x - DIAMETER_POINT / 2;
-                double y = context2D[i].y - DIAMETER_POINT / 2;
-                gc.fillOval(x, y, DIAMETER_POINT, DIAMETER_POINT);
+                // drawing circle at points position
+                // offsetting because fillOval does not draw from the center of the oval
+                graphicsContext.setFill(points.get(i).getColor());
+                double offset = DIAMETER_POINT / 2;
+                double x = context2D[i].x - offset;
+                double y = context2D[i].y - offset;
+                graphicsContext.fillOval(x, y, DIAMETER_POINT, DIAMETER_POINT);
+                // if a point is selected, highlight it
                 if (selectedPointIndex != -1) {
-                   highlightPoint(context2D, selectedPointIndex);
+                    highlightPoint(context2D, selectedPointIndex);
                 }
             }
         }
@@ -339,53 +377,69 @@ public class Controller implements Initializable {
      */
     private void clearCanvas() {
         // clear's a rectangle shape on the screen which in this case is the whole canvas
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     /**
      * draws line between two vectors out of an array of vectors
-     * @param v Array of Vector2D
+     * @param vectors Array of Vector2D
      * @param i Index of vector one
      * @param j Index of vector two
      */
-    private void line(Vector2D[] v, int i, int j) {
-        //System.out.println(i + " " + j);
-        //System.out.println(v[i].toString() + " " + v[j].toString());
-        gc.strokeLine( v[i].x,  v[i].y,  v[j].x,  v[j].y);
+    private void line(Vector2D[] vectors, int i, int j) {
+        graphicsContext.strokeLine( vectors[i].x,  vectors[i].y,  vectors[j].x,  vectors[j].y);
     }
 
+    /**
+     * clears the screen and draws everything again
+     */
     private void redraw() {
-        ph.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+        projectionHandler.calcProj3DTo2D((canvas.getHeight() / canvas.getWidth()));
+
+        // getting the absolute rotated 4D object how its viewed
         camera = obj4DToDraw.rotateToCoord(coordinateSystem);
         clearCanvas();
+
+        // drawing coordinate-system if wanted
         if (cBshowCS.isSelected()) drawObject4D(coordinateSystem);
+
+        // drawing 4D object
         drawObject4D(camera);
-        highlightConnection();
     }
 
     //endregion
 
     //region File-Loading-Saving
 
+    /**
+     * Loads up the tesseract.
+     */
     public void loadTesseract() {
-        obj = PATH_TO_TESSERACT;
+        objFilePath = PATH_TO_TESSERACT;
         reset();
         lblTipp.setText("Tesseract loaded");
     }
 
+    /**
+     * Loads up the simplex.
+     */
     public void loadSimplex() {
-        obj = PATH_TO_SIMPLEX;
+        objFilePath = PATH_TO_SIMPLEX;
         reset();
         lblTipp.setText("Simplex loaded");
     }
 
+    /**
+     * Opens up the file-chooser to the user.
+     * @param e event
+     */
     public void loadObj4DFile(Event e) {
         Node source = (Node) e.getSource();
         Window stage = source.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
         lblTipp.setText("Loading...");
         if (file != null) {
-            obj = file.getPath();
+            objFilePath = file.getPath();
             reset();
             lblTipp.setText("Loading successful");
         } else {
@@ -393,6 +447,10 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Opens up the file-chooser to the user to save a file.
+     * @param e event
+     */
     public void saveObj4DFile(Event e) {
         Node source = (Node) e.getSource();
         Window stage = source.getScene().getWindow();
@@ -409,13 +467,25 @@ public class Controller implements Initializable {
 
     //region Mouserotation
 
-    private Vector2D mousePosition = new Vector2D();
+    /**
+     * Position of the mouse.
+     */
+    private Vector2D mousePosition;
 
+    /**
+     * Sets the mousePosition to the position of the mouse when it is pressed.
+     * Also checks and selects for a point.
+     * @param e mouse event where the position is get from
+     */
     public void setVector(MouseEvent e) {
         mousePosition = new Vector2D(e.getX(), e.getY());
-        selectPoint();
+        checkSelectPoint();
     }
 
+    /**
+     * Updates the mousePosition and calculates for how much the coordinate system should be rotated.
+     * @param e mouse event to get the position of the mouse
+     */
     public void updateVector(MouseEvent e) {
         Vector2D oldVector = new Vector2D(mousePosition.x, mousePosition.y);
         mousePosition = new Vector2D(e.getX(), e.getY());
@@ -429,9 +499,13 @@ public class Controller implements Initializable {
         redraw();
     }
 
+    /**
+     * Changes the distance to the 4D object according to the scroll-wheel
+     * @param s scroll event to get the position of the scroll-wheel
+     */
     public void zoom(ScrollEvent s) {
-        if (ph.zDisplacement - s.getDeltaY() / 100 >= 2) {
-            ph.zDisplacement -= s.getDeltaY() / 100;
+        if (projectionHandler.zDisplacement - s.getDeltaY() / 100 >= 2) {
+            projectionHandler.zDisplacement -= s.getDeltaY() / 100;
             redraw();
         }
     }
@@ -439,42 +513,64 @@ public class Controller implements Initializable {
     //endregion
 
     //region Pointslection
+    /**
+     * Index of the selected point
+     */
     private int selectedPointIndex = -1;
 
-    public void selectPoint() {
-        Vector2D[] points = camera.project(canvas, ph);
-        double smallestDist = 5;
-        selectedPointIndex = -1;
+    /**
+     * Checks if the distance of the mouse to a point is less than a certain threshold and selects the nearest point.
+     * Also sets up the values for the point-editor and checks if a connection should be added.
+     */
+    private void checkSelectPoint() {
+        // check if in range of the drawn point
+        double maxDist = DIAMETER_POINT;
+        Vector2D[] points = camera.project(canvas, projectionHandler);
         for (int i = 0; i < points.length; i++) {
+            // getting distance in 2D plane
             double dist = points[i].dist(mousePosition);
-            if ( dist < smallestDist) {
-                smallestDist = dist;
-                selectedPointIndex = i;
+            if ( dist < maxDist) {
+                // if in range
+                if (selectedPointIndex != i) {
+                    // if not same point select
+                    selectedPointIndex = i;
+                    // this checks for the nearest point
+                    maxDist = dist;
+                } else {
+                    // if same point unselect
+                    selectedPointIndex = -1;
+                }
             }
         }
-        Vector4D vector;
+        Vector4D values;
         if (selectedPointIndex != -1) {
+            // set values according to the selected point
             Point point = obj4DToDraw.getPoints().get(selectedPointIndex);
-            vector = point.getValues();
+            values = point.getValues();
             colorPickerPoint.setValue(point.getColor());
+            lblTipp.setText("Selected Point-Index: " + selectedPointIndex);
+
+            // enable button for adding connection
             btnAddConnection.setDisable(false);
 
+            // if connection can be added and the points to connect are not the same add a connection to the 4D object
             if (addConnectionFlag && oldSelectedPointIndex != selectedPointIndex) {
                 Color color = colorPickerConnection.getValue();
                 Connection connection = new Connection(oldSelectedPointIndex, selectedPointIndex, color);
                 obj4DToDraw.getConnections().add(connection);
             }
-            lblTipp.setText("Selected Point-Index: " + selectedPointIndex);
         } else {
-            vector = new Vector4D();
+            // set values to standard values
+            values = new Vector4D();
             colorPickerPoint.setValue(Color.BLACK);
             btnAddConnection.setDisable(true);
             lblTipp.setText("");
         }
-        textXValue.setText(Double.toString(vector.x));
-        textYValue.setText(Double.toString(vector.y));
-        textZValue.setText(Double.toString(vector.z));
-        textWValue.setText(Double.toString(vector.w));
+        // set the point-editor UI to values
+        textXValue.setText(Double.toString(values.x));
+        textYValue.setText(Double.toString(values.y));
+        textZValue.setText(Double.toString(values.z));
+        textWValue.setText(Double.toString(values.w));
 
         addConnectionFlag = false;
         setListViewConnections();
@@ -488,12 +584,11 @@ public class Controller implements Initializable {
      * and in addition a timeline for automatic rotation
      */
     private void addListeners() {
-        text4DObj.textProperty().addListener((ov, old_val, new_val) -> obj4DToDraw.setName(new_val));
-
         addTextFieldListeners();
 
         for (int i = 0; i < sliders.length; i++) {
             int finalI = i;
+            // when slider-value is changed rotate
             sliders[i].valueProperty().addListener((ov, old_val, new_val) -> {
                 double newD = new_val.doubleValue();
                 double oldD = old_val.doubleValue();
@@ -508,13 +603,14 @@ public class Controller implements Initializable {
         canvas.widthProperty().bind(canvasPane.widthProperty());
         canvas.heightProperty().bind(canvasPane.heightProperty());
 
-        // adds a listener to the width and height property
-        // when changed it recalculates the projection matrix for the 3D to 2D projection
+        // adds a listener to the width and height property, when changed it redraw
         canvas.heightProperty().addListener((e) -> redraw());
         canvas.widthProperty().addListener((e) -> redraw());
 
+        // when unselected redraw and therefore the coordinate-system will not be drawn
         cBshowCS.selectedProperty().addListener(e -> {redraw();});
 
+        // timeline for automatic rotation
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0),
                         e -> {
@@ -528,10 +624,10 @@ public class Controller implements Initializable {
                 ),
                 new KeyFrame(Duration.millis(1))
         );
-
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
+        // when a connection is selected redraw and therefore highlight the connection
         listViewConnections.getSelectionModel().selectedIndexProperty().addListener((ov, old_val, new_val) -> {
             redraw();
         });
@@ -539,7 +635,14 @@ public class Controller implements Initializable {
     //endregion
 
     //region Point-Editor
+    /**
+     * Adds listeners for the the textfields.
+     */
     private void addTextFieldListeners() {
+        // setting name of the 4D object according to the value in the textfield
+        text4DObj.textProperty().addListener((ov, old_val, new_val) -> obj4DToDraw.setName(new_val));
+
+        // textformatter that only allows double-values in the textfield
         // credits to https://stackoverflow.com/a/45981297
         Pattern validEditingState;
         validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
@@ -568,11 +671,14 @@ public class Controller implements Initializable {
                 return d.toString();
             }
         };
+
+        // adding textformatter to each textfield
         for (TextField t : textFields) {
             TextFormatter<Double> textFormatter = new TextFormatter<>(converter, 0.0, filter);
             t.setTextFormatter(textFormatter);
         }
 
+        // changing values of the selected point to the values in the textfields
         textXValue.textProperty().addListener((ov, old_val, new_val) -> {
             if (isValid(new_val)) {
                 obj4DToDraw.getPoints().get(selectedPointIndex).getValues().x = Double.parseDouble(new_val);
@@ -599,11 +705,20 @@ public class Controller implements Initializable {
         });
     }
 
+    /**
+     * Checks if a point is selected and if the string is just empty or just a minus.
+     * @param value string to be validated
+     * @return true if valid
+     */
     private boolean isValid(String value) {
-        return selectedPointIndex != -1 && !value.equals("") && !value.equals("-");
+        return selectedPointIndex != -1 && !value.equals("") && !value.equals("-") && !value.equals(".");
     }
 
+    /**
+     * Adds a point to the 4D object according to the textfield-values.
+     */
     public void addPoint() {
+        // getting values from the textfields
         double outputX = Double.parseDouble(textXValue.getText());
         double outputY = Double.parseDouble(textYValue.getText());
         double outputZ = Double.parseDouble(textZValue.getText());
@@ -611,17 +726,26 @@ public class Controller implements Initializable {
         Vector4D values = new Vector4D(outputX, outputY, outputZ, outputW);
         Color color = colorPickerPoint.getValue();
         obj4DToDraw.getPoints().add(new Point(values, color, true));
+
+        // setting the added point as the selected
         selectedPointIndex = obj4DToDraw.getPoints().size() - 1;
+
         setListViewConnections();
         redraw();
     }
 
+    /**
+     * Removes the selected point from the 4D object.
+     */
     public void removePoint() {
         obj4DToDraw.removePointOfIndex(selectedPointIndex);
         selectedPointIndex = -1;
         redraw();
     }
 
+    /**
+     * Changes the color of the selected point, if one is selected.
+     */
     public void changeColorPoint() {
         if (selectedPointIndex != -1) {
             obj4DToDraw.getPoints().get(selectedPointIndex).setColor(colorPickerPoint.getValue());
@@ -629,31 +753,56 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Highlights the selected point.
+     * @param context2D 2D values of the points
+     * @param index index of the point to highlight
+     */
     private void highlightPoint(Vector2D[] context2D, int index) {
-        gc.setStroke(Color.RED);
-        double x = context2D[index].x - DIAMETER_HIGHLIGHT / 2;
-        double y = context2D[index].y - DIAMETER_HIGHLIGHT / 2;
-        gc.strokeOval(x, y, DIAMETER_HIGHLIGHT, DIAMETER_HIGHLIGHT);
+        // drawing red oval around the point
+        graphicsContext.setStroke(Color.RED);
+        // offset for centering the oval to the point
+        double offset = DIAMETER_HIGHLIGHT / 2;
+        double x = context2D[index].x - offset;
+        double y = context2D[index].y - offset;
+        graphicsContext.strokeOval(x, y, DIAMETER_HIGHLIGHT, DIAMETER_HIGHLIGHT);
     }
     //endregion
 
     //region Connection-Editor
 
+    /**
+     * Index of the previously selected point.
+     */
     private int oldSelectedPointIndex;
+
+    /**
+     * Flag for whether a connection should be added or not.
+     */
     private boolean addConnectionFlag = false;
 
+    /**
+     * Makes everything ready for adding a connection.
+     * Adding the connection happens in the pointselection.
+     */
     public void addConnection() {
         oldSelectedPointIndex = selectedPointIndex;
         addConnectionFlag = true;
         lblTipp.setText("Select the second point for the connection.");
     }
 
+    /**
+     * Removes the selected connection from the 4D object.
+     */
     public void removeConnection() {
         obj4DToDraw.getConnections().remove(listViewConnections.getSelectionModel().getSelectedItem());
         setListViewConnections();
         redraw();
     }
 
+    /**
+     * Changes the color of the selected connection, if one is selected.
+     */
     public void changeColorConnection() {
         Connection connection = (Connection) listViewConnections.getSelectionModel().getSelectedItem();
         if (connection != null) {
@@ -662,20 +811,25 @@ public class Controller implements Initializable {
         }
     }
 
-    private void highlightConnection() {
-        Connection connection = (Connection) listViewConnections.getSelectionModel().getSelectedItem();
-        if (connection != null) {
-            colorPickerConnection.setValue(connection.getColor());
-            Vector2D[] context2D = camera.project(canvas, ph);
-            highlightPoint(context2D, connection.getIndexOne());
-            highlightPoint(context2D, connection.getIndexTwo());
-            setListViewConnections();
-        }
+    /**
+     * Highlights a connection by highlighting the contained point.
+     * @param connection connection to be highlighted
+     */
+    private void highlightConnection(Connection connection) {
+        colorPickerConnection.setValue(connection.getColor());
+        Vector2D[] context2D = camera.project(canvas, projectionHandler);
+        highlightPoint(context2D, connection.getIndexOne());
+        highlightPoint(context2D, connection.getIndexTwo());
+        setListViewConnections();
     }
 
+    /**
+     * Sets the listview-items.
+     */
     private void setListViewConnections() {
         ArrayList<Connection> connectionsToView = new ArrayList<>(0);
         if (selectedPointIndex != -1) {
+            // setting the items to all connection that contain the selected point
             ArrayList<Connection> connections = obj4DToDraw.getConnections();
             for (int i = 0; i < obj4DToDraw.getConnections().size(); i++) {
                 Connection connection = connections.get(i);
@@ -684,11 +838,11 @@ public class Controller implements Initializable {
                 }
             }
         } else {
+            // setting the items ti all connections
             connectionsToView.addAll(obj4DToDraw.getConnections());
         }
         ObservableList<Connection> obsConnections = FXCollections.observableArrayList(connectionsToView);
         listViewConnections.setItems(obsConnections);
     }
-
     //endregion
 }

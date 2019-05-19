@@ -38,6 +38,13 @@ public class Vector4D extends Vector3D {
     }
 
     /**
+     * @return vector as string
+     */
+    public String toString() {
+        return x + " " + y + " " + z + " " + w;
+    }
+
+    /**
      * Calculates the sum of this 4D vector and the 4D vector to be added.
      * @param toBeAdded vector to be added to this vector
      * @return sum of the two 4D vectors
@@ -57,31 +64,45 @@ public class Vector4D extends Vector3D {
      * @return difference of the two 4D vectors
      */
     private Vector4D sub(Vector4D toBeSubtracted) {
-        Vector4D o = new Vector4D();
-        o.x = this.x - toBeSubtracted.x;
-        o.y = this.y - toBeSubtracted.y;
-        o.z = this.z - toBeSubtracted.z;
-        o.w = this.w - toBeSubtracted.w;
-        return o;
+        Vector4D output = new Vector4D();
+        output.x = this.x - toBeSubtracted.x;
+        output.y = this.y - toBeSubtracted.y;
+        output.z = this.z - toBeSubtracted.z;
+        output.w = this.w - toBeSubtracted.w;
+        return output;
     }
 
+    /**
+     * Calculates the product of this 4D vector and a double in 3D context.
+     * @param amount by what to multiply
+     * @return product of the multiplication
+     */
     private Vector4D times3D(double amount) {
-        Vector4D o = new Vector4D();
-        o.x = this.x * amount;
-        o.y = this.y * amount;
-        o.z = this.z * amount;
-        o.w = this.w;
-        return o;
+        Vector4D output = new Vector4D();
+        output.x = this.x * amount;
+        output.y = this.y * amount;
+        output.z = this.z * amount;
+        output.w = this.w;
+        return output;
     }
 
+    /**
+     * Calculates the dot-product of this 4D vector and another 4D vector in 3D context.
+     * @param other other vector to calculate with
+     * @return dot-product
+     */
     private double dotProd3D(Vector4D other) {
-        double o = 0;
-        o += this.x * other.x;
-        o += this.y * other.y;
-        o += this.z * other.z;
-        return o;
+        double output = 0;
+        output += this.x * other.x;
+        output += this.y * other.y;
+        output += this.z * other.z;
+        return output;
     }
 
+    /**
+     * Calculates the magnitude of this 4D vector in 3D context.
+     * @return magnitude
+     */
     private double magnitude3D() {
         double X = this.x * this.x;
         double Y = this.y * this.y;

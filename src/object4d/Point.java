@@ -64,6 +64,14 @@ public class Point {
         return ph.project3DTo2D(inThirdDim, w, h);
     }
 
+
+    /**
+     * @return point as string
+     */
+    public String toString() {
+        return values.toString() + " " + color;
+    }
+
     /**
      * @return values of the point in 4D hyperspace
      */

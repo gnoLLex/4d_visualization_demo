@@ -7,33 +7,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0bb17bef-244c-4423-abe7-c06858dc046c" name="Default Changelist" comment="added some comments">
-      <change afterPath="$PROJECT_DIR$/src/object4d/package-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/serializer/package-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/4D_Demo.jar" beforeDir="false" afterPath="$PROJECT_DIR$/4D_Demo.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/MatrixHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/handlers/MatrixHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/ProjectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/handlers/ProjectionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/RotationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/handlers/RotationHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/app.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/app.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/package-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/object4d/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/object4d/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/object4d/Object4D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/object4d/Object4D.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/object4d/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/object4d/Point.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/.coordinateSystemOld.obj4d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/le.obj4d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/objects/package-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/tesseractOld.obj4d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/Object4DSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/serializer/Object4DSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/serializer/StringUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vector/Vector2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vector/Vector3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector3D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/objects/simplex.obj4d" beforeDir="false" afterPath="$PROJECT_DIR$/src/objects/simplex.obj4d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/serializer/Object4DSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/serializer/Object4DSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vector/Vector4D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/Vector4D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vector/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector/package-info.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -60,14 +40,35 @@
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/serializer/package-info.java">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="1" column="46" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="46" />
+            <state relative-caret-position="-16">
+              <caret line="713" column="102" selection-start-line="713" selection-start-column="102" selection-end-line="713" selection-end-column="102" />
+              <folding>
+                <element signature="e#1192#1217#0" />
+                <element signature="e#1223#1250#0" />
+                <element signature="e#3958#3976#0" />
+                <element signature="e#8861#8877#0" />
+                <element signature="e#10040#10068#0" />
+                <element signature="e#11317#11339#0" />
+                <element signature="e#13861#13883#0" />
+                <element signature="e#13859#13886#0" />
+                <element signature="e#19795#19821#0" />
+              </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="477">
+              <caret line="23" column="65" selection-start-line="23" selection-start-column="65" selection-end-line="23" selection-end-column="65" />
+            </state>
+          </provider>
+          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
         </entry>
       </file>
     </leaf>
@@ -149,9 +150,7 @@
         <option value="$PROJECT_DIR$/src/objects/.coordinateSystem.obj4d" />
         <option value="$PROJECT_DIR$/src/objects/le.obj4d" />
         <option value="$PROJECT_DIR$/src/objects/tesseract.obj4d" />
-        <option value="$PROJECT_DIR$/src/objects/simplex.obj4d" />
         <option value="$PROJECT_DIR$/src/objects/Dir.java" />
-        <option value="$PROJECT_DIR$/src/main/app.fxml" />
         <option value="$PROJECT_DIR$/src/main/Main.java" />
         <option value="$PROJECT_DIR$/src/vector/package-info.java" />
         <option value="$PROJECT_DIR$/src/object4d/package-info.java" />
@@ -163,15 +162,18 @@
         <option value="$PROJECT_DIR$/src/handlers/RotationHandler.java" />
         <option value="$PROJECT_DIR$/src/handlers/ProjectionHandler.java" />
         <option value="$PROJECT_DIR$/src/handlers/MatrixHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/Controller.java" />
         <option value="$PROJECT_DIR$/src/object4d/Object4D.java" />
         <option value="$PROJECT_DIR$/src/object4d/Connection.java" />
-        <option value="$PROJECT_DIR$/src/object4d/Point.java" />
-        <option value="$PROJECT_DIR$/src/vector/Vector4D.java" />
         <option value="$PROJECT_DIR$/src/parser/Object4DSerializer.java" />
         <option value="$PROJECT_DIR$/src/parser/StringUtils.java" />
         <option value="$PROJECT_DIR$/src/parser/package-info.java" />
         <option value="$PROJECT_DIR$/src/serializer/package-info.java" />
+        <option value="$PROJECT_DIR$/src/serializer/Object4DSerializer.java" />
+        <option value="$PROJECT_DIR$/src/main/Controller.java" />
+        <option value="$PROJECT_DIR$/src/object4d/Point.java" />
+        <option value="$PROJECT_DIR$/src/vector/Vector4D.java" />
+        <option value="$PROJECT_DIR$/src/objects/simplex.obj4d" />
+        <option value="$PROJECT_DIR$/src/main/app.fxml" />
       </list>
     </option>
   </component>
@@ -205,6 +207,12 @@
               <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
               <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="object4d" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -217,20 +225,14 @@
               <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
               <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="serializer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="4D_Demo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="4D_Demo" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="vector" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -354,12 +356,13 @@
       <workItem from="1558167033779" duration="6426000" />
       <workItem from="1558175727561" duration="11034000" />
       <workItem from="1558189596942" duration="99000" />
-      <workItem from="1558192003939" duration="14943000" />
+      <workItem from="1558192003939" duration="15947000" />
+      <workItem from="1558264036599" duration="14589000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="288797000" />
+    <option name="totallyTimeSpent" value="304390000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -372,8 +375,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15991472" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16151386" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -382,7 +386,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3279743" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49733475" visible="true" weight="0.39013934" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49733475" weight="0.39013934" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39978564" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -498,7 +502,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/objects/tesseract.ser.obj4d" />
     <entry file="file://$PROJECT_DIR$/src/object4d/SerColor.java" />
     <entry file="file://$PROJECT_DIR$/src/objects/tesseract2.obj4d" />
     <entry file="file://$PROJECT_DIR$/filename.txt" />
@@ -619,14 +622,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="23" column="65" selection-start-line="23" selection-start-column="65" selection-end-line="23" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/object4d/package-info.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21">
@@ -648,13 +643,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21">
           <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="4" lean-forward="true" selection-start-column="4" selection-end-line="1" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -727,25 +715,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-441">
-          <caret line="259" column="65" selection-start-line="259" selection-start-column="65" selection-end-line="259" selection-end-column="65" />
-          <folding>
-            <element signature="e#1272#1297#0" />
-            <element signature="e#1303#1330#0" />
-            <element signature="e#4038#4056#0" />
-            <element signature="e#8039#8055#0" />
-            <element signature="e#9894#9922#0" />
-            <element signature="e#11172#11194#0" />
-            <element signature="e#12024#12046#0" />
-            <element signature="e#13714#13741#0" />
-            <element signature="e#15910#15931#0" />
-            <element signature="e#19651#19677#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/handlers/ProjectionHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -770,50 +739,98 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/object4d/Point.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2016">
-          <caret line="108" column="31" selection-start-line="108" selection-start-column="31" selection-end-line="108" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/objects/simplex.obj4d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="115" column="118" selection-start-line="115" selection-start-column="118" selection-end-line="115" selection-end-column="118" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/serializer/Object4DSerializer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="89" column="62" lean-forward="true" selection-start-line="89" selection-start-column="62" selection-end-line="89" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/serializer/StringUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-331">
-          <caret line="20" column="53" selection-start-line="20" selection-start-column="53" selection-end-line="20" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/serializer/package-info.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21">
           <caret line="1" column="46" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="46" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/serializer/Object4DSerializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="43" column="27" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/javafx-src.zip!/javafx/event/Event.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="40" column="28" lean-forward="true" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/serializer/StringUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="100" column="31" selection-start-line="100" selection-start-column="31" selection-end-line="100" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vector/Vector4D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="103" column="24" selection-start-line="103" selection-start-column="24" selection-end-line="103" selection-end-column="24" />
+          <folding>
+            <element signature="e#1040#1041#0" expanded="true" />
+            <element signature="e#1094#1095#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/object4d/Point.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="67" column="4" lean-forward="true" selection-start-line="67" selection-start-column="4" selection-end-line="72" selection-end-column="5" />
+          <folding>
+            <element signature="e#1697#1698#0" expanded="true" />
+            <element signature="e#1750#1751#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/objects/simplex.obj4d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-16">
+          <caret line="713" column="102" selection-start-line="713" selection-start-column="102" selection-end-line="713" selection-end-column="102" />
+          <folding>
+            <element signature="e#1192#1217#0" />
+            <element signature="e#1223#1250#0" />
+            <element signature="e#3958#3976#0" />
+            <element signature="e#8861#8877#0" />
+            <element signature="e#10040#10068#0" />
+            <element signature="e#11317#11339#0" />
+            <element signature="e#13861#13883#0" />
+            <element signature="e#13859#13886#0" />
+            <element signature="e#19795#19821#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/app.fxml">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="23" column="65" selection-start-line="23" selection-start-column="65" selection-end-line="23" selection-end-column="65" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
     </entry>
   </component>
   <component name="masterDetails">

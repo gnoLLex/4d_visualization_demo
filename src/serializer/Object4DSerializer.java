@@ -41,12 +41,12 @@ public class Object4DSerializer {
 
     /**
      * Loads a 4D object from file.
-     * @param file .obj4d-file to be loaded
+     * @param path path to .obj4d-file to be loaded
      * @return loaded 4D object
      * @throws Exception
      */
-    public static Object4D loadObj4D(File file) throws Exception{
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+    public static Object4D loadObj4D(String path) throws Exception{
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(path)));
         return loadFromBufferedReader(bufferedReader);
     }
 
