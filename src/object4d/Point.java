@@ -36,6 +36,7 @@ public class Point {
 
     /**
      * Initializes the point with values and color of another point.
+     * @param point point to copy
      */
     public Point(Point point) {
         this.values = point.values;
@@ -45,6 +46,9 @@ public class Point {
 
     /**
      * Initializes the point with values, color and if it's selectable.
+     * @param values coordinate-values
+     * @param color color of the point
+     * @param selectable whether the point should be selectable or not
      */
     public Point(Vector4D values, Color color, boolean selectable) {
         this.values = new Vector4D(values);

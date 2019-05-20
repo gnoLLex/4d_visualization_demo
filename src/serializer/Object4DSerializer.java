@@ -31,7 +31,7 @@ public class Object4DSerializer {
      * @param path path to the .obj4d-file which should be loaded
      * @param source where it is called from
      * @return loaded 4D object
-     * @throws Exception
+     * @throws Exception ignored
      */
     public static Object4D loadObj4D(String path, Object source) throws Exception{
         InputStreamReader isr = new InputStreamReader(source.getClass().getResourceAsStream(path), Charset.forName("UTF-8"));
@@ -43,7 +43,7 @@ public class Object4DSerializer {
      * Loads a 4D object from file.
      * @param path path to .obj4d-file to be loaded
      * @return loaded 4D object
-     * @throws Exception
+     * @throws Exception ignored
      */
     public static Object4D loadObj4D(String path) throws Exception{
         BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(path)));
@@ -54,7 +54,7 @@ public class Object4DSerializer {
      * Loads a 4D object.
      * @param bufferedReader bufferedreader to be read from
      * @return loaded 4D object
-     * @throws Exception
+     * @throws Exception ignored
      */
     private static Object4D loadFromBufferedReader(BufferedReader bufferedReader) throws Exception{
         String name = "4D-Object";
