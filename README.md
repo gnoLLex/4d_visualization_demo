@@ -29,6 +29,7 @@ You can also save/load your custom 4D-objects.
 Adding a point will generate a point at the coordinates with a color, which are provided by you. Initial values are 0 and the color black.
 
 When a point is selected it is highlighted with a red circle on the screen. You can edit the coordinates and color of the point.
+Recommended are values between -1 and 1.
 Also you can remove it, which also removes all connections which contain the point.
 
 #### Connection
