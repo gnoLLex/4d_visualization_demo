@@ -364,6 +364,7 @@ public class Controller implements Initializable {
                 double x = context2D[i].x - offset;
                 double y = context2D[i].y - offset;
                 graphicsContext.fillOval(x, y, DIAMETER_POINT, DIAMETER_POINT);
+
                 // if a point is selected, highlight it
                 if (selectedPointIndex != -1) {
                     highlightPoint(context2D, selectedPointIndex);
@@ -564,7 +565,7 @@ public class Controller implements Initializable {
             values = new Vector4D();
             colorPickerPoint.setValue(Color.BLACK);
             btnAddConnection.setDisable(true);
-            lblTipp.setText("");
+            lblTipp.setText("no Point selected");
         }
         // set the point-editor UI to values
         textXValue.setText(Double.toString(values.x));
@@ -617,6 +618,13 @@ public class Controller implements Initializable {
                             for (int i = 0; i < checkBoxes.length; i++) {
                                 if (checkBoxes[i].isSelected()) {
                                     obj4DToDraw.rotate(around[i], ANIMATION_ROTATION_SPEED);
+                                    if (selectedPointIndex != -1) {
+                                        Vector4D values = obj4DToDraw.getPoints().get(selectedPointIndex).getValues();
+                                        textXValue.setText(Double.toString(values.x));
+                                        textYValue.setText(Double.toString(values.y));
+                                        textZValue.setText(Double.toString(values.z));
+                                        textWValue.setText(Double.toString(values.w));
+                                    }
                                     redraw();
                                 }
                             }

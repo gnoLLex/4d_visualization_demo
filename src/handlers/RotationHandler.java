@@ -41,7 +41,7 @@ public class RotationHandler {
                 break;
         }
         Vector4D rotatedValues = MatrixHandler.multMatVec(rM, point.getValues());
-        return new Point(rotatedValues, Color.BLACK, point.isSelectable());
+        return new Point(rotatedValues, point.getColor(), point.isSelectable());
     }
 
     //region Rotation-Matrix calculation
