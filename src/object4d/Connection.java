@@ -34,10 +34,20 @@ public class Connection {
     }
 
     /**
-     * @return Connection represented as string.
+     * Connection represented as string.
+     * @return String with index one and two and the color
+     */
+    public String toStringSer() {
+        return indexOne + " " + indexTwo + " " + color;
+    }
+
+    /**
+     * Connection represented as string with rgb-values.
+     * @return String with index one and two and the color as rgb value
      */
     public String toString() {
-        return indexOne + " " + indexTwo + " " + color;
+        String rgb = "(" + (int)(color.getRed()*255) + "," + (int)(color.getGreen()*255) + "," + (int)(color.getBlue()*255) + ")";
+        return " " + indexOne + "\t  " + indexTwo + "\t   " + rgb;
     }
 
     /**

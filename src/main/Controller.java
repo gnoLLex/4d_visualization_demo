@@ -129,7 +129,7 @@ public class Controller implements Initializable {
     /**
      * Listview for listing all connections of the 4d object or those which contain the selected point
      */
-    public ListView listViewConnections;
+    public ListView<Connection> listViewConnections;
     //endregion
 
     /**
@@ -231,6 +231,7 @@ public class Controller implements Initializable {
     private static final double INIT_ZOOM = 4.5;
     //endregion
 
+    //region Initalize/Reset
     /**
      * Is called to initialize the controller after its root element has been completely processed.
      */
@@ -261,6 +262,8 @@ public class Controller implements Initializable {
         // initializing filechooser and adding a extensionfilter
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("4D Object Files", "*.obj4d"));
+
+        listViewConnections.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // one time use in the beginning
         addListeners();
@@ -316,7 +319,7 @@ public class Controller implements Initializable {
     /**
      * Resets the UI
      */
-    public void resetUI() {
+    private void resetUI() {
         for(Slider slider: sliders) {
             slider.setValue(0);
         }
@@ -329,6 +332,8 @@ public class Controller implements Initializable {
         // disabling button for adding connection (point needs to be selected first)
         btnAddConnection.setDisable(true);
     }
+
+    //endregion
 
     //region Drawing
 
@@ -347,8 +352,7 @@ public class Controller implements Initializable {
         }
 
         // if connection is selected highlight it
-        Connection connection = (Connection) listViewConnections.getSelectionModel().getSelectedItem();
-        if (connection != null) {
+        for (Connection connection: listViewConnections.getSelectionModel().getSelectedItems()) {
             highlightConnection(connection);
         }
 
@@ -481,6 +485,7 @@ public class Controller implements Initializable {
     public void setVector(MouseEvent e) {
         mousePosition = new Vector2D(e.getX(), e.getY());
         checkSelectPoint();
+        listViewConnections.getSelectionModel().select(-1);
     }
 
     /**
@@ -803,7 +808,7 @@ public class Controller implements Initializable {
      * Removes the selected connection from the 4D object.
      */
     public void removeConnection() {
-        obj4DToDraw.getConnections().remove(listViewConnections.getSelectionModel().getSelectedItem());
+        obj4DToDraw.getConnections().removeAll(listViewConnections.getSelectionModel().getSelectedItems());
         setListViewConnections();
         redraw();
     }
@@ -812,11 +817,11 @@ public class Controller implements Initializable {
      * Changes the color of the selected connection, if one is selected.
      */
     public void changeColorConnection() {
-        Connection connection = (Connection) listViewConnections.getSelectionModel().getSelectedItem();
-        if (connection != null) {
+        for (Connection connection: listViewConnections.getSelectionModel().getSelectedItems()) {
             connection.setColor(colorPickerConnection.getValue());
-            redraw();
         }
+        listViewConnections.refresh();
+        redraw();
     }
 
     /**
@@ -824,11 +829,11 @@ public class Controller implements Initializable {
      * @param connection connection to be highlighted
      */
     private void highlightConnection(Connection connection) {
+        if (connection == null) return;
         colorPickerConnection.setValue(connection.getColor());
         Vector2D[] context2D = camera.project(canvas, projectionHandler);
         highlightPoint(context2D, connection.getIndexOne());
         highlightPoint(context2D, connection.getIndexTwo());
-        setListViewConnections();
     }
 
     /**
@@ -838,9 +843,7 @@ public class Controller implements Initializable {
         ArrayList<Connection> connectionsToView = new ArrayList<>(0);
         if (selectedPointIndex != -1) {
             // setting the items to all connection that contain the selected point
-            ArrayList<Connection> connections = obj4DToDraw.getConnections();
-            for (int i = 0; i < obj4DToDraw.getConnections().size(); i++) {
-                Connection connection = connections.get(i);
+            for (Connection  connection: obj4DToDraw.getConnections()) {
                 if (connection.containsPoint(selectedPointIndex) > 0) {
                     connectionsToView.add(connection);
                 }

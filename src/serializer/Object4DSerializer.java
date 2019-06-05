@@ -97,7 +97,7 @@ public class Object4DSerializer {
                 out.println("p " + point.toString());
             }
             for (Connection connection: object4D.getConnections()) {
-                out.println("c " + connection.toString());
+                out.println("c " + connection.toStringSer());
             }
             out.close();
         } catch (IOException e) {
