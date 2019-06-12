@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1180.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+<AnchorPane prefHeight="720.0" prefWidth="1180.0" style="-fx-background-color: rgba(0,0,0,0.25);" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
    <VBox alignment="CENTER" layoutX="990.0" layoutY="30.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
          <children>
@@ -40,7 +40,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="text4DObj" alignment="CENTER" />
+      <TextField fx:id="text4DObj" alignment="CENTER" maxWidth="180.0" />
       <Separator layoutX="10.0" layoutY="115.0" prefWidth="200.0" />
       <VBox alignment="CENTER" spacing="10.0">
          <Label text="Point Editor">
@@ -119,12 +119,12 @@
    </Pane>
    <Separator minWidth="2.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0" />
    <VBox alignment="CENTER" layoutX="206.0" maxWidth="200.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Label text="!!Caution!!">
+      <Label text="!!Caution!!" wrapText="true">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label text="Do not rotate without saving!!">
+      <Label text="Do not rotate without saving!!" wrapText="true">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
@@ -136,32 +136,32 @@
             </font>
          </Label>
          <CheckBox fx:id="cBshowCS" mnemonicParsing="false" selected="true" text="show coordinatesystem" />
-         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+         <HBox alignment="CENTER" prefHeight="10.0">
             <Label minWidth="60.0" text="X-Axis" textFill="BLUE" />
             <CheckBox fx:id="cbX" mnemonicParsing="false" text="AutoAnimate" />
          </HBox>
-         <Slider fx:id="sdrX" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" />
-         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+         <Slider fx:id="sdrX" blockIncrement="0.0" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" />
+         <HBox alignment="CENTER" prefHeight="10.0">
             <Label minWidth="60.0" text="Y-Axis" textFill="RED" />
             <CheckBox fx:id="cbY" mnemonicParsing="false" text="AutoAnimate" />
          </HBox>
          <Slider fx:id="sdrY" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" />
-         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+         <HBox alignment="CENTER" prefHeight="10.0">
             <Label minWidth="60.0" text="Z-Axis" textFill="LIME" />
             <CheckBox fx:id="cbZ" mnemonicParsing="false" text="AutoAnimate" />
          </HBox>
          <Slider fx:id="sdrZ" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" />
-         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+         <HBox alignment="CENTER" prefHeight="10.0">
             <Label minWidth="60.0" text="XW-Plane" />
             <CheckBox fx:id="cbXW" mnemonicParsing="false" text="AutoAnimate" />
          </HBox>
          <Slider fx:id="sdrXW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" />
-         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+         <HBox alignment="CENTER" prefHeight="10.0">
             <Label minWidth="60.0" text="YW-Plane" />
             <CheckBox fx:id="cbYW" mnemonicParsing="false" text="AutoAnimate" />
          </HBox>
          <Slider fx:id="sdrYW" majorTickUnit="2.0" max="4.0" min="-4.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" />
-         <HBox alignment="CENTER" prefHeight="10.0" spacing="30.0">
+         <HBox alignment="CENTER" prefHeight="10.0">
             <Label minWidth="60.0" text="ZW-Plane" />
             <CheckBox fx:id="cbZW" mnemonicParsing="false" text="AutoAnimate" />
          </HBox>

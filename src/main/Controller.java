@@ -463,6 +463,7 @@ public class Controller implements Initializable {
         lblTipp.setText("Saving...");
         if (destination != null) {
             Object4DSerializer.saveObj4d(obj4DToDraw, destination);
+            objFilePath = destination.getPath();
             lblTipp.setText("Saving successful");
         } else {
             lblTipp.setText("Saving Failed. No file name chosen!");

@@ -1,4 +1,4 @@
 /**
- * Utility-Classes
+ * Provides classes for projection and rotation.
  */
 package handlers;
